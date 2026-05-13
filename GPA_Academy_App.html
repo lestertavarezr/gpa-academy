@@ -1,1 +1,1402 @@
-hello
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GPA Academy — Asistencia Quirúrgica</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#F0F5FB}
+input[type=range]{width:100%;accent-color:#2E75B6}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#f1f1f1}
+::-webkit-scrollbar-thumb{background:#C5D5E8;border-radius:3px}
+.hover-card:hover{box-shadow:0 4px 20px rgba(26,58,92,0.18)!important}
+</style></head><body><div id="root"></div>
+<script type="text/babel">
+const SAMPLE_DATA = {
+  programs: [
+    { id:'p-001', name:'Asistencia Quirúrgica — Cohorte 2026-I', instructor:'Dr. Ramón Espinal',
+      requiredCases:50, requiredHours:120, studentsCount:24, maxStudents:30,
+      startDate:'2026-03-01', endDate:'2026-08-31', price:18500, status:'activo',
+      caseTypes:[
+        'Colecistectomía Laparoscópica','Apendicectomía Laparoscópica','Herniorrafía Inguinal',
+        'Laparotomía Exploradora','Cesárea Segmentaria','Histerectomía Total',
+        'Tiroidectomía Total','Resección Intestinal','Desbridamiento de Heridas',
+        'Amputación de Extremidad','Safenectomía','Colostomía / Ileostomía',
+      ],
+      skills:[
+        'Lavado quirúrgico de manos (Técnica Scrub)','Vestimenta del equipo quirúrgico',
+        'Preparación y mantenimiento del campo estéril','Posicionamiento e higienización del paciente',
+        'Conteo de instrumental, gasas y suturas','Pase y manejo de instrumental quirúrgico',
+        'Asistencia en hemostasia','Retracción de tejidos',
+        'Asistencia en suturas y cierre de heridas','Manejo del electrocauterio (Bovie)',
+        'Preparación de suturas y ligaduras','Comunicación efectiva en sala quirúrgica',
+      ],
+    },
+    { id:'p-002', name:'Asistencia Quirúrgica — Cohorte 2026-II', instructor:'Dra. Carmen Díaz',
+      requiredCases:50, requiredHours:120, studentsCount:12, maxStudents:30,
+      startDate:'2026-07-01', endDate:'2026-12-31', price:18500, status:'próximo',
+      caseTypes:[
+        'Colecistectomía Laparoscópica','Apendicectomía Laparoscópica','Herniorrafía Inguinal',
+        'Laparotomía Exploradora','Cesárea Segmentaria','Histerectomía Total',
+        'Tiroidectomía Total','Resección Intestinal','Desbridamiento de Heridas',
+        'Amputación de Extremidad','Safenectomía','Colostomía / Ileostomía',
+      ],
+      skills:[
+        'Lavado quirúrgico de manos (Técnica Scrub)','Vestimenta del equipo quirúrgico',
+        'Preparación y mantenimiento del campo estéril','Posicionamiento e higienización del paciente',
+        'Conteo de instrumental, gasas y suturas','Pase y manejo de instrumental quirúrgico',
+        'Asistencia en hemostasia','Retracción de tejidos',
+        'Asistencia en suturas y cierre de heridas','Manejo del electrocauterio (Bovie)',
+        'Preparación de suturas y ligaduras','Comunicación efectiva en sala quirúrgica',
+      ],
+    },
+    { id:'p-003', name:'Módulo de Laparoscopía Avanzada', instructor:'Dr. Ramón Espinal',
+      requiredCases:20, requiredHours:40, studentsCount:8, maxStudents:15,
+      startDate:'2026-05-01', endDate:'2026-07-31', price:8500, status:'activo',
+      caseTypes:[
+        'Colecistectomía Laparoscópica Compleja','Fundoplicatura de Nissen',
+        'Miotomía de Heller','Esplenectomía Laparoscópica',
+        'Adrenalectomía Laparoscópica','Nefrectomía Laparoscópica',
+        'Colon Laparoscópico','Cirugía Bariátrica (Observación)',
+      ],
+      skills:[
+        'Ergonomía e instrumental laparoscópico','Manejo de óptica, cámara y trocar',
+        'Técnica de neumoperitoneo','Asistencia en disección laparoscópica',
+        'Hemostasia laparoscópica','Extracción de pieza quirúrgica',
+        'Suturas intracorpóreas','Cierre de puertos y reconversión',
+      ],
+    },
+    { id:'p-004', name:'Técnicas de Instrumentación Quirúrgica', instructor:'Dra. Carmen Díaz',
+      requiredCases:15, requiredHours:30, studentsCount:18, maxStudents:20,
+      startDate:'2026-04-01', endDate:'2026-06-30', price:6500, status:'activo',
+      caseTypes:[
+        'Mesa de Instrumentación — Cirugía Mayor','Mesa de Instrumentación — Cirugía Menor',
+        'Preparación de Suturas y Materiales','Control y Registro de Conteo Quirúrgico',
+        'Esterilización por Autoclave','Esterilización por Óxido de Etileno',
+        'Descontaminación y Limpieza de Instrumental','Embalaje y Validación de Paquetes',
+      ],
+      skills:[
+        'Clasificación del instrumental quirúrgico','Preparación de mesa de instrumentista',
+        'Técnica de conteo quirúrgico','Protocolo de esterilización por autoclave',
+        'Protocolo de esterilización química','Mantenimiento preventivo del instrumental',
+        'Control y registro de inventario','Trazabilidad del proceso de esterilización',
+      ],
+    },
+    { id:'p-005', name:'Bioseguridad y Gestión de Riesgos en Quirófano', instructor:'Dra. Patricia Lora',
+      requiredCases:10, requiredHours:20, studentsCount:15, maxStudents:20,
+      startDate:'2026-03-01', endDate:'2026-04-30', price:4500, status:'activo',
+      caseTypes:[
+        'Control de infecciones en sala quirúrgica','Manejo de residuos bioinfecciosos',
+        'Accidente con objeto punzocortante','Protocolo ante exposición a sangre',
+        'Simulacro de incendio en quirófano','Gestión de residuos patológicos',
+        'Protocolo COVID-19 y enfermedades transmisibles','Auditoría de bioseguridad',
+      ],
+      skills:[
+        'Uso correcto de EPP quirúrgico','Protocolo de lavado de manos OMS',
+        'Gestión de residuos hospitalarios','Manejo de accidentes laborales',
+        'Prevención de infecciones del sitio quirúrgico','Protocolo de aislamiento',
+        'Notificación de incidentes','Cultura de seguridad del paciente quirúrgico',
+      ],
+    },
+  ],
+  students: [
+    { id:'st-001', name:'Lucía Herrera',    code:'GPA-001', email:'',                     phone:'8095550505', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'al_día',    progress:30, pendingCert:false },
+    { id:'st-002', name:'Jennifer Ramírez', code:'GPA-002', email:'jennifer.r@gmail.com',  phone:'8095551102', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'al_día',    progress:10, pendingCert:false },
+    { id:'st-003', name:'Orlando Peña',     code:'GPA-003', email:'',                     phone:'8495551203', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'al_día',    progress:20, pendingCert:false,
+      driveLink:'https://drive.google.com/drive/folders/example-asistencia-qx', videoLink:'https://youtube.com/playlist?list=example-aqx', questionBankLink:'', vrLink:'https://vranatomyapp.com/cirugia-general',
+      nextClassDate:'2026-05-14', nextClassTime:'07:00–13:00', nextClassModule:'Colecistectomía Laparoscópica — Asistencia directa',
+      totalClasses:50, completedClasses:10, requiredHoursOverride:120, completedHoursOverride:null,
+      grades:[{subject:'Práctica 1 — Lavado quirúrgico',grade:8,date:'2026-04-29'},{subject:'Práctica 2 — Colecistectomía Lap.',grade:9,date:'2026-05-06'},{subject:'Evaluación Conteo Quirúrgico',grade:8.5,date:'2026-05-07'}] },
+    { id:'st-004', name:'Nelson Cruz',      code:'GPA-004', email:'',                     phone:'8095551404', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'al_día',    progress:0,  pendingCert:false,
+      driveLink:'', videoLink:'', questionBankLink:'', vrLink:'', nextClassDate:'2026-05-14', nextClassTime:'07:00–13:00', nextClassModule:'Preparación del campo estéril — Inducción', totalClasses:50, completedClasses:0 },
+    { id:'st-005', name:'Patricia Gómez',   code:'GPA-005', email:'',                     phone:'8095551505', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'al_día',    progress:0,  pendingCert:false,
+      driveLink:'', videoLink:'', questionBankLink:'', vrLink:'', nextClassDate:'2026-05-14', nextClassTime:'07:00–13:00', nextClassModule:'Posicionamiento del paciente quirúrgico', totalClasses:50, completedClasses:0 },
+    { id:'st-006', name:'Andrés Villar',    code:'GPA-006', email:'',                     phone:'8295551606', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'al_día',    progress:95, pendingCert:true,
+      driveLink:'https://drive.google.com/drive/folders/example-asistencia-qx', videoLink:'https://youtube.com/playlist?list=example-aqx', questionBankLink:'https://forms.gle/example-asistencia-qx', vrLink:'https://vranatomyapp.com/cirugia-general',
+      nextClassDate:'2026-05-15', nextClassTime:'13:00–19:00', nextClassModule:'Histerectomía Total — Sesión de pre-certificación',
+      totalClasses:50, completedClasses:48, requiredHoursOverride:120, completedHoursOverride:null,
+      grades:[{subject:'Práctica 1 — Colecistectomía',grade:9,date:'2026-04-25'},{subject:'Práctica 2 — Apendicectomía',grade:10,date:'2026-05-02'},{subject:'Evaluación Teórica — Bioseguridad',grade:9.5,date:'2026-05-04'},{subject:'Práctica 3 — Cesárea',grade:9,date:'2026-05-09'}] },
+    { id:'st-007', name:'Rosa Cabrera',     code:'GPA-007', email:'',                     phone:'8095551707', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'atrasado',  progress:80, pendingCert:true,
+      driveLink:'https://drive.google.com/drive/folders/example-asistencia-qx', videoLink:'https://youtube.com/playlist?list=example-aqx', questionBankLink:'', vrLink:'https://vranatomyapp.com/cirugia-general',
+      nextClassDate:'2026-05-09', nextClassTime:'07:00–13:00', nextClassModule:'Herniorrafía Inguinal — Asistencia en retracción de tejidos',
+      totalClasses:50, completedClasses:40, requiredHoursOverride:120, completedHoursOverride:null,
+      grades:[{subject:'Práctica 1 — Lavado Scrub',grade:7,date:'2026-05-06'},{subject:'Práctica 2 — Instrumental Colecistectomía',grade:8,date:'2026-05-06'},{subject:'Evaluación Electrocauterio',grade:8,date:'2026-05-07'}] },
+    { id:'st-008', name:'Félix Taveras',    code:'GPA-008', email:'',                     phone:'8495551808', cohort:'Asistencia Quirúrgica 2026-I', programId:'p-001', status:'active', paymentStatus:'pendiente',  progress:75, pendingCert:false },
+  ],  doctors: [
+    // ── Instructores del Programa de Asistencia Quirúrgica — GPA Academy ──
+    { id:'d1', name:'Dr. Ramón Espinal',  specialty:'Cirugía General · Laparoscopía Avanzada',       license:'MED-2001', email:'respinal@gpacademy.com', phone:'8099002001', hospitals:['h1','h2','h4'], status:'active', username:'dr.espinal',    password:'GPA#2026' },
+    { id:'d2', name:'Dra. Carmen Díaz',   specialty:'Cirugía General · Instrumentación Quirúrgica',  license:'MED-2002', email:'cdiaz@gpacademy.com',   phone:'8099002002', hospitals:['h1','h4'],      status:'active', username:'dra.cdiaz',     password:'GPA#2026' },
+    { id:'d3', name:'Dr. Luis Vargas',    specialty:'Cirugía General · Supervisión Asistencia Qx',   license:'MED-2003', email:'lvargas@gpacademy.com', phone:'8099002003', hospitals:['h2','h3','h4'], status:'active', username:'dr.lvargas',    password:'GPA#2026' },
+    { id:'d4', name:'Dra. Patricia Lora', specialty:'Cirugía General · Bioseguridad Quirúrgica',     license:'MED-2004', email:'plora@gpacademy.com',   phone:'8099002004', hospitals:['h3','h4'],      status:'active', username:'dra.plora',     password:'GPA#2026' },
+    // ── Cirujanos Supervisores — HGEDMTD — Servicio de Cirugía General ────
+    { id:'d5',  name:'Dr. Maldonado',   specialty:'Cirugía General', license:'HGEDMTD-001', email:'', phone:'8298555449', hospitals:['h4'], status:'active', username:'dr.maldonado',  password:'T0igU#pd' },
+    { id:'d6',  name:'Dr. Florencio',   specialty:'Cirugía General', license:'HGEDMTD-002', email:'', phone:'8098566026', hospitals:['h4'], status:'active', username:'dr.florencio',  password:'R!SqH9IA' },
+    { id:'d7',  name:'Dra. Peña',       specialty:'Cirugía General', license:'HGEDMTD-003', email:'', phone:'8296499299', hospitals:['h4'], status:'active', username:'dra.pena',      password:'iff@K27u' },
+    { id:'d8',  name:'Dra. Beltre',     specialty:'Cirugía General', license:'HGEDMTD-004', email:'', phone:'8295856893', hospitals:['h4'], status:'active', username:'dra.beltre',    password:'Z#18JMMc' },
+    { id:'d9',  name:'Dra. Piña',       specialty:'Cirugía General', license:'HGEDMTD-005', email:'', phone:'8492727727', hospitals:['h4'], status:'active', username:'dra.pina',      password:'$m4mDwwN' },
+    { id:'d10', name:'Dra. Abad',       specialty:'Cirugía General', license:'HGEDMTD-006', email:'', phone:'8299673732', hospitals:['h4'], status:'active', username:'dra.abad',      password:'9NI#6QoF' },
+    { id:'d11', name:'Dra. Alcántara',  specialty:'Cirugía General', license:'HGEDMTD-007', email:'', phone:'8097680150', hospitals:['h4'], status:'active', username:'dra.alcantara', password:'Gy@5C4sO' },
+    { id:'d12', name:'Dr. Ramírez',     specialty:'Cirugía General', license:'HGEDMTD-008', email:'', phone:'8293073801', hospitals:['h4'], status:'active', username:'dr.ramirez',    password:'9S5@EiUm' },
+    { id:'d13', name:'Dra. Paredes',    specialty:'Cirugía General', license:'HGEDMTD-009', email:'', phone:'8297121188', hospitals:['h4'], status:'active', username:'dra.paredes',   password:'$aM19G8m' },
+    { id:'d14', name:'Dr. Taveras',     specialty:'Cirugía General', license:'HGEDMTD-010', email:'', phone:'8099746999', hospitals:['h4'], status:'active', username:'dr.taveras',    password:'q!2fFN77' },
+    { id:'d15', name:'Dra. Arredondo',  specialty:'Cirugía General', license:'HGEDMTD-011', email:'', phone:'8493433215', hospitals:['h4'], status:'active', username:'dra.arredondo', password:'8w!EgYfL' },
+  ],
+  hospitals: [
+    { id:'h1', name:'Hospital General del Este', city:'Santo Domingo', address:'Av. Las Américas #100', contact:'Lic. Rosa Pérez', phone:'8092001000',
+      areas:[ { id:'a1', name:'Quirófano Central',   capacity:5, shifts:[{name:'Mañana',start:'07:00',end:'13:00'},{name:'Tarde',start:'13:00',end:'19:00'}] },
+              { id:'a2', name:'Sala de Neuroimagen', capacity:4, shifts:[{name:'Mañana',start:'08:00',end:'14:00'}] } ]},
+    { id:'h2', name:'Clínica Metropolitana',    city:'Santiago',       address:'Calle del Sol #55',    contact:'Dr. Marco Díaz',  phone:'8092002000',
+      areas:[ { id:'a3', name:'Bloque Quirúrgico A', capacity:5, shifts:[{name:'Mañana',start:'08:00',end:'14:00'},{name:'Tarde',start:'14:00',end:'20:00'}] },
+              { id:'a4', name:'Lab. Ecografía',       capacity:4, shifts:[{name:'Mañana',start:'07:00',end:'13:00'}] } ]},
+    { id:'h3', name:'Hospital del Sur',         city:'San Cristóbal',  address:'Km 5 Carretera Sur',   contact:'Dra. Irma Castro', phone:'8092003000',
+      areas:[ { id:'a5', name:'Sala de Emergencias', capacity:4, shifts:[{name:'Mañana',start:'07:00',end:'12:00'},{name:'Tarde',start:'12:00',end:'17:00'}] } ]},
+    { id:'h4', name:'Hospital General Dr. Marcelino Vélez Santaná (HGEDMTD)', city:'Santo Domingo Este', address:'Autopista San Isidro Km 9', contact:'Depto. Docencia', phone:'8092220000',
+      areas:[ { id:'a6', name:'Quirófano Cirugía General', capacity:6, shifts:[{name:'Mañana',start:'07:00',end:'13:00'},{name:'Tarde',start:'13:00',end:'19:00'},{name:'Noche',start:'19:00',end:'07:00'}] },
+              { id:'a7', name:'Consulta Externa',          capacity:8, shifts:[{name:'AM',start:'08:00',end:'13:00'},{name:'PM',start:'13:00',end:'16:00'}] },
+              { id:'a8', name:'Emergencias',               capacity:4, shifts:[{name:'Día',start:'06:00',end:'18:00'},{name:'Noche',start:'18:00',end:'06:00'}] } ]},
+  ],
+  leads: [
+    { id:'l-001', name:'María Fernández',   phone:'+1-809-555-0101', email:'maria.fernandez@gmail.com', program:'Asistencia Quirúrgica — Cohorte 2026-I',  temperature:'caliente', status:'caliente',   source:'WhatsApp',  assignedTo:'Luz (Bot)', notes:'Enfermera de piso. Quiere especializarse en quirófano. Alta probabilidad de cierre.', value:18500 },
+    { id:'l-002', name:'Carlos Rodríguez',  phone:'+1-809-555-0202', email:'',                           program:'Asistencia Quirúrgica — Cohorte 2026-I',  temperature:'caliente', status:'interesado', source:'Instagram', assignedTo:'Luz (Bot)', notes:'Técnico de enfermería. Barrera de pago — busca financiamiento.', value:18500 },
+    { id:'l-007', name:'Valeria Santos',    phone:'+1-809-555-0707', email:'valeria.s@outlook.com',      program:'Asistencia Quirúrgica — Cohorte 2026-I',  temperature:'caliente', status:'interesado', source:'WhatsApp',  assignedTo:'Luz (Bot)', notes:'Muy interesada. Pide plan de pago en cuotas. Trabaja en clínica privada.', value:18500 },
+    { id:'l-010', name:'David Morales',     phone:'+1-849-555-1010', email:'',                           program:'Módulo de Laparoscopía Avanzada',          temperature:'caliente', status:'contactado', source:'Referido',  assignedTo:'Luz (Bot)', notes:'Referido por estudiante del programa. Tiene presupuesto disponible.', value:8500 },
+    { id:'l-004', name:'Roberto Méndez',    phone:'+1-849-555-0404', email:'',                           program:'Asistencia Quirúrgica — Cohorte 2026-II', temperature:'tibio',   status:'nuevo',      source:'WhatsApp',  assignedTo:'Luz (Bot)', notes:'Interesado en el siguiente cohorte. Preguntó sobre requisitos previos.', value:18500 },
+    { id:'l-009', name:'Stephanie Núñez',   phone:'+1-809-555-0909', email:'snunez@gmail.com',           program:'Técnicas de Instrumentación Quirúrgica',  temperature:'tibio',   status:'nuevo',      source:'Instagram', assignedTo:'Luz (Bot)', notes:'Escribió por historia de Instagram. Auxiliar de quirófano buscando certificarse.', value:6500 },
+    { id:'l-011', name:'Ana María Castillo',phone:'+1-809-555-1100', email:'ana.castillo@hotmail.com',   program:'Asistencia Quirúrgica — Cohorte 2026-I',  temperature:'caliente', status:'caliente',   source:'Referido',  assignedTo:'Luz (Bot)', notes:'Referida por Lucía Herrera (GPA-001). Asistente médico con 2 años de experiencia. Listo para inscribirse.', value:18500 },
+    { id:'l-012', name:'Luis Guzmán',       phone:'+1-849-555-1200', email:'',                           program:'Bioseguridad y Gestión de Riesgos en Quirófano', temperature:'frio', status:'nuevo',   source:'Facebook',  assignedTo:'Luz (Bot)', notes:'Solo preguntó el precio. Sin respuesta después del primer contacto.', value:4500 },
+  ],  assignments: [
+    { id:'as1', studentId:'st-001', doctorId:'d2', hospitalId:'h1', areaId:'a1', programId:'p-002', date:'2026-05-07', shift:'Mañana', shiftStart:'07:00', shiftEnd:'13:00', status:'scheduled', token:'tok_as1', notified:true  },
+    { id:'as2', studentId:'st-004', doctorId:'d2', hospitalId:'h1', areaId:'a1', programId:'p-002', date:'2026-05-07', shift:'Mañana', shiftStart:'07:00', shiftEnd:'13:00', status:'scheduled', token:'tok_as2', notified:true  },
+    { id:'as3', studentId:'st-002', doctorId:'d3', hospitalId:'h2', areaId:'a4', programId:'p-003', date:'2026-05-07', shift:'Mañana', shiftStart:'07:00', shiftEnd:'13:00', status:'scheduled', token:'tok_as3', notified:true  },
+    { id:'as4', studentId:'st-005', doctorId:'d3', hospitalId:'h2', areaId:'a4', programId:'p-003', date:'2026-05-07', shift:'Mañana', shiftStart:'07:00', shiftEnd:'13:00', status:'scheduled', token:'tok_as4', notified:false },
+    { id:'as5', studentId:'st-006', doctorId:'d3', hospitalId:'h2', areaId:'a3', programId:'p-003', date:'2026-05-08', shift:'Tarde',  shiftStart:'14:00', shiftEnd:'20:00', status:'scheduled', token:'tok_as5', notified:true  },
+    { id:'as6', studentId:'st-003', doctorId:'d1', hospitalId:'h1', areaId:'a2', programId:'p-001', date:'2026-05-06', shift:'Mañana', shiftStart:'08:00', shiftEnd:'14:00', status:'completed', token:'tok_as6', notified:true  },
+    { id:'as7', studentId:'st-007', doctorId:'d4', hospitalId:'h3', areaId:'a5', programId:'p-005', date:'2026-05-06', shift:'Mañana', shiftStart:'07:00', shiftEnd:'12:00', status:'completed', token:'tok_as7', notified:true  },
+    { id:'as8', studentId:'st-008', doctorId:'d4', hospitalId:'h3', areaId:'a5', programId:'p-005', date:'2026-05-10', shift:'Tarde',  shiftStart:'12:00', shiftEnd:'17:00', status:'scheduled', token:'tok_as8', notified:false },
+    { id:'as9', studentId:'st-003', doctorId:'d1', hospitalId:'h1', areaId:'a2', programId:'p-001', date:'2026-04-29', shift:'Mañana', shiftStart:'08:00', shiftEnd:'14:00', status:'completed', token:'tok_as9', notified:true  },
+    { id:'as10',studentId:'st-006', doctorId:'d3', hospitalId:'h2', areaId:'a4', programId:'p-003', date:'2026-04-25', shift:'Mañana', shiftStart:'07:00', shiftEnd:'13:00', status:'completed', token:'tok_as10',notified:true  },
+    { id:'as11',studentId:'st-006', doctorId:'d3', hospitalId:'h2', areaId:'a4', programId:'p-003', date:'2026-05-02', shift:'Mañana', shiftStart:'07:00', shiftEnd:'13:00', status:'completed', token:'tok_as11',notified:true  },
+  ],
+  checklists: [
+    { id:'cl1', assignmentId:'as6',
+      scheduledStart:'08:00', clockIn:'08:05', clockOut:'14:00', minutesLate:5, totalHours:5.9, attendance:'attended',
+      cases:[{type:'TC de Cráneo',count:3,role:'realizó',notes:'Protocolo completo sin contraste'},{type:'RM Cerebral',count:2,role:'observó',notes:'Primera exposición a bobinas'},{type:'Rx de Tórax',count:5,role:'participó',notes:'Posicionamiento con asistencia'}],
+      skillLevels:{'Posicionamiento del paciente':3,'Uso de contraste':1,'Interpretación TC':2,'Interpretación RM':1,'Protocolo de seguridad radiológica':3,'Registro de imágenes PACS':2,'Técnica de venopunción':2,'Control de artefactos':1,'Comunicación de hallazgos críticos':2},
+      dresscode:true,handwash:true,areaKnowledge:true,instruments:true,asepsis:true,participation:true,communication:true,hospitalRules:true,
+      performance:9,comments:'Orlando muestra excelente comprensión de neuroimágenes. Muy proactivo. Dominó posicionamiento y protocolo de seguridad desde la primera práctica.',signed:true,signedAt:'2026-05-06T14:20:00Z' },
+    { id:'cl9', assignmentId:'as9',
+      scheduledStart:'08:00', clockIn:'08:00', clockOut:'14:00', minutesLate:0, totalHours:6, attendance:'attended',
+      cases:[{type:'TC de Cráneo',count:2,role:'observó',notes:'Inducción al equipo'},{type:'Rx de Tórax',count:4,role:'observó',notes:'Técnica de posicionamiento'},{type:'Densitometría',count:2,role:'observó',notes:'Primera exposición'}],
+      skillLevels:{'Posicionamiento del paciente':2,'Uso de contraste':0,'Interpretación TC':1,'Interpretación RM':0,'Protocolo de seguridad radiológica':2,'Registro de imágenes PACS':1,'Técnica de venopunción':0,'Control de artefactos':0,'Comunicación de hallazgos críticos':1},
+      dresscode:true,handwash:true,areaKnowledge:false,instruments:true,asepsis:true,participation:true,communication:true,hospitalRules:true,
+      performance:8,comments:'Primera práctica. Excelente actitud. Debe mejorar conocimiento del área quirúrgica.',signed:true,signedAt:'2026-04-29T14:30:00Z' },
+    { id:'cl2', assignmentId:'as7',
+      scheduledStart:'07:00', clockIn:'07:22', clockOut:'12:00', minutesLate:22, totalHours:4.6, attendance:'late',
+      cases:[{type:'Intubación Orotraqueal (IOT)',count:3,role:'observó',notes:'Guía de estilete usada en 2 casos'},{type:'Ventilación con BVM',count:5,role:'participó',notes:'Técnica de sello facial'},{type:'Aspiración de secreciones',count:4,role:'realizó',notes:'Independiente los últimos 2 casos'}],
+      skillLevels:{'Evaluación predictiva de vía aérea':2,'Preoxigenación':2,'Técnica de IOT directa':1,'Videolaringoscopia':0,'Mascarilla laríngea':2,'Presión cricoidea (Sellick)':2,'Ventilación BVM':3,'Reconocimiento de IOT fallida':1,'Cricotiroidotomía de emergencia':0},
+      dresscode:true,handwash:true,areaKnowledge:true,instruments:false,asepsis:true,participation:true,communication:true,hospitalRules:true,
+      performance:7,comments:'Rosa llegó 22 minutos tarde. Buen desempeño. Dominó aspiración. Debe mejorar puntualidad.',signed:true,signedAt:'2026-05-06T12:30:00Z' },
+    { id:'cl10', assignmentId:'as10',
+      scheduledStart:'07:00', clockIn:'07:00', clockOut:'13:00', minutesLate:0, totalHours:6, attendance:'attended',
+      cases:[{type:'Eco Abdominal',count:5,role:'participó',notes:'Hígado y vesícula'},{type:'Eco Pélvica',count:3,role:'observó',notes:'Primera vez'},{type:'Eco Tiroidea',count:2,role:'participó',notes:'Técnica aceptable'}],
+      skillLevels:{'Manejo del transductor':3,'Ajuste de parámetros del equipo':2,'Ventana acústica abdominal':3,'Exploración pélvica':2,'Biometría obstétrica':0,'Eco tiroidea':2,'Doppler vascular':0,'Identificación de estructuras anatómicas':3,'Registro de hallazgos ecográficos':2},
+      dresscode:true,handwash:true,areaKnowledge:true,instruments:true,asepsis:true,participation:true,communication:true,hospitalRules:true,
+      performance:9,comments:'Andrés domina el manejo del transductor y la anatomía abdominal. Progreso excelente.',signed:true,signedAt:'2026-04-25T13:15:00Z' },
+    { id:'cl11', assignmentId:'as11',
+      scheduledStart:'07:00', clockIn:'07:00', clockOut:'13:00', minutesLate:0, totalHours:6, attendance:'attended',
+      cases:[{type:'Eco Abdominal',count:4,role:'realizó',notes:'Independiente en hígado y riñones'},{type:'Eco Pélvica',count:4,role:'participó',notes:'Con guía'},{type:'Eco Obstétrica',count:3,role:'observó',notes:'Primera biometría'},{type:'Eco Vascular Doppler',count:2,role:'observó',notes:'Primera exposición'}],
+      skillLevels:{'Manejo del transductor':4,'Ajuste de parámetros del equipo':3,'Ventana acústica abdominal':4,'Exploración pélvica':3,'Biometría obstétrica':1,'Eco tiroidea':3,'Doppler vascular':1,'Identificación de estructuras anatómicas':4,'Registro de hallazgos ecográficos':3},
+      dresscode:true,handwash:true,areaKnowledge:true,instruments:true,asepsis:true,participation:true,communication:true,hospitalRules:true,
+      performance:10,comments:'Andrés ha progresado notablemente. Trabaja casi independiente en ecografía abdominal.',signed:true,signedAt:'2026-05-02T13:05:00Z' },
+  ],
+  dayChanges: [
+    { id:'dc1', studentId:'st-005', originalAssignmentId:'as4', newDate:'2026-05-10', newShift:'Mañana', reason:'Cita médica personal previamente agendada', status:'pending',  requestedAt:'2026-05-06T09:00:00Z' },
+    { id:'dc2', studentId:'st-007', originalAssignmentId:'as7', newDate:'2026-05-09', newShift:'Mañana', reason:'Cobro pendiente — situación de transporte',  status:'approved', requestedAt:'2026-05-05T14:00:00Z', reviewedAt:'2026-05-05T16:00:00Z', reviewedBy:'admin1' },
+  ],
+  notifications: [
+    { id:'n1',  recipient:'Dra. Carmen Díaz',   channel:'whatsapp', type:'practice_reminder', status:'delivered', sentAt:'2026-05-06T07:00:00Z', summary:'Lista: Lucía Herrera y Nelson Cruz – Sutura Avanzada 07/05' },
+    { id:'n2',  recipient:'Dr. Luis Vargas',    channel:'whatsapp', type:'practice_reminder', status:'sent',      sentAt:'2026-05-06T07:01:00Z', summary:'Lista: Jennifer Ramírez y Andrés Villar – Ecografía 07/05' },
+    { id:'n3',  recipient:'Lucía Herrera',      channel:'whatsapp', type:'practice_reminder', status:'delivered', sentAt:'2026-05-06T07:10:00Z', summary:'Recordatorio práctica 07/05 Taller de Sutura' },
+    { id:'n4',  recipient:'Orlando Peña',       channel:'whatsapp', type:'practice_reminder', status:'delivered', sentAt:'2026-05-06T07:12:00Z', summary:'Recordatorio práctica 06/05 Neuroimágenes' },
+    { id:'n5',  recipient:'Rosa Cabrera',       channel:'whatsapp', type:'practice_reminder', status:'delivered', sentAt:'2026-05-06T07:15:00Z', summary:'Recordatorio práctica 06/05 Vía Aérea' },
+    { id:'n6',  recipient:'Patricia Gómez',     channel:'email',    type:'practice_reminder', status:'sent',      sentAt:'2026-05-06T07:05:00Z', summary:'Recordatorio 07/05 – sin WhatsApp, enviado por correo' },
+    { id:'n7',  recipient:'Patricia Gómez',     channel:'whatsapp', type:'change_pending',    status:'sent',      sentAt:'2026-05-06T09:05:00Z', summary:'Solicitud de cambio de día pendiente' },
+    { id:'n8',  recipient:'Dra. Patricia Lora', channel:'whatsapp', type:'change_approved',   status:'delivered', sentAt:'2026-05-06T16:10:00Z', summary:'Cambio aprobado: Rosa Cabrera reasignada al 09/05' },
+    { id:'n9',  recipient:'Bot Luz',            channel:'whatsapp', type:'lead_captured',     status:'sent',      sentAt:'2026-05-07T08:30:00Z', summary:'Nuevo lead: Stephanie Núñez – Taller de Sutura' },
+    { id:'n10', recipient:'Bot Luz',            channel:'whatsapp', type:'lead_captured',     status:'sent',      sentAt:'2026-05-07T10:45:00Z', summary:'Lead caliente: María Fernández – Neuroimágenes RD$8,500' },
+  ],
+  clinicalAlerts: [
+    { id:'al-001', doctorId:'d4', studentId:'st-007', alertType:'tardanza', description:'Rosa llegó 22 minutos tarde a la práctica del 06/05. Ya es la segunda vez.', date:'2026-05-06', priority:'alta', status:'active', createdAt:'2026-05-06T12:35:00Z' },
+    { id:'al-002', doctorId:'d3', studentId:'st-002', alertType:'ausencia', description:'Jennifer Ramírez no se presentó a la práctica programada del 07/05 sin avisar.', date:'2026-05-07', priority:'alta', status:'active', createdAt:'2026-05-07T08:30:00Z' },
+    { id:'al-003', doctorId:'d1', studentId:'st-003', alertType:'observacion', description:'Orlando demuestra excelente actitud y proactividad. Candidato para mención de honor.', date:'2026-05-06', priority:'baja', status:'resolved', createdAt:'2026-05-06T14:25:00Z' },
+  ],
+  coordinationNotes: [
+    { id:'note-001', doctorId:'d1', doctorName:'Dr. Ramón Espinal', title:'Solicitud de nuevo horario para Orlando Peña', content:'Solicito reprogramar la práctica de Orlando al turno de tarde del 16/05 por conflicto de agenda hospitalaria.', type:'solicitud', priority:'alta', createdAt:'2026-05-08T09:00:00Z' },
+    { id:'note-002', doctorId:'d4', doctorName:'Dra. Patricia Lora', title:'Observación clínica — Rosa Cabrera', content:'Rosa mejoró notablemente su puntualidad en la última práctica. Recomiendo mantener seguimiento.', type:'observacion', priority:'normal', createdAt:'2026-05-09T11:00:00Z' },
+  ],
+};
+
+const COLORS={primary:'#1A3A5C',accent:'#2E75B6',light:'#D6E4F0',success:'#1D6B3B',warning:'#D97706',danger:'#DC2626',bg:'#F0F5FB'};
+const SKILL_LABELS=['No iniciada','Observó','Participó','Realizó','Dominó'];
+const SKILL_COLORS=['#9CA3AF','#3B82F6','#F59E0B','#F97316','#16A34A'];
+
+const Icon=({name,size=20,color='currentColor'})=>{
+  const icons={
+    dashboard:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>,    students:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    doctors:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+    hospitals:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>,
+    assignments:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>,
+    calendar:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+    changes:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M17 3l4 4-4 4M3 7h18M7 21l-4-4 4-4M21 17H3"/></svg>,
+    checklist:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>,
+    reports:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
+    skills:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
+    alerts:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+    bell:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+    botluz:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+    clock:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+    plus:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+    trash:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>,
+    edit:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+    check:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>,
+    x:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+    search:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+    send:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
+    logout:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>,
+    user:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+    whatsapp:<svg width={size} height={size} viewBox="0 0 24 24" fill={color}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>,
+    email:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
+    download:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+    eye:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+  };
+  return icons[name]||null;
+};
+
+const Badge=({text,color='blue'})=>{
+  const map={blue:'#DBEAFE:#1E40AF',green:'#D1FAE5:#065F46',red:'#FEE2E2:#991B1B',yellow:'#FEF3C7:#92400E',gray:'#F3F4F6:#374151',purple:'#EDE9FE:#5B21B6',orange:'#FFEDD5:#9A3412'};
+  const [bg,tc]=(map[color]||map.gray).split(':');
+  return <span style={{background:bg,color:tc,padding:'2px 10px',borderRadius:999,fontSize:12,fontWeight:600,whiteSpace:'nowrap'}}>{text}</span>;
+};
+
+const Card=({children,style={}})=>(
+  <div style={{background:'white',borderRadius:12,boxShadow:'0 2px 8px rgba(26,58,92,0.09)',padding:'20px 24px',...style}}>{children}</div>
+);
+
+const Btn=({children,onClick,color='primary',size='md',disabled=false,style={}})=>{
+  const colors={primary:`background:${COLORS.accent};color:white`,secondary:'background:#F3F4F6;color:#374151',danger:`background:${COLORS.danger};color:white`,success:`background:${COLORS.success};color:white`,ghost:'background:transparent;color:#374151'};
+  const sizes={sm:'padding:4px 12px;font-size:13px',md:'padding:8px 18px;font-size:14px',lg:'padding:12px 24px;font-size:16px'};
+  const cs=Object.fromEntries([...colors[color].split(';'),...sizes[size].split(';')].map(s=>s.split(':')));
+  return <button onClick={onClick} disabled={disabled} style={{...cs,border:'none',borderRadius:8,fontWeight:600,cursor:disabled?'not-allowed':'pointer',opacity:disabled?0.6:1,display:'inline-flex',alignItems:'center',gap:6,...style}}>{children}</button>;
+};
+
+const Input=({label,value,onChange,type='text',placeholder:'',required=false,style={}})=>(
+  <div style={{marginBottom:16}}>
+    {label&&<label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>{label}{required&&<span style={{color:'red'}}> *</span>}</label>}
+    <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
+      style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',...style}}/>
+  </div>
+);
+
+const Select=({label,value,onChange,options=[],required=false})=>(
+  <div style={{marginBottom:16}}>
+    {label&&<label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>{label}{required&&<span style={{color:'red'}}> *</span>}</label>}
+    <select value={value} onChange={e=>onChange(e.target.value)} style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',background:'white'}}>
+      <option value="">-- Seleccionar --</option>
+      {options.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
+    </select>
+  </div>
+);
+
+const Table=({headers,rows,emptyMsg='Sin datos'})=>(
+  <div style={{overflowX:'auto'}}>
+    <table style={{width:'100%',borderCollapse:'collapse',fontSize:14}}>
+      <thead><tr style={{background:COLORS.primary}}>{headers.map((h,i)=><th key={i} style={{padding:'10px 14px',color:'white',fontWeight:600,textAlign:'left',whiteSpace:'nowrap'}}>{h}</th>)}</tr></thead>
+      <tbody>{rows.length===0?<tr><td colSpan={headers.length} style={{padding:24,textAlign:'center',color:'#9CA3AF'}}>{emptyMsg}</td></tr>
+        :rows.map((row,i)=><tr key={i} style={{background:i%2===0?'white':'#F8FAFC',borderBottom:'1px solid #E5E7EB'}}>{row.map((cell,j)=><td key={j} style={{padding:'10px 14px',verticalAlign:'middle'}}>{cell}</td>)}</tr>)}</tbody>
+    </table>
+  </div>
+);
+
+const Modal=({title,children,onClose,width=500})=>(
+  <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.5)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+    <div style={{background:'white',borderRadius:16,width:'100%',maxWidth:width,maxHeight:'92vh',overflowY:'auto',boxShadow:'0 20px 60px rgba(0,0,0,0.3)'}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'16px 24px',borderBottom:'1px solid #E5E7EB',position:'sticky',top:0,background:'white',zIndex:1}}>
+        <h3 style={{margin:0,color:COLORS.primary,fontSize:18,fontWeight:700}}>{title}</h3>
+        <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',padding:4}}><Icon name="x" size={22} color="#6B7280"/></button>
+      </div>
+      <div style={{padding:'20px 24px'}}>{children}</div>
+    </div>
+  </div>
+);
+
+const Toast=({msg,type='success',onClose})=>{
+  const colors={success:'#D1FAE5',error:'#FEE2E2',info:'#DBEAFE',warning:'#FEF3C7'};
+  React.useEffect(()=>{const t=setTimeout(onClose,3500);return()=>clearTimeout(t);},[]);
+  return(
+    <div style={{position:'fixed',bottom:24,right:24,zIndex:2000,background:colors[type]||colors.info,border:`1.5px solid ${type==='success'?'#6EE7B7':type==='error'?'#FCA5A5':'#93C5FD'}`,borderRadius:12,padding:'12px 20px',minWidth:260,boxShadow:'0 8px 24px rgba(0,0,0,0.15)',display:'flex',alignItems:'center',gap:10}}>
+      <span style={{fontSize:14,fontWeight:600,flex:1,color:'#1F2937'}}>{msg}</span>
+      <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer'}}><Icon name="x" size={16} color="#6B7280"/></button>
+    </div>
+  );
+};
+
+const ProgressBar=({value,max,color='#2E75B6',height=10,showLabel=true})=>{
+  const pct=Math.min(100,Math.round((value/max)*100));
+  return(
+    <div>
+      {showLabel&&<div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:3,color:'#6B7280'}}>
+        <span>{value} / {max}</span><span style={{fontWeight:700,color}}>{pct}%</span>
+      </div>}
+      <div style={{height,background:'#F3F4F6',borderRadius:999}}>
+        <div style={{height:'100%',width:`${pct}%`,background:pct>=100?COLORS.success:pct>=70?COLORS.accent:COLORS.warning,borderRadius:999,transition:'width 0.4s'}}/>
+      </div>
+    </div>
+  );
+};
+
+const StatCard=({label,value,icon,color='#2E75B6',sub})=>(
+  <Card style={{display:'flex',alignItems:'center',gap:16,flex:1,minWidth:160}}>
+    <div style={{width:52,height:52,borderRadius:14,background:`${color}18`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+      <Icon name={icon} size={26} color={color}/>
+    </div>
+    <div>
+      <div style={{fontSize:28,fontWeight:800,color:'#1F2937',lineHeight:1}}>{value}</div>
+      <div style={{fontSize:13,color:'#6B7280',marginTop:2,fontWeight:500}}>{label}</div>
+      {sub&&<div style={{fontSize:11,color,marginTop:2,fontWeight:600}}>{sub}</div>}
+    </div>
+  </Card>
+);
+
+
+// ── Credenciales base (solo admins — los demás se derivan del estado) ─────
+const ADMIN_USERS = [
+  { id:'admin1',  username:'admin',          password:'GPA.Admin2026!', name:'Administrador GPA',  role:'admin'   },
+  { id:'admin2',  username:'lester.tavarez', password:'GPA.Admin2026!', name:'Lester Tavarez',     role:'admin'   },  // Instructores de programas
+  { id:'d1',  username:'dr.espinal',    password:'GPA#2026',  name:'Dr. Ramón Espinal',  role:'doctor' },
+  { id:'d2',  username:'dra.cdiaz',     password:'GPA#2026',  name:'Dra. Carmen Díaz',   role:'doctor' },
+  { id:'d3',  username:'dr.lvargas',    password:'GPA#2026',  name:'Dr. Luis Vargas',    role:'doctor' },
+  { id:'d4',  username:'dra.plora',     password:'GPA#2026',  name:'Dra. Patricia Lora', role:'doctor' },
+  // Cirugía General HGEDMTD
+  { id:'d5',  username:'dr.maldonado',  password:'T0igU#pd',  name:'Dr. Maldonado',      role:'doctor' },
+  { id:'d6',  username:'dr.florencio',  password:'R!SqH9IA',  name:'Dr. Florencio',      role:'doctor' },
+  { id:'d7',  username:'dra.pena',      password:'iff@K27u',  name:'Dra. Peña',          role:'doctor' },
+  { id:'d8',  username:'dra.beltre',    password:'Z#18JMMc',  name:'Dra. Beltre',        role:'doctor' },
+  { id:'d9',  username:'dra.pina',      password:'$m4mDwwN',  name:'Dra. Piña',          role:'doctor' },
+  { id:'d10', username:'dra.abad',      password:'9NI#6QoF',  name:'Dra. Abad',          role:'doctor' },
+  { id:'d11', username:'dra.alcantara', password:'Gy@5C4sO',  name:'Dra. Alcántara',     role:'doctor' },
+  { id:'d12', username:'dr.ramirez',    password:'9S5@EiUm',  name:'Dr. Ramírez',        role:'doctor' },
+  { id:'d13', username:'dra.paredes',   password:'$aM19G8m',  name:'Dra. Paredes',       role:'doctor' },
+  { id:'d14', username:'dr.taveras',    password:'q!2fFN77',  name:'Dr. Taveras',        role:'doctor' },
+  { id:'d15', username:'dra.arredondo', password:'8w!EgYfL',  name:'Dra. Arredondo',     role:'doctor' },
+  // Estudiantes
+  { id:'st-003', username:'orlando.pena',     password:'Est2026!', name:'Orlando Peña',     role:'student' },
+  { id:'st-006', username:'andres.villar',    password:'Est2026!', name:'Andrés Villar',    role:'student' },
+  { id:'st-007', username:'rosa.cabrera',     password:'Est2026!', name:'Rosa Cabrera',     role:'student' },
+];
+
+const LoginPage=({onLogin,users=[]})=>{
+  const [username,setUsername]=React.useState('');
+  const [password,setPassword]=React.useState('');
+  const [error,setError]=React.useState('');
+  const [showPass,setShowPass]=React.useState(false);
+
+  const handle=()=>{
+    const u=users.find(u=>u.username&&u.username.toLowerCase()===username.trim().toLowerCase()&&u.password===password);
+    if(u){ setError(''); onLogin(u); }
+    else { setError('Usuario o contraseña incorrectos. Verifica tus credenciales.'); }
+  };
+
+  const handleKey=e=>{ if(e.key==='Enter') handle(); };
+
+  return(
+    <div style={{minHeight:'100vh',background:`linear-gradient(135deg,${COLORS.primary} 0%,${COLORS.accent} 100%)`,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+      <div style={{background:'white',borderRadius:20,padding:'40px 44px',width:'100%',maxWidth:440,boxShadow:'0 24px 64px rgba(0,0,0,0.25)'}}>
+        {/* Logo */}
+        <div style={{textAlign:'center',marginBottom:32}}>
+          <div style={{width:76,height:76,background:COLORS.primary,borderRadius:20,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px',boxShadow:'0 8px 24px rgba(26,58,92,0.35)'}}>
+            <span style={{color:'white',fontWeight:900,fontSize:28}}>GPA</span>
+          </div>
+          <h1 style={{margin:'0 0 4px',color:COLORS.primary,fontSize:26,fontWeight:800}}>GPA Academy</h1>
+          <p style={{margin:0,color:'#6B7280',fontSize:14}}>Sistema de Asistencia Quirúrgica</p>
+        </div>
+
+        {/* Form */}
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:6}}>Usuario</label>
+          <input value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={handleKey}
+            placeholder="ej: dr.maldonado" autoFocus
+            style={{width:'100%',padding:'11px 14px',border:`1.5px solid ${error?'#EF4444':'#D1D5DB'}`,borderRadius:10,fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+        </div>
+        <div style={{marginBottom:error?8:20}}>
+          <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:6}}>Contraseña</label>
+          <div style={{position:'relative'}}>
+            <input type={showPass?'text':'password'} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey}
+              placeholder="••••••••"
+              style={{width:'100%',padding:'11px 44px 11px 14px',border:`1.5px solid ${error?'#EF4444':'#D1D5DB'}`,borderRadius:10,fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+            <button onClick={()=>setShowPass(!showPass)} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',color:'#9CA3AF',fontSize:13}}>
+              {showPass?'Ocultar':'Ver'}
+            </button>
+          </div>
+        </div>
+
+        {error&&<div style={{padding:'9px 14px',background:'#FEE2E2',borderRadius:8,fontSize:13,color:'#991B1B',marginBottom:16,fontWeight:500}}>⚠ {error}</div>}
+
+        <button onClick={handle} style={{width:'100%',padding:14,background:COLORS.primary,color:'white',border:'none',borderRadius:10,fontSize:16,fontWeight:700,cursor:'pointer',letterSpacing:0.3}}>
+          Iniciar Sesión
+        </button>
+
+        <div style={{marginTop:20,padding:'12px 14px',background:'#F8FAFC',borderRadius:10,border:'1px solid #E5E7EB'}}>
+          <div style={{fontSize:12,color:'#6B7280',fontWeight:600,marginBottom:6}}>Acceso rápido (demo):</div>
+          <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+            {[['admin','GPA.Admin2026!','🔑 Admin'],['dr.maldonado','T0igU#pd','👨‍⚕️ Doctor'],['orlando.pena','Est2026!','🎓 Estudiante']].map(([u,p,label])=>(
+              <button key={u} onClick={()=>{setUsername(u);setPassword(p);setError('');}}
+                style={{padding:'4px 10px',borderRadius:6,border:'1.5px solid #D1D5DB',background:'white',fontSize:11,cursor:'pointer',fontWeight:600,color:'#374151'}}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const NAV_ITEMS=[
+  {key:'dashboard',    label:'Dashboard',          icon:'dashboard',   roles:['admin','doctor','student']},
+  {key:'supervision',  label:'Supervisión Clínica', icon:'checklist',   roles:['doctor']},
+  {key:'students',     label:'Estudiantes',         icon:'students',    roles:['admin']},
+  {key:'doctors',      label:'Doctores',            icon:'doctors',     roles:['admin']},
+  {key:'hospitals',    label:'Hospitales',          icon:'hospitals',   roles:['admin']},
+  {key:'assignments',  label:'Asignaciones',        icon:'assignments', roles:['admin','doctor']},
+  {key:'calendar',     label:'Calendario',          icon:'calendar',   roles:['admin','doctor','student']},
+  {key:'changes',      label:'Cambios de Día',      icon:'changes',    roles:['admin','student']},
+  {key:'checklist',    label:'Checklist',           icon:'checklist',  roles:['admin']},
+  {key:'reports',      label:'Reportes',            icon:'reports',    roles:['admin']},
+  {key:'skills',       label:'Destrezas',           icon:'skills',     roles:['admin','doctor']},
+  {key:'doc_alerts',   label:'Alertas Clínicas',    icon:'alerts',     roles:['doctor']},
+  {key:'coordinacion', label:'Coordinación',        icon:'send',       roles:['doctor']},
+  {key:'botluz',       label:'Bot Luz',             icon:'botluz',     roles:['admin']},
+  {key:'alerts',       label:'Alertas del Sistema', icon:'alerts',     roles:['admin']},
+  {key:'notifications',label:'Notificaciones',      icon:'bell',       roles:['admin']},
+];
+
+const Sidebar=({user,view,setView,collapsed,setCollapsed})=>{
+  const items=NAV_ITEMS.filter(i=>i.roles.includes(user.role));
+  const W=collapsed?64:240;
+  return(
+    <div style={{width:W,minHeight:'100vh',background:COLORS.primary,display:'flex',flexDirection:'column',transition:'width 0.25s',flexShrink:0}}>
+      <div style={{padding:'20px 16px',borderBottom:'1px solid rgba(255,255,255,0.12)',display:'flex',alignItems:'center',gap:10}}>
+        <div style={{width:36,height:36,background:'rgba(255,255,255,0.15)',borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><span style={{color:'white',fontWeight:900,fontSize:13}}>GPA</span></div>
+        {!collapsed&&<div><div style={{color:'white',fontWeight:800,fontSize:15,lineHeight:1.2}}>GPA Academy</div><div style={{color:'rgba(255,255,255,0.5)',fontSize:11}}>Asistencia Quirúrgica</div></div>}
+      </div>
+      <nav style={{flex:1,padding:'12px 8px',overflowY:'auto'}}>
+        {items.map(item=>(
+          <button key={item.key} onClick={()=>setView(item.key)}
+            style={{width:'100%',display:'flex',alignItems:'center',gap:12,padding:'10px 12px',borderRadius:10,border:'none',cursor:'pointer',marginBottom:2,
+              background:view===item.key?'rgba(255,255,255,0.18)':'transparent',
+              color:view===item.key?'white':'rgba(255,255,255,0.65)',
+              fontWeight:view===item.key?700:500,fontSize:13,justifyContent:collapsed?'center':'flex-start'}}>
+            <Icon name={item.icon} size={19} color={view===item.key?'white':'rgba(255,255,255,0.65)'}/>
+            {!collapsed&&<span>{item.label}</span>}
+          </button>
+        ))}
+      </nav>
+      <div style={{padding:'12px 8px',borderTop:'1px solid rgba(255,255,255,0.12)'}}>
+        {!collapsed&&<div style={{padding:'10px 12px',marginBottom:4,borderRadius:10,background:'rgba(255,255,255,0.08)'}}>
+          <div style={{color:'white',fontWeight:600,fontSize:13}}>{user.name}</div>
+          <div style={{color:'rgba(255,255,255,0.5)',fontSize:11}}>{user.role==='admin'?'Administrador':user.role==='doctor'?'Doctor Supervisor':'Estudiante'}</div>
+        </div>}
+        <button onClick={()=>setCollapsed(!collapsed)} style={{width:'100%',display:'flex',alignItems:'center',justifyContent:collapsed?'center':'flex-start',gap:10,padding:'8px 12px',borderRadius:10,border:'none',cursor:'pointer',background:'transparent',color:'rgba(255,255,255,0.5)',fontSize:13}}>
+          <svg width={18} height={18} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          {!collapsed&&'Colapsar'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const Header=({title,user,pendingChanges=0,onLogout})=>(
+  <div style={{height:64,background:'white',borderBottom:'1px solid #E5E7EB',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 28px',position:'sticky',top:0,zIndex:100,boxShadow:'0 1px 4px rgba(0,0,0,0.06)'}}>
+    <h2 style={{margin:0,fontSize:20,fontWeight:700,color:COLORS.primary}}>{title}</h2>
+    <div style={{display:'flex',alignItems:'center',gap:16}}>
+      {pendingChanges>0&&<div style={{position:'relative'}}><Icon name="bell" size={22} color={COLORS.warning}/><span style={{position:'absolute',top:-6,right:-6,background:COLORS.danger,color:'white',borderRadius:999,fontSize:10,fontWeight:700,padding:'1px 5px',lineHeight:1.5}}>{pendingChanges}</span></div>}
+      <div style={{display:'flex',alignItems:'center',gap:8,padding:'6px 12px',background:COLORS.light,borderRadius:10}}>
+        <Icon name="user" size={18} color={COLORS.primary}/>
+        <span style={{fontSize:13,fontWeight:600,color:COLORS.primary}}>{user.name}</span>
+      </div>
+      <button onClick={onLogout} style={{display:'flex',alignItems:'center',gap:6,padding:'6px 12px',background:'#FEE2E2',border:'none',borderRadius:10,cursor:'pointer',color:'#991B1B',fontSize:13,fontWeight:600}}>
+        <Icon name="logout" size={16} color="#991B1B"/>Salir
+      </button>
+    </div>
+  </div>
+);
+
+const [state, dispatch] = React.useReducer(reducer, initialState);
+
+function App() {
+  const [user, setUser] = React.useState(null);
+  const [view, setView] = React.useState('dashboard');
+  const [collapsed, setCollapsed] = React.useState(false);
+  const [toasts, setToasts] = React.useState([]);
+
+  const toast = (msg, type = 'success') => {
+    const id = Date.now();
+    setToasts([...toasts, { id, msg, type }]);
+    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setView('dashboard');
+  };
+
+  if (!user) return <LoginPage onLogin={setUser} users={ADMIN_USERS} />;
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar user={user} view={view} setView={setView} collapsed={collapsed} setCollapsed={setCollapsed} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Header title="GPA Academy" user={user} onLogout={handleLogout} />
+        <div style={{ flex: 1, overflowY: 'auto', background: COLORS.bg }}>
+          {view === 'dashboard' && <div><p>Dashboard Placeholder</p></div>}
+          {view === 'students' && <div><p>Students Placeholder</p></div>}
+          {view === 'doctors' && <div><p>Doctors Placeholder</p></div>}
+          {view === 'hospitals' && <div><p>Hospitals Placeholder</p></div>}
+        </div>
+      </div>
+      <div style={{ position: 'fixed', bottom: 0, right: 0 }}>
+        {toasts.map(t => <Toast key={t.id} msg={t.msg} type={t.type} onClose={() => setToasts(toasts.filter(x => x.id !== t.id))} />)}
+      </div>
+    </div>
+  );
+}
+
+const reducer = (state, action) => state;
+const initialState = { data: SAMPLE_DATA };
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>ss:pct>=70?COLORS.accent:COLORS.warning,borderRadius:999,transition:'width 0.4s'}}/>
+      </div>
+    </div>
+  );
+};
+
+const StatCard=({label,value,icon,color='#2E75B6',sub})=>(
+  <Card style={{display:'flex',alignItems:'center',gap:16,flex:1,minWidth:160}}>
+    <div style={{width:52,height:52,borderRadius:14,background:`${color}18`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+      <Icon name={icon} size={26} color={color}/>
+    </div>
+    <div>
+      <div style={{fontSize:28,fontWeight:800,color:'#1F2937',lineHeight:1}}>{value}</div>
+      <div style={{fontSize:13,color:'#6B7280',marginTop:2,fontWeight:500}}>{label}</div>
+      {sub&&<div style={{fontSize:11,color,marginTop:2,fontWeight:600}}>{sub}</div>}
+    </div>
+  </Card>
+);
+
+
+// ── STUDENT PERSONAL DASHBOARD ────────────────────────────────────────────────
+const StudentDashboardPage=({state,dispatch,toast,user})=>{
+  const st=state.students.find(s=>s.id===user.id);
+  const prog=state.programs?.find(p=>p.id===st?.programId);
+  const myAssignments=state.assignments.filter(a=>a.studentId===user.id);
+  const myChecklists=myAssignments.map(a=>state.checklists.find(c=>c.assignmentId===a.id)).filter(Boolean);
+
+  // ── Computed metrics ──────────────────────────────────────────────────────
+  const attended=myChecklists.filter(c=>c.attendance==='attended'||c.attendance==='late').length;
+  const attendanceRate=myChecklists.length===0?0:Math.round(attended/myChecklists.length*100);
+  const hoursFromChecklists=myChecklists.reduce((s,c)=>s+(c.totalHours||0),0);
+  const totalHours=st?.completedHoursOverride!=null?st.completedHoursOverride:hoursFromChecklists;
+  const requiredHours=st?.requiredHoursOverride||(prog?.requiredHours||40);
+  const totalCases=myChecklists.reduce((s,c)=>s+(c.cases||[]).reduce((ss,ca)=>ss+ca.count,0),0);
+
+  // ── Skills ────────────────────────────────────────────────────────────────
+  const skillMatrix={};
+  myChecklists.forEach(c=>Object.entries(c.skillLevels||{}).forEach(([sk,lv])=>{skillMatrix[sk]=Math.max(skillMatrix[sk]||0,lv);}));
+  const totalSkills=prog?.skills?.length||0;
+  const dominatedSkills=Object.values(skillMatrix).filter(v=>v>=3).length;
+  const pendingSkills=totalSkills>0?prog.skills.filter(sk=>(skillMatrix[sk]||0)===0).length:0;
+
+  // ── Grades ────────────────────────────────────────────────────────────────
+  const grades=st?.grades&&st.grades.length>0
+    ?st.grades
+    :myChecklists.map((c,i)=>{const a=myAssignments.find(as=>as.id===c.assignmentId);return{subject:`Práctica ${i+1}`,grade:c.performance||0,date:a?.date||''};}).filter(g=>g.grade>0);
+  const avgGrade=grades.length>0?(grades.reduce((s,g)=>s+Number(g.grade),0)/grades.length).toFixed(1):'—';
+
+  // ── Next class ────────────────────────────────────────────────────────
+  const today=new Date().toISOString().split('T')[0];
+  const nextA=myAssignments.filter(a=>a.date>=today&&a.status==='scheduled').sort((a,b)=>a.date.localeCompare(b.date))[0];
+  const nextDate=st?.nextClassDate||(nextA?.date||null);
+  const nextTime=st?.nextClassTime||(nextA?`${nextA.shiftStart}–${nextA.shiftEnd}`:null);
+  const nextModule=st?.nextClassModule||(nextA?(prog?.name||'Práctica clínica'):null);
+  const nextHosp=nextA?state.hospitals.find(h=>h.id===nextA.hospitalId)?.name:null;
+  const nextDr=nextA?state.doctors.find(d=>d.id===nextA.doctorId)?.name:null;
+
+  // ── Progress ──────────────────────────────────────────────────────────────
+  const totalClasses=st?.totalClasses||(prog?.requiredCases||20);
+  const completedClasses=st?.completedClasses!=null?st.completedClasses:myChecklists.length;
+  const progressPct=Math.min(100,Math.round((completedClasses/Math.max(totalClasses,1))*100));
+  const hoursPct=Math.min(100,Math.round(totalHours/Math.max(requiredHours,1)*100));
+
+  // ── Resources ─────────────────────────────────────────────────────────────
+  const drive=st?.driveLink||'';
+  const video=st?.videoLink||'';
+  const qbank=st?.questionBankLink||'';
+  const vr=st?.vrLink||'';
+
+  // ── Motivational phrase ───────────────────────────────────────────────────
+  const PHRASES=[
+    'La sala de operaciones es tu escuela: cada intervención te hace más preciso y seguro. 🔪',
+    'El asistente quirúrgico excelente se forma un pase de instrumental a la vez. ¡Sigue! ⚕️',
+    'Dominar el campo estéril es dominar la seguridad del paciente. ¡Tú lo logras! 💪',
+    'Tu campo estéril, tu conteo, tu precisión — marcan la diferencia en el quirófano. 🔬',
+    'La excelencia en asistencia quirúrgica se construye caso a caso. ¡Sigue sumando! 🌟',
+    'Hoy en el quirófano, mañana referente de asistencia quirúrgica. ¡Aprovecha cada turno! 🩺',
+  ];
+  const phrase=PHRASES[new Date().getDate()%PHRASES.length];
+
+  // ── Case timeline ─────────────────────────────────────────────────────────
+  const caseTypes=prog?.caseTypes?.slice(0,8)||[];
+
+  // ── Resource card component ───────────────────────────────────────────────
+  const ResourceCard=({href,emoji,label,sub,color})=>{
+    const hasLink=href&&href.trim()!=='';
+    return(
+      <a href={hasLink?href:'#'} target={hasLink?'_blank':'_self'}
+        onClick={hasLink?undefined:e=>{e.preventDefault();toast('Enlace no configurado aún. El administrador debe agregar el enlace.','info');}}
+        style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:10,padding:'22px 16px',
+          background:'white',borderRadius:14,textDecoration:'none',transition:'all 0.2s',
+          border:`2px solid ${hasLink?color+'35':'#E5E7EB'}`,
+          boxShadow:`0 2px 8px rgba(0,0,0,${hasLink?'0.08':'0.04'})`,cursor:'pointer',minHeight:130,
+          opacity:hasLink?1:0.7}}>
+        <div style={{width:50,height:50,borderRadius:14,background:`${color}15`,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <span style={{fontSize:26}}>{emoji}</span>
+        </div>
+        <div style={{textAlign:'center'}}>
+          <div style={{fontWeight:700,fontSize:13,color:hasLink?'#1F2937':'#9CA3AF',lineHeight:1.3}}>{label}</div>
+          <div style={{fontSize:11,color:'#9CA3AF',marginTop:3}}>{sub}</div>
+        </div>
+        {!hasLink&&<span style={{fontSize:10,color:'#D1D5DB',fontStyle:'italic',marginTop:-4}}>Pendiente de configurar</span>}
+        {hasLink&&<span style={{fontSize:11,fontWeight:600,color:color,display:'flex',alignItems:'center',gap:3}}>Acceder →</span>}
+      </a>
+    );
+  };
+
+  // ── Color helpers ─────────────────────────────────────────────────────────
+  const pColor=p=>p>=80?COLORS.success:p>=50?COLORS.accent:COLORS.warning;
+  const aColor=r=>r>=80?COLORS.success:r>=60?COLORS.warning:COLORS.danger;
+
+  return(
+    <div style={{padding:'20px 24px 32px',boxSizing:'border-box'}}>
+
+      {/* ════ GREETING BANNER ════ */}
+      <div style={{marginBottom:22,padding:'22px 28px',background:`linear-gradient(135deg,${COLORS.primary} 0%,${COLORS.accent} 100%)`,borderRadius:18,color:'white',boxShadow:'0 8px 24px rgba(26,58,92,0.22)',position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',right:-20,top:-20,width:120,height:120,borderRadius:'50%',background:'rgba(255,255,255,0.06)'}}></div>
+        <div style={{position:'absolute',right:60,bottom:-30,width:80,height:80,borderRadius:'50%',background:'rgba(255,255,255,0.04)'}}></div>
+        <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',flexWrap:'wrap',gap:12,position:'relative'}}>
+          <div style={{flex:1,minWidth:260}}>
+            <div style={{fontSize:11,opacity:0.72,fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:8}}>Centro de Progreso Quirúrgico · GPA Academy</div>
+            <h2 style={{margin:'0 0 8px',fontSize:26,fontWeight:900,letterSpacing:-0.5}}>
+              ¡Bienvenido, {(st?.name||user.name).split(' ')[0]}! 👋
+            </h2>
+            <p style={{margin:0,fontSize:13.5,opacity:0.88,lineHeight:1.65,maxWidth:560}}>{phrase}</p>
+          </div>
+          <div style={{background:'rgba(255,255,255,0.16)',borderRadius:12,padding:'14px 20px',textAlign:'center',backdropFilter:'blur(4px)',flexShrink:0}}>
+            <div style={{fontSize:10,opacity:0.7,fontWeight:700,textTransform:'uppercase',letterSpacing:1,marginBottom:5}}>Programa Actual</div>
+            <div style={{fontSize:14,fontWeight:800,lineHeight:1.3,maxWidth:180}}>{prog?.name||st?.cohort||'Sin programa asignado'}</div>
+            <div style={{fontSize:11,opacity:0.65,marginTop:5,fontFamily:'monospace'}}>{st?.code||user.id}</div>
+          </div>
+        </div>
+      </div>
+{bottom:10}}>
+            <span style={{fontSize:42,fontWeight:900,color:pColor(progressPct),lineHeight:1}}>{progressPct}</span>
+            <span style={{fontSize:20,fontWeight:700,color:'#CBD5E1'}}>%</span>
+          </div>
+          <div style={{height:8,background:'#F1F5F9',borderRadius:999,marginBottom:8,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${progressPct}%`,background:pColor(progressPct),borderRadius:999,transition:'width 0.7s ease'}}/>
+          </div>
+          <div style={{fontSize:12,color:'#64748B'}}>{completedClasses} de {totalClasses} clases completadas</div>
+          {progressPct>=100&&<div style={{marginTop:6,fontSize:11,fontWeight:700,color:COLORS.success}}>🎓 ¡Listo para certificación!</div>}
+        </div>
+
+        {/* Próxima Clase */}
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(26,58,92,0.08)',border:`2px solid ${nextDate?COLORS.accent+'40':'#E5E7EB'}`}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#EEF6FF',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+              <span style={{fontSize:18}}>📅</span>
+            </div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Próxima Clase</span>
+          </div>
+          {nextDate?(
+            <div>
+              <div style={{fontSize:17,fontWeight:800,color:COLORS.primary,marginBottom:4}}>{nextDate}</div>
+              <div style={{fontSize:12,color:COLORS.accent,fontWeight:700,marginBottom:6,background:'#EEF6FF',display:'inline-block',padding:'2px 8px',borderRadius:6}}>{nextTime||'—'}</div>
+              <div style={{fontSize:12,color:'#374151',marginBottom:6,lineHeight:1.45,fontWeight:500}}>{nextModule}</div>
+              {(nextHosp||nextDr)&&<div style={{fontSize:11,color:'#9CA3AF',marginBottom:10}}>🏥 {nextHosp}{nextDr?<span> · {nextDr}</span>:null}</div>}
+              <button onClick={()=>toast('📍 Abriendo detalles de tu práctica...','info')} style={{width:'100%',padding:'8px 12px',background:COLORS.accent,color:'white',border:'none',borderRadius:8,fontWeight:700,fontSize:12,cursor:'pointer',marginTop:4}}>
+                Ver Detalles →
+              </button>
+            </div>
+          ):(
+            <div style={{textAlign:'center',padding:'16px 0',color:'#9CA3AF'}}>
+              <div style={{fontSize:28,marginBottom:8}}>📭</div>
+              <div style={{fontSize:13,fontWeight:500}}>Sin clases programadas</div>
+              <div style={{fontSize:11,marginTop:4}}>El administrador puede agregar tu próxima sesión</div>
+            </div>
+          )}
+        </div>
+
+        {/* Asistencia */}
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(26,58,92,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#ECFDF5',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+              <span style={{fontSize:18}}>✅</span>
+            </div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Asistencia</span>
+          </div>
+          <div style={{display:'flex',alignItems:'baseline',gap:3,marginBottom:10}}>
+            <span style={{fontSize:42,fontWeight:900,color:aColor(attendanceRate),lineHeight:1}}>{attendanceRate}</span>
+            <span style={{fontSize:20,fontWeight:700,color:'#CBD5E1'}}>%</span>
+          </div>
+          <div style={{height:8,background:'#F1F5F9',borderRadius:999,marginBottom:8,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${attendanceRate}%`,background:aColor(attendanceRate),borderRadius:999}}/>
+          </div>
+          <div style={{fontSize:12,color:'#64748B'}}>{attended} de {myChecklists.length} sesiones</div>
+          {attendanceRate<80&&myChecklists.length>0&&<div style={{marginTop:8,padding:'4px 10px',background:'#FEF3C7',borderRadius:8,fontSize:11,color:'#92400E',fontWeight:600}}>⚠ Mínimo requerido: 80%</div>}
+          {attendanceRate>=80&&myChecklists.length>0&&<div style={{marginTop:8,fontSize:11,fontWeight:600,color:COLORS.success}}>✓ Asistencia en regla</div>}
+        </div>
+
+        {/* Horas Clínicas */}
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(26,58,92,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#F5F3FF',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+              <span style={{fontSize:18}}>⏱</span>
+            </div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Horas Clínicas</span>
+          </div>
+          <div style={{display:'flex',alignItems:'baseline',gap:3,marginBottom:10}}>
+            <span style={{fontSize:42,fontWeight:900,color:'#7C3AED',lineHeight:1}}>{parseFloat(totalHours).toFixed(1)}</span>
+            <span style={{fontSize:15,fontWeight:700,color:'#CBD5E1'}}>/{requiredHours}h</span>
+          </div>
+          <div style={{height:8,background:'#F1F5F9',borderRadius:999,marginBottom:8,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${hoursPct}%`,background:`linear-gradient(90deg,#7C3AED,#A855F7)`,borderRadius:999}}/>
+          </div>
+          <div style={{fontSize:12,color:'#64748B'}}>
+            {Math.max(0,requiredHours-totalHours).toFixed(1)}h restantes para cert.
+          </div>
+          {hoursPct>=100&&<div style={{marginTop:6,fontSize:11,fontWeight:700,color:COLORS.success}}>🎉 Horas completadas</div>}
+        </div>
+      </div>
+
+      {/* ════ FILA 2: CASOS, EVALUACIONES, TIMELINE ════ */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1.5fr',gap:14,marginBottom:18}}>
+
+        {/* Casos Registrados */}
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(26,58,92,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#ECFDF5',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <span style={{fontSize:18}}>🔬</span>
+            </div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Casos Registrados</span>
+          </div>
+          <div style={{fontSize:48,fontWeight:900,color:COLORS.success,lineHeight:1,marginBottom:4}}>{totalCases}</div>
+          <div style={{fontSize:12,color:'#64748B',marginBottom:14}}>casos clínicos / quirúrgicos</div>
+          <div style={{borderTop:'1px solid #F1F5F9',paddingTop:12}}>
+            <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',marginBottom:6,textTransform:'uppercase',letterSpacing:0.5}}>Últimas sesiones</div>
+            {myChecklists.length===0&&<div style={{fontSize:12,color:'#9CA3AF',textAlign:'center',padding:'8px 0'}}>Sin casos registrados aún</div>}
+            {myChecklists.slice(-3).reverse().map((cl,i)=>{
+              const a=myAssignments.find(as=>as.id===cl.assignmentId);
+              const n=(cl.cases||[]).reduce((s,c)=>s+c.count,0);
+              return(
+                <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:12,padding:'4px 0',borderBottom:'1px solid #F9FAFB'}}>
+                  <span style={{color:'#64748B'}}>{a?.date||'—'}</span>
+                  <span style={{fontWeight:700,color:COLORS.success,background:'#D1FAE5',padding:'1px 8px',borderRadius:5,fontSize:11}}>+{n} caso{n!==1?'s':''}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Evaluaciones */}
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(26,58,92,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#FFF7ED',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <span style={{fontSize:18}}>📝</span>
+            </div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Evaluaciones</span>
+          </div>
+          <div style={{display:'flex',gap:16,marginBottom:14}}>
+            <div style={{flex:1,textAlign:'center',padding:'10px 8px',background:'#EEF6FF',borderRadius:10}}>
+              <div style={{fontSize:32,fontWeight:900,color:COLORS.accent,lineHeight:1}}>{avgGrade}</div>
+              <div style={{fontSize:11,color:'#64748B',marginTop:3}}>Promedio</div>
+            </div>
+            <div style={{flex:1,textAlign:'center',padding:'10px 8px',background:pendingSkills>0?'#FEF3C7':'#F0FDF4',borderRadius:10}}>
+              <div style={{fontSize:32,fontWeight:900,color:pendingSkills>0?COLORS.warning:COLORS.success,lineHeight:1}}>{pendingSkills}</div>
+              <div style={{fontSize:11,color:'#64748B',marginTop:3}}>Pendientes</div>
+            </div>
+          </div>
+          <div style={{borderTop:'1px solid #F1F5F9',paddingTop:12,maxHeight:120,overflowY:'auto'}}>
+            {grades.length===0&&<div style={{fontSize:12,color:'#9CA3AF',textAlign:'center',padding:'8px 0'}}>Sin evaluaciones aún</div>}
+            {grades.slice(-4).reverse().map((g,i)=>{
+              const gc=Number(g.grade);const gcol=gc>=8?COLORS.success:gc>=6?COLORS.warning:COLORS.danger;
+              return(
+                <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'5px 0',fontSize:12,borderBottom:'1px solid #F9FAFB'}}>
+                  <span style={{color:'#374151',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',flex:1,marginRight:8,fontWeight:500}}>{g.subject}</span>
+                  <span style={{fontWeight:700,color:gcol,background:`${gcol}18`,padding:'2px 8px',borderRadius:6,fontSize:11,flexShrink:0}}>{gc}/10</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Timeline de Progreso */}
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(26,58,92,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#EEF6FF',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <span style={{fontSize:18}}>🗺️</span>
+            </div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Timeline de Progreso</span>
+          </div>
+          <div style={{maxHeight:200,overflowY:'auto',paddingRight:4}}>
+            {(caseTypes.length>0?caseTypes:['Módulo 1 — Inducción clínica','Módulo 2 — Práctica supervisada','Módulo 3 — Participación activa','Módulo 4 — Práctica independiente','Módulo 5 — Evaluación final']).map((ct,i)=>{
+              const done=i<completedClasses;
+              const current=i===completedClasses;
+              const pending=i>completedClasses;
+              return(
+                <div key={i} style={{display:'flex',alignItems:'flex-start',gap:12,marginBottom:10,position:'relative'}}>
+                  <div style={{display:'flex',flexDirection:'column',alignItems:'center',flexShrink:0}}>
+                    <div style={{width:28,height:28,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,fontSize:11,
+                      background:done?COLORS.success:current?COLORS.accent:'#F1F5F9',
+                      color:done||current?'white':'#94A3B8',
+                      border:`2.5px solid ${done?COLORS.success:current?COLORS.accent:'#E2E8F0'}`,
+                      boxShadow:current?`0 0 0 3px ${COLORS.accent}30`:'none',
+                      transition:'all 0.3s'}}>
+                      {done?'✓':i+1}
+                    </div>
+                    {i<(caseTypes.length>0?caseTypes.length:5)-1&&<div style={{width:2,height:16,background:done?COLORS.success:'#E2E8F0',margin:'3px 0'}}/>
+                  </div>
+                  <div style={{flex:1,paddingTop:4}}>
+                    <div style={{fontSize:12,fontWeight:current?700:done?600:400,color:done?'#374151':current?COLORS.primary:'#9CA3AF',lineHeight:1.4}}>{ct}</div>
+                    {done&&<div style={{fontSize:10,color:COLORS.success,fontWeight:700,marginTop:2}}>✓ Completado</div>}
+                    {current&&<div style={{fontSize:10,color:COLORS.accent,fontWeight:700,marginTop:2,display:'flex',alignItems:'center',gap:4}}><span style={{width:6,height:6,borderRadius:'50%',background:COLORS.accent,display:'inline-block',animation:'pulse 1s infinite'}}/>EN PROGRESO</div>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{marginTop:10,padding:'8px 12px',background:COLORS.light,borderRadius:8,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            <span style={{fontSize:12,fontWeight:600,color:COLORS.primary}}>Destrezas dominadas</span>
+            <span style={{fontSize:13,fontWeight:800,color:dominatedSkills===totalSkills&&totalSkills>0?COLORS.success:COLORS.accent}}>{dominatedSkills}<span style={{color:'#9CA3AF',fontWeight:400}}>/{totalSkills}</span></span>
+          </div>
+        </div>
+      </div>
+
+      {/* ════ FILA 3: ACCESO RÁPIDO ════ */}
+      <div>
+        <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:12,display:'flex',alignItems:'center',gap:8}}>
+          <span>⚡</span> Acceso Rápido al Material Académico
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:12}}>
+          <ResourceCard href={drive} emoji="📂" label="Material de Estudio" sub="Google Drive" color={COLORS.accent}/>
+          <ResourceCard href={video} emoji="🎬" label="Videos del Programa" sub="Biblioteca de videos" color="#DC2626"/>
+          <ResourceCard href={qbank} emoji="❓" label="Banco de Preguntas" sub="Cuestionarios y exámenes" color="#D97706"/>
+          <ResourceCard href={vr} emoji="🥽" label="VR Anatomy" sub="Anatomía en realidad virtual" color="#7C3AED"/>
+        </div>
+        {(!drive&&!video&&!qbank&&!vr)&&(
+          <div style={{marginTop:10,padding:'10px 14px',background:'#F8FAFC',border:'1px solid #E2E8F0',borderRadius:10,fontSize:12,color:'#64748B',display:'flex',alignItems:'center',gap:8}}>
+            <span>ℹ️</span> <span>El administrador puede configurar los enlaces de recursos desde el panel de <strong>Gestión de Estudiantes → Editar Estudiante → Recursos del Dashboard</strong>.</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ── DOCTOR CLINICAL DASHBOARD ────────────────────────────────────────────────
+const DoctorDashboardPage=({state,dispatch,toast,user,setView})=>{
+  const [reportModal,setReportModal]=React.useState(false);
+  const [attendModal,setAttendModal]=React.useState(null);
+  const [attendForm,setAttendForm]=React.useState({clockIn:'',clockOut:'',attendance:'attended',minutesLate:0});
+  const [evalModal,setEvalModal]=React.useState(null);
+  const [evalForm,setEvalForm]=React.useState({performance:8,comments:'',dresscode:true,handwash:true,areaKnowledge:true,instruments:true,asepsis:true,participation:true,communication:true,hospitalRules:true});
+
+  const today=new Date().toISOString().split('T')[0];
+  const nowHour=new Date().getHours();
+  const greeting=nowHour<12?'Buenos días':nowHour<18?'Buenas tardes':'Buenas noches';
+  const doctorRecord=state.doctors.find(d=>d.id===user.id);
+
+  const myAssignments=state.assignments.filter(a=>a.doctorId===user.id);
+  const todayAssignments=myAssignments.filter(a=>a.date===today);
+  const upcomingAssignments=myAssignments.filter(a=>a.date>=today&&a.status==='scheduled').sort((a,b)=>a.date.localeCompare(b.date));
+  const completedAssignments=myAssignments.filter(a=>a.status==='completed');
+  const myChecklists=state.checklists.filter(c=>myAssignments.some(a=>a.id===c.assignmentId));
+  const pendingEvals=completedAssignments.filter(a=>!state.checklists.find(c=>c.assignmentId===a.id&&c.signed));
+  const myStudentIds=[...new Set(myAssignments.map(a=>a.studentId))];
+  const myStudents=state.students.filter(s=>myStudentIds.includes(s.id));
+  const totalHoursSupervised=myChecklists.reduce((s,c)=>s+(c.totalHours||0),0);
+  const totalCasesSupervised=myChecklists.reduce((s,c)=>s+(c.cases||[]).reduce((ss,ca)=>ss+ca.count,0),0);
+  const todayAttended=myChecklists.filter(c=>{const a=myAssignments.find(a=>a.id===c.assignmentId);return a&&a.date===today&&c.attendance==='attended';}).length;
+
+  const lowAttendanceStudents=myStudents.filter(s=>{
+    const sA=myAssignments.filter(a=>a.studentId===s.id&&a.status==='completed');
+    if(!sA.length) return false;
+    const sCl=myChecklists.filter(c=>sA.some(a=>a.id===c.assignmentId));
+    if(!sCl.length) return false;
+    return sCl.filter(c=>c.attendance==='attended').length/sCl.length<0.75;
+  });
+  const alertCount=lowAttendanceStudents.length+pendingEvals.length;
+
+  const getStudent=id=>state.students.find(s=>s.id===id);
+  const getHospital=id=>state.hospitals.find(h=>h.id===id);
+  const getArea=(hId,aId)=>{const h=state.hospitals.find(h=>h.id===hId);return h?.areas?.find(a=>a.id===aId);};
+  const getProgram=id=>state.programs?.find(p=>p.id===id);
+  const getChecklist=aId=>state.checklists.find(c=>c.assignmentId===aId);
+  const studentPerf=sId=>{
+    const sA=myAssignments.filter(a=>a.studentId===sId&&a.status==='completed');
+    const sCl=myChecklists.filter(c=>sA.some(a=>a.id===c.assignmentId)&&c.performance>0);
+    if(!sCl.length) return null;
+    return Math.round(sCl.reduce((s,c)=>s+c.performance,0)/sCl.length*10)/10;
+  };
+  const lastAttendance=sId=>{
+    const sA=myAssignments.filter(a=>a.studentId===sId&&a.status==='completed').sort((a,b)=>b.date.localeCompare(a.date));
+    return sA[0]?.date||null;
+  };
+
+  const submitAttend=()=>{
+    dispatch({type:'COMPLETE_ASSIGNMENT',payload:attendModal.id});
+    const existing=getChecklist(attendModal.id);
+    if(!existing){
+      const late=attendForm.attendance==='late'?(parseInt(attendForm.minutesLate)||0):0;
+      const [h1,m1]=(attendForm.clockIn||'07:00').split(':').map(Number);
+      const [h2,m2]=(attendForm.clockOut||'13:00').split(':').map(Number);
+      const hrs=Math.max(0,((h2*60+m2)-(h1*60+m1))/60);
+      dispatch({type:'ADD_CHECKLIST',payload:{
+        id:'cl'+Date.now(),assignmentId:attendModal.id,
+        scheduledStart:attendModal.shiftStart,clockIn:attendForm.clockIn,clockOut:attendForm.clockOut,
+        minutesLate:late,totalHours:Math.round(hrs*10)/10,attendance:attendForm.attendance,
+        cases:[],skillLevels:{},dresscode:true,handwash:true,areaKnowledge:true,
+        instruments:true,asepsis:true,participation:true,communication:true,hospitalRules:true,
+        performance:0,comments:'',signed:false
+      }});
+    }
+    toast('✅ Asistencia registrada — '+getStudent(attendModal.studentId)?.name);
+    setAttendModal(null);
+  };
+
+  const submitEval=()=>{
+    const existing=getChecklist(evalModal.id);
+    const payload={performance:evalForm.performance,comments:evalForm.comments,
+      dresscode:evalForm.dresscode,handwash:evalForm.handwash,areaKnowledge:evalForm.areaKnowledge,
+      instruments:evalForm.instruments,asepsis:evalForm.asepsis,participation:evalForm.participation,
+      communication:evalForm.communication,hospitalRules:evalForm.hospitalRules,
+      signed:true,signedAt:new Date().toISOString()};
+    if(existing){
+      dispatch({type:'UPDATE_CHECKLIST',payload:{...existing,...payload}});
+    } else {
+      dispatch({type:'ADD_CHECKLIST',payload:{id:'cl'+Date.now(),assignmentId:evalModal.id,
+        scheduledStart:evalModal.shiftStart,clockIn:evalModal.shiftStart,clockOut:evalModal.shiftEnd,
+        minutesLate:0,totalHours:6,attendance:'attended',cases:[],skillLevels:{},...payload}});
+      dispatch({type:'COMPLETE_ASSIGNMENT',payload:evalModal.id});
+    }
+    toast('✅ Evaluación registrada y firmada');setEvalModal(null);
+  };
+
+  const openEval=a=>{
+    const ec=getChecklist(a.id);
+    setEvalModal(a);
+    setEvalForm({performance:ec?.performance||8,comments:ec?.comments||'',
+      dresscode:ec?.dresscode??true,handwash:ec?.handwash??true,areaKnowledge:ec?.areaKnowledge??true,
+      instruments:ec?.instruments??true,asepsis:ec?.asepsis??true,participation:ec?.participation??true,
+      communication:ec?.communication??true,hospitalRules:ec?.hospitalRules??true});
+  };
+
+  const avgPerf=()=>{
+    const cl=myChecklists.filter(c=>c.performance>0);
+    if(!cl.length) return '—';
+    return (cl.reduce((s,c)=>s+c.performance,0)/cl.length).toFixed(1);
+  };
+  const attendRate=myChecklists.length===0?0:Math.round(myChecklists.filter(c=>c.attendance==='attended').length/myChecklists.length*100);
+
+  return(
+    <div style={{padding:28,maxWidth:1400}}>
+
+      {/* ── BANNER DEL DOCTOR ─────────────────────────────────────────────── */}
+      <div style={{background:`linear-gradient(135deg,${COLORS.primary} 0%,${COLORS.accent} 100%)`,borderRadius:16,padding:'22px 28px',marginBottom:24,display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:16}}>
+        <div style={{display:'flex',alignItems:'center',gap:18}}>
+          <div style={{width:60,height:60,borderRadius:16,background:'rgba(255,255,255,0.18)',border:'2px solid rgba(255,255,255,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,flexShrink:0}}>🩺</div>
+          <div>
+            <div style={{color:'rgba(255,255,255,0.7)',fontSize:12,fontWeight:500,marginBottom:2}}>{greeting}, doctor</div>
+            <div style={{color:'white',fontSize:21,fontWeight:800,lineHeight:1.2}}>{user.name}</div>
+            <div style={{color:'rgba(255,255,255,0.6)',fontSize:12,marginTop:3}}>{doctorRecord?.specialty||'Cirugía General'}{doctorRecord?.license?' · Lic. '+doctorRecord.license:''}</div>
+          </div>
+        </div>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+          {[['📅','Calendario',()=>setView('calendar')],['📊','Reporte',()=>setReportModal(true)],['📞','Coordinación',()=>setView('coordinacion')]].map(([ico,lbl,action])=>(
+            <button key={lbl} onClick={action}
+              style={{padding:'8px 14px',background:'rgba(255,255,255,0.12)',color:'white',border:'1.5px solid rgba(255,255,255,0.25)',borderRadius:9,fontSize:12,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:6}}>
+              {ico} {lbl}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── MÉTRICAS PRINCIPALES ──────────────────────────────────────────── */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(175px,1fr))',gap:14,marginBottom:24}}>
+        {[
+          {label:'Estudiantes Asignados',value:myStudentIds.length,icon:'🎓',color:'#2E75B6',bg:'#EFF6FF',sub:'bajo tu supervisión'},{label:'Evaluaciones Pendientes',value:pendingEvals.length,icon:'📋',color:pendingEvals.length>0?'#D97706':'#059669',bg:pendingEvals.length>0?'#FFFBEB':'#ECFDF5',sub:pendingEvals.length>0?'Requieren firma':'Al día'},
+          {label:'Casos Supervisados',value:totalCasesSupervised,icon:'🔬',color:'#7C3AED',bg:'#F5F3FF',sub:'en todas las prácticas'},
+          {label:'Horas Supervisadas',value:totalHoursSupervised.toFixed(1),icon:'⏱',color:'#059669',bg:'#ECFDF5',sub:'horas clínicas'},
+          {label:'Tasa de Asistencia',value:attendRate+'%',icon:'✅',color:attendRate>=80?'#059669':'#D97706',bg:attendRate>=80?'#ECFDF5':'#FFFBEB',sub:attendRate>=80?'en parámetros':'por debajo del 80%'},
+        ].map((m,i)=>(<StatCard key={i} {...m}/>))}
+      </div>
+
+      {/* ── LISTA DE ASIGNACIONES ─────────────────────────────────────────── */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,marginBottom:24}}>
+        {/* Hoy */}
+        <Card>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <span style={{fontSize:18}}>📅</span>
+            <h3 style={{margin:0,color:COLORS.primary,fontSize:16,fontWeight:700}}>Hoy ({todayAssignments.length})</h3>
+          </div>
+          {todayAssignments.length===0?<p style={{color:'#9CA3AF',margin:0}}>Sin prácticas programadas hoy</p>
+            :<div style={{display:'flex',flexDirection:'column',gap:10}}>
+              {todayAssignments.map(a=>(       
+                <div key={a.id} style={{padding:'12px',background:'#F8FAFC',borderRadius:10,border:'1px solid #E5E7EB'}}>
+                  <div style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>{getStudent(a.studentId)?.name}</div>
+                  <div style={{fontSize:12,color:'#64748B',marginTop:2}}>{a.shift} ({a.shiftStart}–{a.shiftEnd})</div>
+                  <div style={{fontSize:12,color:'#9CA3AF',marginTop:2}}>{getHospital(a.hospitalId)?.name} · {getArea(a.hospitalId,a.areaId)?.name}</div>
+                </div>
+              ))}
+            </div>}
+        </Card>
+
+        {/* Próximos 7 días */}
+        <Card>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <span style={{fontSize:18}}>🔜</span>
+            <h3 style={{margin:0,color:COLORS.primary,fontSize:16,fontWeight:700}}>Próximos 7 días ({upcomingAssignments.length})</h3>
+          </div>
+          {upcomingAssignments.length===0?<p style={{color:'#9CA3AF',margin:0}}>Sin prácticas programadas</p>
+            :<div style={{display:'flex',flexDirection:'column',gap:10}}>
+              {upcomingAssignments.slice(0,5).map(a=>(                   
+                <div key={a.id} style={{padding:'12px',background:'#F8FAFC',borderRadius:10,border:'1px solid #E5E7EB'}}>
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'start'}}>
+                    <div>
+                      <div style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>{a.date}</div>
+                      <div style={{fontSize:12,color:'#374151',marginTop:2}}>{getStudent(a.studentId)?.name}</div>
+                    </div>
+                    <span style={{fontSize:11,fontWeight:700,color:COLORS.accent,background:'#EFF6FF',padding:'2px 8px',borderRadius:4}}>{a.shift}</span>
+                  </div>
+                </div>
+              ))}
+            </div>}
+        </Card>
+      </div>
+
+      {/* ── ESTUDIANTES CON ALERTAS ───────────────────────────────────────── */}
+      {alertCount>0&&(
+        <Card style={{marginBottom:24,border:'2px solid '+COLORS.warning,background:'#FFFBEB'}}>
+          <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
+            <span style={{fontSize:18}}>⚠️</span>
+            <h3 style={{margin:0,color:COLORS.warning,fontSize:16,fontWeight:700}}>Alertas ({alertCount})</h3>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+            {lowAttendanceStudents.length>0&&(
+              <div style={{padding:12,background:'white',borderRadius:8,border:'1px solid #FED7AA'}}>
+                <div style={{fontSize:12,fontWeight:700,color:'#92400E',marginBottom:6}}>Baja asistencia ({lowAttendanceStudents.length})</div>
+                {lowAttendanceStudents.map(s=><div key={s.id} style={{fontSize:11,color:'#374151',padding:4}}>{s.name}</div>)}
+              </div>
+            )}
+            {pendingEvals.length>0&&(
+              <div style={{padding:12,background:'white',borderRadius:8,border:'1px solid #FED7AA'}}>
+                <div style={{fontSize:12,fontWeight:700,color:'#92400E',marginBottom:6}}>Evaluaciones pendientes ({pendingEvals.length})</div>
+                {pendingEvals.map(a=><div key={a.id} style={{fontSize:11,color:'#374151',padding:4}}>{getStudent(a.studentId)?.name}</div>)}
+              </div>
+            )}
+          </div>
+        </Card>
+      )}
+
+      {/* ── TABLA DE ESTUDIANTES ──────────────────────────────────────────── */}
+      <Card>
+        <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>Mis Estudiantes ({myStudents.length})</h3>
+        <Table headers={['Nombre','Código','Asignaciones','Último','Desempeño']}
+          rows={myStudents.map(s=>[
+            s.name,
+            s.code,
+            myAssignments.filter(a=>a.studentId===s.id).length,
+            lastAttendance(s.id)||'—',
+            studentPerf(s.id)?.toFixed(1)||'—',
+          ])}/>
+      </Card>
+    </div>
+  );
+};
+
+function App() {
+  const [user, setUser] = React.useState(null);
+  const [view, setView] = React.useState('dashboard');
+  const [collapsed, setCollapsed] = React.useState(false);
+  const [toasts, setToasts] = React.useState([]);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  const toast = (msg, type = 'success') => {
+    const id = Date.now();
+    setToasts([...toasts, { id, msg, type }]);
+    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setView('dashboard');
+  };
+
+  if (!user) return <LoginPage onLogin={setUser} users={ADMIN_USERS} />;
+
+  const pageTitle = {
+    dashboard: 'Dashboard',
+    supervision: 'Supervisión Clínica',
+    students: 'Gestión de Estudiantes',
+    doctors: 'Gestión de Doctores',
+    hospitals: 'Gestión de Hospitales',
+    assignments: 'Asignaciones de Prácticas',
+    calendar: 'Calendario',
+    changes: 'Cambios de Día',
+    checklist: 'Checklist de Prácticas',
+    reports: 'Reportes',
+    skills: 'Destrezas',
+    doc_alerts: 'Alertas Clínicas',
+    coordinacion: 'Coordinación',
+    botluz: 'Bot Luz',
+    alerts: 'Alertas del Sistema',
+    notifications: 'Notificaciones',
+  }[view] || 'GPA Academy';
+
+  const pendingChanges = state.dayChanges?.filter(dc => dc.status === 'pending')?.length || 0;
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar user={user} view={view} setView={setView} collapsed={collapsed} setCollapsed={setCollapsed} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Header title={pageTitle} user={user} pendingChanges={pendingChanges} onLogout={handleLogout} />
+        <div style={{ flex: 1, overflowY: 'auto', background: COLORS.bg }}>
+          {user.role === 'admin' && (
+            <>
+              {view === 'dashboard' && <div><p>Dashboard Admin</p></div>}
+              {view === 'students' && <div><p>Gestión de Estudiantes</p></div>}
+              {view === 'doctors' && <div><p>Gestión de Doctores</p></div>}
+              {view === 'hospitals' && <div><p>Gestión de Hospitales</p></div>}
+              {view === 'assignments' && <div><p>Asignaciones</p></div>}
+              {view === 'checklist' && <div><p>Checklist</p></div>}
+              {view === 'reports' && <div><p>Reportes</p></div>}
+              {view === 'botluz' && <div><p>Bot Luz</p></div>}
+            </>
+          )}
+          {(user.role === 'admin' || user.role === 'doctor') && (
+            <>
+              {view === 'dashboard' && (user.role === 'doctor' ? <DoctorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} /> : <div><p>Admin Dashboard</p></div>)}
+              {view === 'calendar' && <div><p>Calendario</p></div>}
+            </>
+          )}
+          {user.role === 'doctor' && (
+            <>
+              {view === 'supervision' && <div><p>Supervisión Clínica</p></div>}
+              {view === 'doc_alerts' && <div><p>Alertas Clínicas</p></div>}
+              {view === 'coordinacion' && <div><p>Coordinación</p></div>}
+            </>
+          )}
+          {(user.role === 'admin' || user.role === 'student') && (
+            <>
+              {view === 'calendar' && <div><p>Calendario Estudiante</p></div>}
+              {view === 'changes' && <div><p>Cambios de Día</p></div>}
+            </>
+          )}
+          {user.role === 'student' && view === 'dashboard' && <StudentDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} />}
+        </div>
+      </div>
+      <div style={{ position: 'fixed', bottom: 0, right: 0 }}>
+        {toasts.map(t => <Toast key={t.id} msg={t.msg} type={t.type} onClose={() => setToasts(toasts.filter(x => x.id !== t.id))} />)}
+      </div>
+    </div>
+  );
+}
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'COMPLETE_ASSIGNMENT':
+      return {
+        ...state,
+        assignments: state.assignments.map(a => a.id === action.payload ? { ...a, status: 'completed' } : a),
+      };
+    case 'ADD_CHECKLIST':
+      return {
+        ...state,
+        checklists: [...state.checklists, action.payload],
+      };
+    case 'UPDATE_CHECKLIST':
+      return {
+        ...state,
+        checklists: state.checklists.map(c => c.id === action.payload.id ? action.payload : c),
+      };
+    default:
+      return state;
+  }
+};
+
+const initialState = { ...SAMPLE_DATA };
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>
+
+        {/* Módulo de Evaluación Rápida */}
+        <Card style={{padding:'20px 24px'}}>
+          <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>⚡ Evaluación Rápida</h3>
+          {pendingEvals.length===0?(
+            <p style={{margin:0,color:'#9CA3AF'}}>Todas las prácticas están evaluadas</p>
+          ):(
+            <div style={{display:'flex',flexDirection:'column',gap:12}}>
+              <select value={evalModal?.id||''} onChange={e=>{const a=pendingEvals.find(x=>x.id===e.target.value);openEval(a);}} style={{width:'100%',padding:'10px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14}}>
+                <option value="">Selecciona una práctica para evaluar...</option>
+                {pendingEvals.map(a=><option key={a.id} value={a.id}>{getStudent(a.studentId)?.name||'?'} · {a.date}</option>)}
+              </select>
+              <div style={{padding:'10px 12px',background:'#F0F9FF',borderRadius:9,fontSize:12,color:'#0369A1'}}>
+                💡 Selecciona una práctica para abrir el formulario de evaluación rápida.
+              </div>
+            </div>
+          )}
+        </Card>
+
+        {/* Mis estadísticas de supervisor */}
+        <Card style={{padding:'20px 24px'}}>
+          <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>📊 Mis Estadísticas</h3>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+            <div>
+              <div style={{fontSize:11,color:'#9CA3AF',fontWeight:700,textTransform:'uppercase',marginBottom:4}}>Promedio de Desempeño</div>
+              <div style={{fontSize:32,fontWeight:900,color:COLORS.accent,lineHeight:1}}>{avgPerf()}</div>
+              <div style={{fontSize:12,color:'#64748B',marginTop:4}}>en estudiantes evaluados</div>
+            </div>
+            <div>
+              <div style={{fontSize:11,color:'#9CA3AF',fontWeight:700,textTransform:'uppercase',marginBottom:4}}>Tasa de Asistencia</div>
+              <div style={{fontSize:32,fontWeight:900,color:attendRate>=80?COLORS.success:COLORS.warning,lineHeight:1}}>{attendRate}%</div>
+              <div style={{fontSize:12,color:'#64748B',marginTop:4}}>{attendRate>=80?'excelente':'necesita mejora'}</div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+const DoctorPerformancePanel = ({ state, doctor, toast }) => {
+  const assignments = state.assignments.filter(a => a.doctorId === doctor.id);
+  const checklists = state.checklists.filter(c => assignments.some(a => a.id === c.assignmentId));
+  const students = [...new Set(assignments.map(a => a.studentId))].map(id => state.students.find(s => s.id === id)).filter(Boolean);
+
+  return (
+    <Card>
+      <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>{doctor.name} - Desempeño</h3>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))',gap:12}}>
+        <div>
+          <div style={{fontSize:11,color:'#9CA3AF',fontWeight:700,marginBottom:6,textTransform:'uppercase'}}>Prácticas Dirigidas</div>
+          <div style={{fontSize:24,fontWeight:800,color:COLORS.primary}}>{assignments.length}</div>
+        </div>
+        <div>
+          <div style={{fontSize:11,color:'#9CA3AF',fontWeight:700,marginBottom:6,textTransform:'uppercase'}}>Estudiantes</div>
+          <div style={{fontSize:24,fontWeight:800,color:COLORS.accent}}>{students.length}</div>
+        </div>
+        <div>
+          <div style={{fontSize:11,color:'#9CA3AF',fontWeight:700,marginBottom:6,textTransform:'uppercase'}}>Horas Supervisadas</div>
+          <div style={{fontSize:24,fontWeight:800,color:COLORS.success}}>{checklists.reduce((s,c)=>s+(c.totalHours||0),0).toFixed(1)}h</div>
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+function App() {
+  const [user, setUser] = React.useState(null);
+  const [view, setView] = React.useState('dashboard');
+  const [collapsed, setCollapsed] = React.useState(false);
+  const [toasts, setToasts] = React.useState([]);
+  const [toastMsg, setToastMsg] = React.useState(null);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  const toast = (msg, type = 'success') => {
+    setToastMsg({ msg, type });
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setView('dashboard');
+  };
+
+  if (!user) return <LoginPage onLogin={setUser} users={ADMIN_USERS} />;
+
+  const pageTitle = {
+    dashboard: user.role === 'student' ? 'Mi Dashboard' : user.role === 'doctor' ? 'Supervisión Clínica' : 'Dashboard',
+    supervision: 'Supervisión Clínica',
+    students: 'Gestión de Estudiantes',
+    doctors: 'Gestión de Doctores',
+    hospitals: 'Gestión de Hospitales',
+    assignments: 'Asignaciones de Prácticas',
+    calendar: 'Calendario',
+    changes: 'Cambios de Día',
+    checklist: 'Checklist de Prácticas',
+    reports: 'Reportes',
+    skills: 'Gestión de Destrezas',
+    doc_alerts: 'Alertas Clínicas',
+    coordinacion: 'Coordinación',
+    botluz: 'Bot Luz',
+    alerts: 'Alertas del Sistema',
+    notifications: 'Notificaciones',
+  }[view] || 'GPA Academy';
+
+  const pendingChanges = state.dayChanges?.filter(dc => dc.status === 'pending')?.length || 0;
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar user={user} view={view} setView={setView} collapsed={collapsed} setCollapsed={setCollapsed} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Header title={pageTitle} user={user} pendingChanges={pendingChanges} onLogout={handleLogout} />
+        <div style={{ flex: 1, overflowY: 'auto', background: COLORS.bg }}>
+          {view === 'dashboard' && user.role === 'student' && <StudentDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} />}
+          {view === 'dashboard' && user.role === 'doctor' && <DoctorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} />}
+          {view === 'dashboard' && user.role === 'admin' && <div><p style={{padding:20}}>Bienvenido al Dashboard Administrativo</p></div>}
+          {view !== 'dashboard' && <div style={{padding:20,color:'#9CA3AF'}}><p>Sección de {pageTitle} - Próximamente</p></div>}
+        </div>
+      </div>
+      <div style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 1000 }}>
+        {toastMsg&&<Toast msg={toastMsg.msg} type={toastMsg.type} onClose={()=>setToastMsg(null)}/>
+      </div>
+    </div>
+  );
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'COMPLETE_ASSIGNMENT':
+      return {
+        ...state,
+        assignments: state.assignments.map(a => a.id === action.payload ? { ...a, status: 'completed' } : a),
+      };
+    case 'ADD_CHECKLIST':
+      return {
+        ...state,
+        checklists: [...state.checklists, action.payload],
+      };
+    case 'UPDATE_CHECKLIST':
+      return {
+        ...state,
+        checklists: state.checklists.map(c => c.id === action.payload.id ? action.payload : c),
+      };
+    default:
+      return state;
+  }
+};
+
+const initialState = { ...SAMPLE_DATA };
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>
