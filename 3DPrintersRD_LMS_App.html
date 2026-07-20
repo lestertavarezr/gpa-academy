@@ -204,6 +204,11 @@ const SAMPLE_DATA = {
     { id:'l-3d5', name:'Kelvin Sánchez',     phone:'+1-849-555-2005', email:'',                        program:'Mantenimiento y Reparación de Impresoras 3D', temperature:'tibio', status:'nuevo', source:'Facebook',  assignedTo:'ADI (Bot)', notes:'Tiene una impresora dañada, quiere aprender a repararla él mismo.', value:4500 },
     { id:'l-3d6', name:'Estefany Guzmán',    phone:'+1-809-555-2006', email:'estefany.g@hotmail.com',  program:'Impresión 3D Avanzada — Multi-material', temperature:'frio', status:'nuevo',    source:'Instagram', assignedTo:'ADI (Bot)', notes:'Solo preguntó el precio del curso avanzado. Sin respuesta después del primer contacto.', value:9500 },
   ],
+  submissions: [
+    { id:'sub1', studentId:'st-3d6', programId:'p-3d1', projectType:'Impresión multi-color (AMS)', title:'Proyecto final — Figura multi-color', imageDataUrl:null, placeholderLabel:'AMS · 4 colores', placeholderColor:'#F97316', uploadedAt:'2026-07-15T18:30:00Z', status:'revisado', feedback:'Excelente acabado, los cambios de color quedaron perfectamente alineados. ¡Listo para certificación!' },
+    { id:'sub2', studentId:'st-3d3', programId:'p-3d1', projectType:'Pieza con soportes removibles', title:'Engranaje con soportes — práctica 3', imageDataUrl:null, placeholderLabel:'Soportes removibles', placeholderColor:'#7C3AED', uploadedAt:'2026-07-08T18:10:00Z', status:'pendiente', feedback:'' },
+    { id:'sub3', studentId:'st-3d8', programId:'p-3d5', projectType:'Cambio de nozzle', title:'Nozzle reemplazado — antes y después', imageDataUrl:null, placeholderLabel:'Mantenimiento', placeholderColor:'#16A34A', uploadedAt:'2026-07-14T18:15:00Z', status:'revisado', feedback:'Buen trabajo documentando el proceso. Se nota el cuidado en el manejo de herramientas.' },
+  ],
 };
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -243,6 +248,8 @@ const Icon=({name,size=20,color='currentColor'})=>{
     download:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
     eye:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
     catalog:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>,
+    image:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>,
+    upload:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
   };
   return icons[name]||null;
 };
@@ -433,6 +440,7 @@ const NAV_ITEMS=[
   {key:'sessions',        label:'Sesiones',              icon:'sessions',   roles:['admin','instructor']},
   {key:'calendar',        label:'Calendario',            icon:'calendar',   roles:['admin','instructor','student']},
   {key:'changes',         label:'Cambios de Horario',    icon:'changes',    roles:['admin','student']},
+  {key:'portfolio',       label:'Portafolio',            icon:'image',      roles:['admin','student']},
   {key:'checklist',       label:'Checklist de Sesión',   icon:'checklist',  roles:['admin']},
   {key:'reports',         label:'Reportes',              icon:'reports',    roles:['admin']},
   {key:'skills',          label:'Destrezas',             icon:'skills',     roles:['admin','instructor']},
@@ -1123,6 +1131,158 @@ const ChangesPage=({state,dispatch,toast,user})=>{
 };
 
 // ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — PORTAFOLIO (subida de fotos de trabajos — student / admin)
+// ══════════════════════════════════════════════════════════════════════════
+const MAX_UPLOAD_MB = 6;
+
+const PortfolioThumb=({sub,height=160})=>(
+  sub.imageDataUrl
+    ? <img src={sub.imageDataUrl} alt={sub.title} style={{width:'100%',height,objectFit:'cover',borderRadius:10,display:'block'}}/>
+    : <div style={{width:'100%',height,borderRadius:10,background:`${sub.placeholderColor||COLORS.accent}18`,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:6}}>
+        <Icon name="image" size={28} color={sub.placeholderColor||COLORS.accent}/>
+        <span style={{fontSize:11,fontWeight:700,color:sub.placeholderColor||COLORS.accent}}>{sub.placeholderLabel||'Sin foto'}</span>
+      </div>
+);
+
+const submissionStatusBadge=s=>s==='revisado'?<Badge text="Revisado" color="green"/>:<Badge text="Pendiente de revisión" color="yellow"/>;
+
+const StudentUploadForm=({state,dispatch,toast,user})=>{
+  const st=state.students.find(s=>s.id===user.id);
+  const prog=state.programs.find(p=>p.id===st?.programId);
+  const [title,setTitle]=React.useState('');
+  const [projectType,setProjectType]=React.useState('');
+  const [preview,setPreview]=React.useState(null);
+  const [fileName,setFileName]=React.useState('');
+  const fileInputRef=React.useRef(null);
+
+  const onFile=e=>{
+    const file=e.target.files&&e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')){toast('Selecciona un archivo de imagen (JPG, PNG, etc.).','error');return;}
+    if(file.size>MAX_UPLOAD_MB*1024*1024){toast(`La imagen supera el límite de ${MAX_UPLOAD_MB}MB.`,'error');return;}
+    const reader=new FileReader();
+    reader.onload=()=>{setPreview(reader.result);setFileName(file.name);};
+    reader.readAsDataURL(file);
+  };
+
+  const submit=()=>{
+    if(!title.trim()){toast('Ponle un título a tu trabajo.','error');return;}
+    if(!preview){toast('Sube una foto de tu pieza antes de publicar.','error');return;}
+    dispatch({type:'ADD_SUBMISSION',payload:{
+      id:'sub-'+Date.now(),studentId:user.id,programId:st?.programId,
+      projectType:projectType||'Trabajo del taller',title,imageDataUrl:preview,
+      uploadedAt:new Date().toISOString(),status:'pendiente',feedback:'',
+    }});
+    setTitle('');setProjectType('');setPreview(null);setFileName('');
+    if(fileInputRef.current) fileInputRef.current.value='';
+    toast('¡Foto publicada! El director la verá en tu portafolio.');
+  };
+
+  return(
+    <Card style={{marginBottom:16}}>
+      <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:12}}>Subir foto de mi trabajo</div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,alignItems:'start'}}>
+        <div>
+          <Input label="Título del trabajo" value={title} onChange={setTitle} placeholder="ej: Pieza multi-color — proyecto final"/>
+          <Select label="Tipo de proyecto" value={projectType} onChange={setProjectType} options={(prog?.projectTypes||[]).map(pt=>({value:pt,label:pt}))}/>
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={onFile} style={{display:'none'}}/>
+          <Btn color="secondary" onClick={()=>fileInputRef.current&&fileInputRef.current.click()}><Icon name="upload" size={15} color="#374151"/>{fileName?'Cambiar foto':'Elegir foto'}</Btn>
+          {fileName&&<span style={{marginLeft:10,fontSize:12,color:'#6B7280'}}>{fileName}</span>}
+          <div style={{marginTop:16}}><Btn onClick={submit}><Icon name="image" size={15} color="white"/>Publicar en mi portafolio</Btn></div>
+        </div>
+        <div>
+          <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5,marginBottom:6}}>Vista previa</div>
+          {preview
+            ? <img src={preview} alt="Vista previa" style={{width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}}/>
+            : <div style={{width:'100%',height:180,borderRadius:10,border:'2px dashed #E5E7EB',display:'flex',alignItems:'center',justifyContent:'center',color:'#9CA3AF',fontSize:12}}>Sin foto seleccionada</div>}
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+const PortfolioPage=({state,dispatch,toast,user}) => {
+  const [filterStudent,setFilterStudent]=React.useState('');
+  const [filterStatus,setFilterStatus]=React.useState('');
+  const [detail,setDetail]=React.useState(null);
+  const [feedbackDraft,setFeedbackDraft]=React.useState('');
+
+  const isAdmin=user.role==='admin';
+  let list=isAdmin?state.submissions:state.submissions.filter(s=>s.studentId===user.id);
+  if(isAdmin&&filterStudent) list=list.filter(s=>s.studentId===filterStudent);
+  if(isAdmin&&filterStatus) list=list.filter(s=>s.status===filterStatus);
+  list=[...list].sort((a,b)=>b.uploadedAt.localeCompare(a.uploadedAt));
+
+  const openDetail=sub=>{setDetail(sub);setFeedbackDraft(sub.feedback||'');};
+  const markReviewed=()=>{
+    dispatch({type:'REVIEW_SUBMISSION',payload:{id:detail.id,feedback:feedbackDraft}});
+    toast('Trabajo marcado como revisado.');
+    setDetail(null);
+  };
+
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      {!isAdmin&&<StudentUploadForm state={state} dispatch={dispatch} toast={toast} user={user}/>}
+
+      {isAdmin&&(
+        <Card style={{marginBottom:16,display:'flex',gap:12,alignItems:'flex-end',flexWrap:'wrap'}}>
+          <div style={{minWidth:220}}>
+            <Select label="Estudiante" value={filterStudent} onChange={setFilterStudent} options={state.students.map(s=>({value:s.id,label:s.name}))}/>
+          </div>
+          <div style={{minWidth:200}}>
+            <Select label="Estado" value={filterStatus} onChange={setFilterStatus} options={[{value:'pendiente',label:'Pendiente de revisión'},{value:'revisado',label:'Revisado'}]}/>
+          </div>
+          <span style={{fontSize:12,color:'#9CA3AF',marginBottom:16}}>{list.length} trabajo{list.length!==1?'s':''}</span>
+        </Card>
+      )}
+
+      {list.length===0&&<Card><div style={{color:'#9CA3AF',textAlign:'center',padding:20}}>{isAdmin?'No hay trabajos publicados con este filtro.':'Aún no has publicado ningún trabajo. ¡Sube la foto de tu primera pieza!'}</div></Card>}
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:16}}>
+        {list.map(sub=>{
+          const student=byId(state.students,sub.studentId);
+          return(
+            <Card key={sub.id} style={{padding:0,overflow:'hidden',cursor:isAdmin?'pointer':'default'}} >
+              <div style={{padding:12}} onClick={()=>isAdmin&&openDetail(sub)}>
+                <PortfolioThumb sub={sub}/>
+                <div style={{marginTop:10,fontWeight:700,fontSize:13,color:'#1F2937',lineHeight:1.3}}>{sub.title}</div>
+                {isAdmin&&<div style={{fontSize:11.5,color:'#6B7280',marginTop:2}}>{student?.name} · {student?.code}</div>}
+                <div style={{fontSize:11,color:'#9CA3AF',marginTop:2}}>{sub.projectType}</div>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:8}}>
+                  <span style={{fontSize:10.5,color:'#9CA3AF'}}>{new Date(sub.uploadedAt).toLocaleDateString('es-DO')}</span>
+                  {submissionStatusBadge(sub.status)}
+                </div>
+                {!isAdmin&&sub.feedback&&(
+                  <div style={{marginTop:8,padding:'6px 10px',background:COLORS.light,borderRadius:8,fontSize:11.5,color:'#9A3412'}}>💬 {sub.feedback}</div>
+                )}
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      {detail&&(
+        <Modal title={detail.title} onClose={()=>setDetail(null)} width={520}>
+          <PortfolioThumb sub={detail} height={260}/>
+          <div style={{marginTop:14,fontSize:13,display:'flex',flexDirection:'column',gap:6}}>
+            <div><strong>Estudiante:</strong> {byId(state.students,detail.studentId)?.name}</div>
+            <div><strong>Tipo de proyecto:</strong> {detail.projectType}</div>
+            <div><strong>Publicado:</strong> {new Date(detail.uploadedAt).toLocaleString('es-DO')}</div>
+            <div><strong>Estado:</strong> {submissionStatusBadge(detail.status)}</div>
+          </div>
+          <div style={{marginTop:14}}>
+            <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>Comentario del director</label>
+            <textarea value={feedbackDraft} onChange={e=>setFeedbackDraft(e.target.value)} rows={3} placeholder="Escribe una observación para el estudiante..."
+              style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',fontFamily:'inherit'}}/>
+          </div>
+          <div style={{marginTop:14}}><Btn color="success" onClick={markReviewed}><Icon name="check" size={15} color="white"/>Guardar y marcar como revisado</Btn></div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
 // MÓDULO — CHECKLIST DE SESIÓN (admin)
 // ══════════════════════════════════════════════════════════════════════════
 const ChecklistPage=({state})=>{
@@ -1347,6 +1507,10 @@ const reducer=(state,action)=>{
       return {...state, workshopAlerts: state.workshopAlerts.map(a=>a.id===action.payload?{...a,status:'resolved'}:a)};
     case 'ADD_COORD_NOTE':
       return {...state, coordinationNotes: [action.payload, ...state.coordinationNotes]};
+    case 'ADD_SUBMISSION':
+      return {...state, submissions: [action.payload, ...state.submissions]};
+    case 'REVIEW_SUBMISSION':
+      return {...state, submissions: state.submissions.map(s=>s.id===action.payload.id?{...s,status:'revisado',feedback:action.payload.feedback}:s)};
     default:
       return state;
   }
@@ -1375,6 +1539,7 @@ function App() {
     sessions: 'Sesiones',
     calendar: 'Calendario',
     changes: 'Cambios de Horario',
+    portfolio: user.role === 'admin' ? 'Portafolio de Estudiantes' : 'Mi Portafolio',
     checklist: 'Checklist de Sesión',
     reports: 'Reportes',
     skills: 'Gestión de Destrezas',
@@ -1401,6 +1566,7 @@ function App() {
     if (view === 'sessions') return <SessionsPage state={state} dispatch={dispatch} toast={toast} user={user} />;
     if (view === 'calendar') return <CalendarPage state={state} user={user} />;
     if (view === 'changes') return <ChangesPage state={state} dispatch={dispatch} toast={toast} user={user} />;
+    if (view === 'portfolio') return <PortfolioPage state={state} dispatch={dispatch} toast={toast} user={user} />;
     if (view === 'checklist') return <ChecklistPage state={state} />;
     if (view === 'reports') return <ReportsPage state={state} />;
     if (view === 'skills') return <SkillsPage state={state} />;
