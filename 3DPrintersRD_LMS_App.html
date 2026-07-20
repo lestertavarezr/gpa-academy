@@ -242,6 +242,7 @@ const Icon=({name,size=20,color='currentColor'})=>{
     email:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
     download:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
     eye:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+    catalog:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>,
   };
   return icons[name]||null;
 };
@@ -424,6 +425,7 @@ const LoginPage=({onLogin,users=[]})=>{
 // ══════════════════════════════════════════════════════════════════════════
 const NAV_ITEMS=[
   {key:'dashboard',       label:'Dashboard',            icon:'dashboard',   roles:['admin','instructor','student']},
+  {key:'programs',        label:'Programas',             icon:'catalog',    roles:['admin','instructor','student']},
   {key:'supervision',     label:'Supervisión de Taller', icon:'checklist',  roles:['instructor']},
   {key:'students',        label:'Estudiantes',           icon:'students',   roles:['admin']},
   {key:'instructors',     label:'Instructores',          icon:'instructors',roles:['admin']},
@@ -892,6 +894,88 @@ const AdminDashboardPage=({state})=>{
 };
 
 // ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — PROGRAMAS ACADÉMICOS (admin/instructor/student)
+// ══════════════════════════════════════════════════════════════════════════
+const ProgramCard=({p})=>{
+  const [expanded,setExpanded]=React.useState(false);
+  const cupoPct=Math.min(100,Math.round((p.studentsCount/p.maxStudents)*100));
+  const Chip=({text})=>(<span style={{display:'inline-block',padding:'3px 10px',borderRadius:999,fontSize:11.5,fontWeight:600,background:COLORS.light,color:'#9A3412',marginRight:6,marginBottom:6}}>{text}</span>);
+  return(
+    <Card style={{display:'flex',flexDirection:'column',gap:14}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:10}}>
+        <div>
+          <div style={{fontWeight:800,fontSize:16,color:COLORS.primary,lineHeight:1.3}}>{p.name}</div>
+          <div style={{fontSize:12.5,color:'#6B7280',marginTop:3}}>Instructor: {p.instructor}</div>
+        </div>
+        <Badge text={p.status==='activo'?'Activo':'Próximo'} color={p.status==='activo'?'green':'yellow'}/>
+      </div>
+
+      <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+        <div style={{flex:'1 1 100px',background:'#FAFAF9',borderRadius:10,padding:'10px 12px'}}>
+          <div style={{fontSize:10,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5}}>Precio</div>
+          <div style={{fontSize:17,fontWeight:800,color:COLORS.accent,marginTop:2}}>RD${p.price.toLocaleString()}</div>
+        </div>
+        <div style={{flex:'1 1 100px',background:'#FAFAF9',borderRadius:10,padding:'10px 12px'}}>
+          <div style={{fontSize:10,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5}}>Proyectos req.</div>
+          <div style={{fontSize:17,fontWeight:800,color:COLORS.primary,marginTop:2}}>{p.requiredProjects}</div>
+        </div>
+        <div style={{flex:'1 1 100px',background:'#FAFAF9',borderRadius:10,padding:'10px 12px'}}>
+          <div style={{fontSize:10,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5}}>Horas req.</div>
+          <div style={{fontSize:17,fontWeight:800,color:COLORS.primary,marginTop:2}}>{p.requiredHours}h</div>
+        </div>
+      </div>
+
+      <div>
+        <div style={{display:'flex',justifyContent:'space-between',fontSize:11.5,color:'#6B7280',marginBottom:4}}>
+          <span>Cupo: {p.studentsCount}/{p.maxStudents} estudiantes</span>
+          <span style={{fontWeight:700,color:cupoPct>=90?COLORS.danger:COLORS.accent}}>{cupoPct}%</span>
+        </div>
+        <div style={{height:7,background:'#F1F5F9',borderRadius:999}}><div style={{height:'100%',width:`${cupoPct}%`,background:cupoPct>=90?COLORS.danger:COLORS.accent,borderRadius:999}}/></div>
+      </div>
+
+      <div style={{fontSize:11.5,color:'#6B7280'}}>📅 {p.startDate} → {p.endDate}</div>
+
+      <button onClick={()=>setExpanded(!expanded)} style={{background:'none',border:'none',cursor:'pointer',padding:0,textAlign:'left',fontSize:12.5,fontWeight:700,color:COLORS.accent,display:'flex',alignItems:'center',gap:4}}>
+        {expanded?'Ocultar contenido del programa':'Ver contenido del programa'} {expanded?'▲':'▼'}
+      </button>
+
+      {expanded&&(
+        <div style={{display:'flex',flexDirection:'column',gap:10,paddingTop:4,borderTop:'1px solid #F1F5F9'}}>
+          <div>
+            <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5,marginBottom:6}}>Proyectos del programa</div>
+            <div>{p.projectTypes.map((pt,i)=><Chip key={i} text={pt}/>)}</div>
+          </div>
+          <div>
+            <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5,marginBottom:6}}>Destrezas que se certifican</div>
+            <div>{p.skills.map((sk,i)=><Chip key={i} text={sk}/>)}</div>
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+};
+
+const ProgramsPage=({state})=>{
+  const [filter,setFilter]=React.useState('todos');
+  const filtered=state.programs.filter(p=>filter==='todos'?true:p.status===filter);
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card style={{marginBottom:16,display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
+        <span style={{fontSize:13,fontWeight:600,color:'#374151'}}>Filtrar:</span>
+        {[['todos','Todos'],['activo','Activos'],['próximo','Próximos']].map(([v,label])=>(
+          <button key={v} onClick={()=>setFilter(v)} style={{padding:'6px 14px',borderRadius:999,border:`1.5px solid ${filter===v?COLORS.accent:'#E5E7EB'}`,background:filter===v?COLORS.light:'white',color:filter===v?'#9A3412':'#374151',fontSize:12.5,fontWeight:700,cursor:'pointer'}}>{label}</button>
+        ))}
+        <span style={{marginLeft:'auto',fontSize:12,color:'#9CA3AF'}}>{filtered.length} programa{filtered.length!==1?'s':''}</span>
+      </Card>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:16}}>
+        {filtered.map(p=><ProgramCard key={p.id} p={p}/>)}
+      </div>
+      {filtered.length===0&&<Card><div style={{color:'#9CA3AF',textAlign:'center',padding:20}}>Sin programas en este filtro.</div></Card>}
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
 // MÓDULO — ESTUDIANTES (admin)
 // ══════════════════════════════════════════════════════════════════════════
 const StudentsPage=({state,toast})=>{
@@ -1283,6 +1367,7 @@ function App() {
 
   const pageTitle = {
     dashboard: user.role === 'student' ? 'Mi Dashboard' : user.role === 'instructor' ? 'Supervisión de Taller' : 'Dashboard',
+    programs: 'Programas Académicos',
     supervision: 'Supervisión de Taller',
     students: 'Gestión de Estudiantes',
     instructors: 'Gestión de Instructores',
@@ -1308,6 +1393,7 @@ function App() {
       if (user.role === 'instructor') return <InstructorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} />;
       return <AdminDashboardPage state={state} />;
     }
+    if (view === 'programs') return <ProgramsPage state={state} />;
     if (view === 'supervision') return <InstructorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} />;
     if (view === 'students') return <StudentsPage state={state} dispatch={dispatch} toast={toast} />;
     if (view === 'instructors') return <InstructorsPage state={state} dispatch={dispatch} toast={toast} />;
