@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>3D Printers RD — Academia LMS</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#F6F5F3}
+input[type=range]{width:100%;accent-color:#F97316}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#f1f1f1}
+::-webkit-scrollbar-thumb{background:#FDBA74;border-radius:3px}
+.hover-card:hover{box-shadow:0 4px 20px rgba(17,24,39,0.18)!important}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
+</style></head><body><div id="root"></div>
+<script type="text/babel">
+
+// ══════════════════════════════════════════════════════════════════════════
+// DATOS DE MUESTRA — 3D Printers RD Academia
+// ══════════════════════════════════════════════════════════════════════════
+const SAMPLE_DATA = {
+  programs: [
+    { id:'p-3d1', name:'Impresión 3D Básica — FDM · Cohorte 2026-I', instructor:'Ing. Rafael Duarte',
+      requiredProjects:20, requiredHours:40, studentsCount:24, maxStudents:30,
+      startDate:'2026-05-01', endDate:'2026-08-15', price:6500, status:'activo',
+      projectTypes:[
+        'Calibración de cama y extrusor','Cubo de calibración','Soporte para celular',
+        'Engranaje funcional','Maceta paramétrica','Pieza con soportes removibles',
+        'Impresión multi-color (AMS)','Reparación de pieza rota (empalme)',
+      ],
+      skills:[
+        'Nivelación de cama','Selección de filamento (PLA/PETG/ABS)','Configuración de slicer',
+        'Orientación y soportes','Primeras capas y adherencia','Post-procesado y lijado',
+        'Identificación de fallos comunes','Mantenimiento básico del extrusor',
+      ],
+    },
+    { id:'p-3d2', name:'Diseño 3D para Impresión (CAD)', instructor:'Arq. Melissa Reyes',
+      requiredProjects:15, requiredHours:30, studentsCount:14, maxStudents:20,
+      startDate:'2026-06-01', endDate:'2026-08-30', price:7500, status:'activo',
+      projectTypes:[
+        'Modelado paramétrico básico','Pieza de ensamblaje (2 partes)','Rediseño de pieza (reverse engineering)',
+        'Modelo orgánico esculpido','Pieza optimizada para impresión','Proyecto final personalizado',
+      ],
+      skills:[
+        'Modelado en Fusion 360 / Tinkercad','Tolerancias para ensamblajes','Diseño para manufactura aditiva (DFAM)',
+        'Exportación STL/3MF','Escaneo 3D básico','Reparación de mallas',
+      ],
+    },
+    { id:'p-3d3', name:'Impresión 3D Avanzada — Multi-material', instructor:'Ing. Rafael Duarte',
+      requiredProjects:12, requiredHours:35, studentsCount:6, maxStudents:15,
+      startDate:'2026-08-01', endDate:'2026-10-15', price:9500, status:'próximo',
+      projectTypes:[
+        'Soportes solubles (PVA)','Pieza multi-color (4 colores)','Acabado tipo resina (lijado + pintura)',
+        'Pieza funcional a gran escala','Impresión con fibra de carbono',
+      ],
+      skills:[
+        'Configuración multi-material','Perfiles de temperatura avanzados','Pintura y acabado profesional',
+        'Optimización de tiempos de impresión','Resolución de warping y stringing',
+      ],
+    },
+    { id:'p-3d4', name:'Impresión en Resina (SLA/DLP)', instructor:'Lic. Carolina Ureña',
+      requiredProjects:10, requiredHours:20, studentsCount:9, maxStudents:15,
+      startDate:'2026-06-15', endDate:'2026-07-31', price:6000, status:'activo',
+      projectTypes:[
+        'Calibración de exposición','Miniatura detallada','Pieza de precisión (dental/joyería)','Curado y post-procesado UV',
+      ],
+      skills:[
+        'Manejo seguro de resina','Nivelación de FEP/tanque','Configuración de exposición por capa',
+        'Lavado y curado (wash & cure)','Disposición segura de residuos',
+      ],
+    },
+    { id:'p-3d5', name:'Mantenimiento y Reparación de Impresoras 3D', instructor:'Téc. José Manuel Payano',
+      requiredProjects:8, requiredHours:16, studentsCount:11, maxStudents:15,
+      startDate:'2026-07-01', endDate:'2026-07-31', price:4500, status:'activo',
+      projectTypes:[
+        'Cambio de nozzle','Calibración de extrusor (E-steps)','Reemplazo de correas y poleas',
+        'Diagnóstico de fallos de firmware','Actualización de firmware (Klipper/Marlin)',
+      ],
+      skills:[
+        'Diagnóstico de hardware','Calibración de firmware','Mantenimiento preventivo',
+        'Reemplazo de piezas de desgaste','Seguridad eléctrica básica',
+      ],
+    },
+  ],
+  students: [
+    { id:'st-3d1', name:'Gabriela Solano',      code:'3DP-001', email:'',                        phone:'8095551001', cohort:'FDM Básica 2026-I', programId:'p-3d1', status:'active', paymentStatus:'al_día',   progress:30, pendingCert:false },
+    { id:'st-3d2', name:'Miguel Ángel Ferreira',code:'3DP-002', email:'miguel.ferreira@gmail.com',phone:'8095551002', cohort:'FDM Básica 2026-I', programId:'p-3d1', status:'active', paymentStatus:'al_día',   progress:10, pendingCert:false },
+    { id:'st-3d3', name:'Camila Reynoso',       code:'3DP-003', email:'',                        phone:'8495551003', cohort:'FDM Básica 2026-I', programId:'p-3d1', status:'active', paymentStatus:'al_día',   progress:45, pendingCert:false,
+      materialLink:'https://drive.google.com/drive/folders/example-3dp-material', videoLink:'https://youtube.com/playlist?list=example-3dp', questionBankLink:'', slicerProfilesLink:'https://drive.google.com/drive/folders/example-slicer-profiles',
+      nextClassDate:'2026-07-22', nextClassTime:'14:00–18:00', nextClassModule:'Post-procesado y lijado — Pieza con soportes',
+      totalClasses:20, completedClasses:9, requiredHoursOverride:40, completedHoursOverride:null,
+      grades:[{subject:'Práctica 1 — Nivelación de cama',grade:9,date:'2026-06-10'},{subject:'Práctica 2 — Primeras capas',grade:8.5,date:'2026-06-17'},{subject:'Evaluación de Slicer',grade:9,date:'2026-06-24'}] },
+    { id:'st-3d4', name:'Ernesto Bautista',     code:'3DP-004', email:'',                        phone:'8095551004', cohort:'FDM Básica 2026-I', programId:'p-3d1', status:'active', paymentStatus:'al_día',   progress:0,  pendingCert:false,
+      materialLink:'', videoLink:'', questionBankLink:'', slicerProfilesLink:'', nextClassDate:'2026-07-22', nextClassTime:'14:00–18:00', nextClassModule:'Inducción — Calibración de cama', totalClasses:20, completedClasses:0 },
+    { id:'st-3d5', name:'Yolanda Peralta',      code:'3DP-005', email:'',                        phone:'8095551005', cohort:'Diseño CAD 2026-I', programId:'p-3d2', status:'active', paymentStatus:'al_día',   progress:0,  pendingCert:false,
+      materialLink:'', videoLink:'', questionBankLink:'', slicerProfilesLink:'', nextClassDate:'2026-07-25', nextClassTime:'09:00–13:00', nextClassModule:'Modelado paramétrico básico — Introducción', totalClasses:15, completedClasses:0 },
+    { id:'st-3d6', name:'Kevin Marte',          code:'3DP-006', email:'',                        phone:'8295551006', cohort:'FDM Básica 2026-I', programId:'p-3d1', status:'active', paymentStatus:'al_día',   progress:95, pendingCert:true,
+      materialLink:'https://drive.google.com/drive/folders/example-3dp-material', videoLink:'https://youtube.com/playlist?list=example-3dp', questionBankLink:'https://forms.gle/example-3dp-quiz', slicerProfilesLink:'https://drive.google.com/drive/folders/example-slicer-profiles',
+      nextClassDate:'2026-07-22', nextClassTime:'14:00–18:00', nextClassModule:'Proyecto final — Pieza multi-color (AMS)',
+      totalClasses:20, completedClasses:19, requiredHoursOverride:40, completedHoursOverride:null,
+      grades:[{subject:'Práctica 1 — Calibración',grade:9,date:'2026-06-03'},{subject:'Práctica 2 — Adherencia',grade:10,date:'2026-06-10'},{subject:'Evaluación Teórica — Materiales',grade:9.5,date:'2026-06-17'},{subject:'Práctica 3 — Soportes',grade:9,date:'2026-06-24'}] },
+    { id:'st-3d7', name:'Daniela Cordero',      code:'3DP-007', email:'',                        phone:'8095551007', cohort:'Resina SLA/DLP 2026-I', programId:'p-3d4', status:'active', paymentStatus:'atrasado', progress:80, pendingCert:true,
+      materialLink:'https://drive.google.com/drive/folders/example-3dp-resina', videoLink:'https://youtube.com/playlist?list=example-3dp-resina', questionBankLink:'', slicerProfilesLink:'',
+      nextClassDate:'2026-07-24', nextClassTime:'09:00–12:00', nextClassModule:'Curado y post-procesado UV — Cierre de módulo',
+      totalClasses:10, completedClasses:8, requiredHoursOverride:20, completedHoursOverride:null,
+      grades:[{subject:'Práctica 1 — Calibración de exposición',grade:7,date:'2026-06-19'},{subject:'Práctica 2 — Miniatura detallada',grade:8,date:'2026-06-26'},{subject:'Evaluación Seguridad Química',grade:8,date:'2026-07-03'}] },
+    { id:'st-3d8', name:'Luis Fernando Abreu',  code:'3DP-008', email:'',                        phone:'8495551008', cohort:'Mantenimiento 2026-I',  programId:'p-3d5', status:'active', paymentStatus:'pendiente', progress:75, pendingCert:false },
+  ],
+  instructors: [
+    { id:'i1', name:'Ing. Rafael Duarte',      specialty:'Impresión FDM · Impresión Avanzada',        certification:'CERT-3D-001', email:'rduarte@3dprintersrd.com',   phone:'8099003001', locations:['loc1','loc2'], status:'active', username:'ing.duarte',    password:'3DP#2026' },
+    { id:'i2', name:'Arq. Melissa Reyes',      specialty:'Diseño CAD · DFAM',                          certification:'CERT-3D-002', email:'mreyes@3dprintersrd.com',    phone:'8099003002', locations:['loc1'],        status:'active', username:'arq.mreyes',    password:'3DP#2026' },
+    { id:'i3', name:'Lic. Carolina Ureña',     specialty:'Impresión en Resina · Seguridad Química',    certification:'CERT-3D-003', email:'curena@3dprintersrd.com',    phone:'8099003003', locations:['loc2'],        status:'active', username:'lic.urena',     password:'3DP#2026' },
+    { id:'i4', name:'Téc. José Manuel Payano', specialty:'Mantenimiento y Reparación · Firmware',      certification:'CERT-3D-004', email:'jpayano@3dprintersrd.com',   phone:'8099003004', locations:['loc1','loc2'], status:'active', username:'tec.payano',    password:'3DP#2026' },
+  ],
+  locations: [
+    { id:'loc1', name:'Taller Principal — 3D Printers RD', city:'Santo Domingo', address:'C. José Andrés Aybar Castellanos #150C', contact:'Coordinación Académica', phone:'8092004001',
+      areas:[ { id:'a1', name:'Estación FDM',          capacity:8, shifts:[{name:'Mañana',start:'09:00',end:'13:00'},{name:'Tarde',start:'14:00',end:'18:00'}] },
+              { id:'a2', name:'Estación de Diseño CAD', capacity:6, shifts:[{name:'Mañana',start:'09:00',end:'13:00'}] },
+              { id:'a3', name:'Laboratorio de Resina',  capacity:4, shifts:[{name:'Tarde',start:'14:00',end:'18:00'}] } ]},
+    { id:'loc2', name:'Sede Santiago — 3D Printers RD', city:'Santiago', address:'Av. Estrella Sadhalá #220', contact:'Coordinación Académica Santiago', phone:'8092004002',
+      areas:[ { id:'a4', name:'Estación FDM',              capacity:6, shifts:[{name:'Mañana',start:'09:00',end:'13:00'},{name:'Tarde',start:'14:00',end:'18:00'}] },
+              { id:'a5', name:'Estación de Mantenimiento',  capacity:4, shifts:[{name:'Tarde',start:'14:00',end:'18:00'}] } ]},
+  ],
+  sessions: [
+    { id:'se1', studentId:'st-3d3', instructorId:'i1', locationId:'loc1', areaId:'a1', programId:'p-3d1', date:'2026-06-10', shift:'Mañana', shiftStart:'09:00', shiftEnd:'13:00', status:'completed', token:'tok_se1', notified:true  },
+    { id:'se2', studentId:'st-3d6', instructorId:'i1', locationId:'loc1', areaId:'a1', programId:'p-3d1', date:'2026-06-10', shift:'Mañana', shiftStart:'09:00', shiftEnd:'13:00', status:'completed', token:'tok_se2', notified:true  },
+    { id:'se3', studentId:'st-3d3', instructorId:'i1', locationId:'loc1', areaId:'a1', programId:'p-3d1', date:'2026-07-08', shift:'Tarde',  shiftStart:'14:00', shiftEnd:'18:00', status:'completed', token:'tok_se3', notified:true  },
+    { id:'se4', studentId:'st-3d6', instructorId:'i1', locationId:'loc1', areaId:'a1', programId:'p-3d1', date:'2026-07-15', shift:'Tarde',  shiftStart:'14:00', shiftEnd:'18:00', status:'completed', token:'tok_se4', notified:true  },
+    { id:'se5', studentId:'st-3d7', instructorId:'i3', locationId:'loc2', areaId:'a3', programId:'p-3d4', date:'2026-07-03', shift:'Mañana', shiftStart:'09:00', shiftEnd:'12:00', status:'completed', token:'tok_se5', notified:true  },
+    { id:'se6', studentId:'st-3d8', instructorId:'i4', locationId:'loc2', areaId:'a5', programId:'p-3d5', date:'2026-07-14', shift:'Tarde',  shiftStart:'14:00', shiftEnd:'18:00', status:'completed', token:'tok_se6', notified:true  },
+    { id:'se7', studentId:'st-3d3', instructorId:'i1', locationId:'loc1', areaId:'a1', programId:'p-3d1', date:'2026-07-22', shift:'Tarde',  shiftStart:'14:00', shiftEnd:'18:00', status:'scheduled', token:'tok_se7', notified:true  },
+    { id:'se8', studentId:'st-3d4', instructorId:'i1', locationId:'loc1', areaId:'a1', programId:'p-3d1', date:'2026-07-22', shift:'Tarde',  shiftStart:'14:00', shiftEnd:'18:00', status:'scheduled', token:'tok_se8', notified:true  },
+    { id:'se9', studentId:'st-3d6', instructorId:'i1', locationId:'loc1', areaId:'a1', programId:'p-3d1', date:'2026-07-22', shift:'Tarde',  shiftStart:'14:00', shiftEnd:'18:00', status:'scheduled', token:'tok_se9', notified:true  },
+    { id:'se10',studentId:'st-3d5', instructorId:'i2', locationId:'loc1', areaId:'a2', programId:'p-3d2', date:'2026-07-25', shift:'Mañana', shiftStart:'09:00', shiftEnd:'13:00', status:'scheduled', token:'tok_se10',notified:false },
+    { id:'se11',studentId:'st-3d7', instructorId:'i3', locationId:'loc2', areaId:'a3', programId:'p-3d4', date:'2026-07-24', shift:'Mañana', shiftStart:'09:00', shiftEnd:'12:00', status:'scheduled', token:'tok_se11',notified:true  },
+  ],
+  checklists: [
+    { id:'cl1', sessionId:'se1',
+      scheduledStart:'09:00', clockIn:'09:03', clockOut:'13:00', minutesLate:3, totalHours:3.95, attendance:'attended',
+      projects:[{type:'Calibración de cama y extrusor',count:1,role:'realizó',notes:'Nivelación asistida, buena adherencia final'},{type:'Cubo de calibración',count:2,role:'realizó',notes:'Dimensiones dentro de tolerancia (±0.2mm)'}],
+      skillLevels:{'Nivelación de cama':2,'Selección de filamento (PLA/PETG/ABS)':2,'Configuración de slicer':1,'Orientación y soportes':1,'Primeras capas y adherencia':2,'Post-procesado y lijado':0,'Identificación de fallos comunes':1,'Mantenimiento básico del extrusor':1},
+      epp:true,estacionLimpia:true,manejoMaterial:true,seguridadElectrica:true,participacion:true,comunicacion:true,normasTaller:true,
+      performance:8.5,comments:'Camila muestra buena precisión en calibración. Excelente primera práctica.',signed:true,signedAt:'2026-06-10T13:10:00Z' },
+    { id:'cl2', sessionId:'se2',
+      scheduledStart:'09:00', clockIn:'09:00', clockOut:'13:00', minutesLate:0, totalHours:4, attendance:'attended',
+      projects:[{type:'Calibración de cama y extrusor',count:1,role:'realizó',notes:'Independiente'},{type:'Cubo de calibración',count:3,role:'realizó',notes:'Excelente adherencia'},{type:'Soporte para celular',count:1,role:'participó',notes:'Primera exposición a soportes'}],
+      skillLevels:{'Nivelación de cama':3,'Selección de filamento (PLA/PETG/ABS)':3,'Configuración de slicer':2,'Orientación y soportes':2,'Primeras capas y adherencia':3,'Post-procesado y lijado':1,'Identificación de fallos comunes':2,'Mantenimiento básico del extrusor':2},
+      epp:true,estacionLimpia:true,manejoMaterial:true,seguridadElectrica:true,participacion:true,comunicacion:true,normasTaller:true,
+      performance:9,comments:'Kevin domina la calibración y avanza rápido. Candidato a mención de honor.',signed:true,signedAt:'2026-06-10T13:15:00Z' },
+    { id:'cl3', sessionId:'se3',
+      scheduledStart:'14:00', clockIn:'14:05', clockOut:'18:00', minutesLate:5, totalHours:3.9, attendance:'attended',
+      projects:[{type:'Engranaje funcional',count:1,role:'realizó',notes:'Ensamble correcto'},{type:'Pieza con soportes removibles',count:2,role:'realizó',notes:'Buen retiro de soportes'}],
+      skillLevels:{'Nivelación de cama':3,'Selección de filamento (PLA/PETG/ABS)':3,'Configuración de slicer':3,'Orientación y soportes':3,'Primeras capas y adherencia':3,'Post-procesado y lijado':2,'Identificación de fallos comunes':2,'Mantenimiento básico del extrusor':2},
+      epp:true,estacionLimpia:true,manejoMaterial:true,seguridadElectrica:true,participacion:true,comunicacion:true,normasTaller:true,
+      performance:9,comments:'Camila progresa muy bien con piezas de soporte complejo.',signed:true,signedAt:'2026-07-08T18:05:00Z' },
+    { id:'cl4', sessionId:'se4',
+      scheduledStart:'14:00', clockIn:'14:00', clockOut:'18:00', minutesLate:0, totalHours:4, attendance:'attended',
+      projects:[{type:'Impresión multi-color (AMS)',count:1,role:'realizó',notes:'Cambios de color limpios'},{type:'Maceta paramétrica',count:1,role:'realizó',notes:'Diseño propio'}],
+      skillLevels:{'Nivelación de cama':4,'Selección de filamento (PLA/PETG/ABS)':4,'Configuración de slicer':4,'Orientación y soportes':4,'Primeras capas y adherencia':4,'Post-procesado y lijado':3,'Identificación de fallos comunes':4,'Mantenimiento básico del extrusor':3},
+      epp:true,estacionLimpia:true,manejoMaterial:true,seguridadElectrica:true,participacion:true,comunicacion:true,normasTaller:true,
+      performance:10,comments:'Kevin está listo para certificación. Trabajo casi independiente.',signed:true,signedAt:'2026-07-15T18:05:00Z' },
+    { id:'cl5', sessionId:'se5',
+      scheduledStart:'09:00', clockIn:'09:20', clockOut:'12:00', minutesLate:20, totalHours:2.7, attendance:'late',
+      projects:[{type:'Calibración de exposición',count:1,role:'participó',notes:'Con guía de la instructora'},{type:'Miniatura detallada',count:1,role:'observó',notes:'Primera exposición'}],
+      skillLevels:{'Manejo seguro de resina':2,'Nivelación de FEP/tanque':1,'Configuración de exposición por capa':1,'Lavado y curado (wash & cure)':1,'Disposición segura de residuos':2},
+      epp:true,estacionLimpia:true,manejoMaterial:false,seguridadElectrica:true,participacion:true,comunicacion:true,normasTaller:true,
+      performance:7,comments:'Daniela llegó 20 minutos tarde. Buena actitud. Debe reforzar manejo de resina.',signed:true,signedAt:'2026-07-03T12:15:00Z' },
+    { id:'cl6', sessionId:'se6',
+      scheduledStart:'14:00', clockIn:'14:00', clockOut:'18:00', minutesLate:0, totalHours:4, attendance:'attended',
+      projects:[{type:'Cambio de nozzle',count:2,role:'realizó',notes:'Independiente en ambos casos'},{type:'Calibración de extrusor (E-steps)',count:1,role:'participó',notes:'Con supervisión'}],
+      skillLevels:{'Diagnóstico de hardware':3,'Calibración de firmware':2,'Mantenimiento preventivo':3,'Reemplazo de piezas de desgaste':3,'Seguridad eléctrica básica':2},
+      epp:true,estacionLimpia:true,manejoMaterial:true,seguridadElectrica:true,participacion:true,comunicacion:true,normasTaller:true,
+      performance:8,comments:'Luis Fernando domina el cambio de nozzle. Buen manejo de herramientas.',signed:true,signedAt:'2026-07-14T18:05:00Z' },
+  ],
+  scheduleChanges: [
+    { id:'sc1', studentId:'st-3d5', originalSessionId:'se10', newDate:'2026-07-29', newShift:'Tarde', reason:'Conflicto de horario laboral', status:'pending',  requestedAt:'2026-07-18T09:00:00Z' },
+    { id:'sc2', studentId:'st-3d7', originalSessionId:'se11', newDate:'2026-07-26', newShift:'Mañana', reason:'Cita médica previamente agendada', status:'approved', requestedAt:'2026-07-17T14:00:00Z', reviewedAt:'2026-07-17T16:00:00Z', reviewedBy:'admin1' },
+  ],
+  notifications: [
+    { id:'n1',  recipient:'Ing. Rafael Duarte', channel:'whatsapp', type:'session_reminder', status:'delivered', sentAt:'2026-07-21T08:00:00Z', summary:'Lista: Camila Reynoso, Ernesto Bautista y Kevin Marte — Estación FDM 22/07' },
+    { id:'n2',  recipient:'Arq. Melissa Reyes', channel:'whatsapp', type:'session_reminder', status:'sent',      sentAt:'2026-07-24T08:00:00Z', summary:'Lista: Yolanda Peralta — Diseño CAD 25/07' },
+    { id:'n3',  recipient:'Camila Reynoso',     channel:'whatsapp', type:'session_reminder', status:'delivered', sentAt:'2026-07-21T08:10:00Z', summary:'Recordatorio sesión 22/07 — Estación FDM' },
+    { id:'n4',  recipient:'Daniela Cordero',    channel:'email',    type:'session_reminder', status:'sent',      sentAt:'2026-07-23T08:05:00Z', summary:'Recordatorio 24/07 — sin WhatsApp, enviado por correo' },
+    { id:'n5',  recipient:'Daniela Cordero',    channel:'whatsapp', type:'change_pending',   status:'sent',      sentAt:'2026-07-17T14:05:00Z', summary:'Solicitud de cambio de horario pendiente' },
+    { id:'n6',  recipient:'Lic. Carolina Ureña',channel:'whatsapp', type:'change_approved',  status:'delivered', sentAt:'2026-07-17T16:10:00Z', summary:'Cambio aprobado: Daniela Cordero reasignada al 26/07' },
+    { id:'n7',  recipient:'Bot ADI',            channel:'whatsapp', type:'lead_captured',    status:'sent',      sentAt:'2026-07-19T10:30:00Z', summary:'Nuevo lead: Andy Cabrera — Impresión 3D Básica' },
+    { id:'n8',  recipient:'Bot ADI',            channel:'whatsapp', type:'lead_captured',    status:'sent',      sentAt:'2026-07-19T15:45:00Z', summary:'Lead caliente: Perla Núñez — RD$6,500 Impresión FDM' },
+  ],
+  workshopAlerts: [
+    { id:'al-3d1', instructorId:'i3', studentId:'st-3d7', alertType:'tardanza', description:'Daniela llegó 20 minutos tarde a la sesión del 03/07. Segunda vez en el módulo.', date:'2026-07-03', priority:'alta', status:'active', createdAt:'2026-07-03T12:20:00Z' },
+    { id:'al-3d2', instructorId:'i1', studentId:'st-3d4', alertType:'ausencia', description:'Ernesto Bautista no se presentó a su primera sesión sin avisar.', date:'2026-07-15', priority:'alta', status:'active', createdAt:'2026-07-15T13:30:00Z' },
+    { id:'al-3d3', instructorId:'i1', studentId:'st-3d6', alertType:'observacion', description:'Kevin muestra dominio excepcional. Candidato para mención de honor y monitor del taller.', date:'2026-07-15', priority:'baja', status:'resolved', createdAt:'2026-07-15T18:10:00Z' },
+  ],
+  coordinationNotes: [
+    { id:'note-3d1', instructorId:'i1', instructorName:'Ing. Rafael Duarte', title:'Solicitud de impresoras adicionales', content:'Para el módulo avanzado de agosto necesitamos 2 impresoras FDM adicionales en la Estación FDM — cupo actual insuficiente para 15 estudiantes.', type:'solicitud', priority:'alta', createdAt:'2026-07-16T09:00:00Z' },
+    { id:'note-3d2', instructorId:'i3', instructorName:'Lic. Carolina Ureña', title:'Observación — stock de resina', content:'El stock de resina estándar gris está bajo. Recomiendo reordenar antes de la próxima cohorte.', type:'observacion', priority:'normal', createdAt:'2026-07-18T11:00:00Z' },
+  ],
+  leads: [
+    { id:'l-3d1', name:'Andy Cabrera',       phone:'+1-809-555-2001', email:'andy.cabrera@gmail.com',  program:'Impresión 3D Básica — FDM',        temperature:'caliente', status:'caliente',   source:'WhatsApp',  assignedTo:'ADI (Bot)', notes:'Vio el taller presencial y quiere certificarse online + presencial. Alta probabilidad de cierre.', value:6500 },
+    { id:'l-3d2', name:'Perla Núñez',        phone:'+1-809-555-2002', email:'',                        program:'Impresión 3D Básica — FDM',        temperature:'caliente', status:'interesado', source:'Instagram', assignedTo:'ADI (Bot)', notes:'Diseñadora gráfica, quiere ofrecer impresión 3D como servicio adicional.', value:6500 },
+    { id:'l-3d3', name:'Josué Martínez',     phone:'+1-849-555-2003', email:'jmartinez@outlook.com',   program:'Diseño 3D para Impresión (CAD)',   temperature:'caliente', status:'interesado', source:'Referido',  assignedTo:'ADI (Bot)', notes:'Referido por estudiante actual. Ingeniero, presupuesto disponible.', value:7500 },
+    { id:'l-3d4', name:'Rosanna Féliz',      phone:'+1-809-555-2004', email:'',                        program:'Impresión en Resina (SLA/DLP)',    temperature:'tibio',    status:'nuevo',      source:'WhatsApp',  assignedTo:'ADI (Bot)', notes:'Joyera, interesada en precisión para piezas pequeñas. Preguntó por financiamiento.', value:6000 },
+    { id:'l-3d5', name:'Kelvin Sánchez',     phone:'+1-849-555-2005', email:'',                        program:'Mantenimiento y Reparación de Impresoras 3D', temperature:'tibio', status:'nuevo', source:'Facebook',  assignedTo:'ADI (Bot)', notes:'Tiene una impresora dañada, quiere aprender a repararla él mismo.', value:4500 },
+    { id:'l-3d6', name:'Estefany Guzmán',    phone:'+1-809-555-2006', email:'estefany.g@hotmail.com',  program:'Impresión 3D Avanzada — Multi-material', temperature:'frio', status:'nuevo',    source:'Instagram', assignedTo:'ADI (Bot)', notes:'Solo preguntó el precio del curso avanzado. Sin respuesta después del primer contacto.', value:9500 },
+  ],
+  submissions: [
+    { id:'sub1', studentId:'st-3d6', programId:'p-3d1', projectType:'Impresión multi-color (AMS)', title:'Proyecto final — Figura multi-color', imageDataUrl:null, placeholderLabel:'AMS · 4 colores', placeholderColor:'#F97316', uploadedAt:'2026-07-15T18:30:00Z', status:'revisado', feedback:'Excelente acabado, los cambios de color quedaron perfectamente alineados. ¡Listo para certificación!' },
+    { id:'sub2', studentId:'st-3d3', programId:'p-3d1', projectType:'Pieza con soportes removibles', title:'Engranaje con soportes — práctica 3', imageDataUrl:null, placeholderLabel:'Soportes removibles', placeholderColor:'#7C3AED', uploadedAt:'2026-07-08T18:10:00Z', status:'pendiente', feedback:'' },
+    { id:'sub3', studentId:'st-3d8', programId:'p-3d5', projectType:'Cambio de nozzle', title:'Nozzle reemplazado — antes y después', imageDataUrl:null, placeholderLabel:'Mantenimiento', placeholderColor:'#16A34A', uploadedAt:'2026-07-14T18:15:00Z', status:'revisado', feedback:'Buen trabajo documentando el proceso. Se nota el cuidado en el manejo de herramientas.' },
+  ],
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// DISEÑO — Tokens, iconos y componentes reutilizables
+// ══════════════════════════════════════════════════════════════════════════
+const COLORS={primary:'#111827',accent:'#F97316',light:'#FFEDD5',success:'#16A34A',warning:'#D97706',danger:'#DC2626',bg:'#F6F5F3'};
+const SKILL_LABELS=['No iniciada','Observó','Participó','Realizó','Dominó'];
+const SKILL_COLORS=['#9CA3AF','#3B82F6','#F59E0B','#F97316','#16A34A'];
+
+const Icon=({name,size=20,color='currentColor'})=>{
+  const icons={
+    dashboard:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>,
+    students:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    instructors:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10" r="3"/></svg>,
+    locations:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
+    sessions:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>,
+    calendar:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+    changes:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M17 3l4 4-4 4M3 7h18M7 21l-4-4 4-4M21 17H3"/></svg>,
+    checklist:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>,
+    reports:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
+    skills:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
+    alerts:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+    bell:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+    bot:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="8.5" cy="16" r="1.5"/><circle cx="15.5" cy="16" r="1.5"/><path d="M12 11V7M8 4h8"/></svg>,
+    clock:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+    plus:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+    trash:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>,
+    edit:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+    check:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>,
+    x:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+    search:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+    send:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
+    logout:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>,
+    user:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+    whatsapp:<svg width={size} height={size} viewBox="0 0 24 24" fill={color}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>,
+    email:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
+    download:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+    eye:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+    catalog:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>,
+    image:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>,
+    upload:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
+  };
+  return icons[name]||null;
+};
+
+const Badge=({text,color='blue'})=>{
+  const map={blue:'#DBEAFE:#1E40AF',green:'#D1FAE5:#065F46',red:'#FEE2E2:#991B1B',yellow:'#FEF3C7:#92400E',gray:'#F3F4F6:#374151',purple:'#EDE9FE:#5B21B6',orange:'#FFEDD5:#9A3412'};
+  const [bg,tc]=(map[color]||map.gray).split(':');
+  return <span style={{background:bg,color:tc,padding:'2px 10px',borderRadius:999,fontSize:12,fontWeight:600,whiteSpace:'nowrap'}}>{text}</span>;
+};
+
+const Card=({children,style={}})=>(
+  <div style={{background:'white',borderRadius:12,boxShadow:'0 2px 8px rgba(17,24,39,0.09)',padding:'20px 24px',...style}}>{children}</div>
+);
+
+const Btn=({children,onClick,color='primary',size='md',disabled=false,style={}})=>{
+  const colors={primary:`background:${COLORS.accent};color:white`,secondary:'background:#F3F4F6;color:#374151',danger:`background:${COLORS.danger};color:white`,success:`background:${COLORS.success};color:white`,ghost:'background:transparent;color:#374151'};
+  const sizes={sm:'padding:4px 12px;font-size:13px',md:'padding:8px 18px;font-size:14px',lg:'padding:12px 24px;font-size:16px'};
+  const cs=Object.fromEntries([...colors[color].split(';'),...sizes[size].split(';')].map(s=>s.split(':')));
+  return <button onClick={onClick} disabled={disabled} style={{...cs,border:'none',borderRadius:8,fontWeight:600,cursor:disabled?'not-allowed':'pointer',opacity:disabled?0.6:1,display:'inline-flex',alignItems:'center',gap:6,...style}}>{children}</button>;
+};
+
+const Input=({label,value,onChange,type='text',placeholder='',required=false,style={}})=>(
+  <div style={{marginBottom:16}}>
+    {label&&<label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>{label}{required&&<span style={{color:'red'}}> *</span>}</label>}
+    <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
+      style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',...style}}/>
+  </div>
+);
+
+const Select=({label,value,onChange,options=[],required=false})=>(
+  <div style={{marginBottom:16}}>
+    {label&&<label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>{label}{required&&<span style={{color:'red'}}> *</span>}</label>}
+    <select value={value} onChange={e=>onChange(e.target.value)} style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',background:'white'}}>
+      <option value="">-- Seleccionar --</option>
+      {options.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
+    </select>
+  </div>
+);
+
+const Table=({headers,rows,emptyMsg='Sin datos'})=>(
+  <div style={{overflowX:'auto'}}>
+    <table style={{width:'100%',borderCollapse:'collapse',fontSize:14}}>
+      <thead><tr style={{background:COLORS.primary}}>{headers.map((h,i)=><th key={i} style={{padding:'10px 14px',color:'white',fontWeight:600,textAlign:'left',whiteSpace:'nowrap'}}>{h}</th>)}</tr></thead>
+      <tbody>{rows.length===0?<tr><td colSpan={headers.length} style={{padding:24,textAlign:'center',color:'#9CA3AF'}}>{emptyMsg}</td></tr>
+        :rows.map((row,i)=><tr key={i} style={{background:i%2===0?'white':'#FAFAF9',borderBottom:'1px solid #E5E7EB'}}>{row.map((cell,j)=><td key={j} style={{padding:'10px 14px',verticalAlign:'middle'}}>{cell}</td>)}</tr>)}</tbody>
+    </table>
+  </div>
+);
+
+const Modal=({title,children,onClose,width=500})=>(
+  <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.5)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+    <div style={{background:'white',borderRadius:16,width:'100%',maxWidth:width,maxHeight:'92vh',overflowY:'auto',boxShadow:'0 20px 60px rgba(0,0,0,0.3)'}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'16px 24px',borderBottom:'1px solid #E5E7EB',position:'sticky',top:0,background:'white',zIndex:1}}>
+        <h3 style={{margin:0,color:COLORS.primary,fontSize:18,fontWeight:700}}>{title}</h3>
+        <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer',padding:4}}><Icon name="x" size={22} color="#6B7280"/></button>
+      </div>
+      <div style={{padding:'20px 24px'}}>{children}</div>
+    </div>
+  </div>
+);
+
+const Toast=({msg,type='success',onClose})=>{
+  const colors={success:'#D1FAE5',error:'#FEE2E2',info:'#DBEAFE',warning:'#FEF3C7'};
+  React.useEffect(()=>{const t=setTimeout(onClose,3500);return()=>clearTimeout(t);},[]);
+  return(
+    <div style={{position:'fixed',bottom:24,right:24,zIndex:2000,background:colors[type]||colors.info,border:`1.5px solid ${type==='success'?'#6EE7B7':type==='error'?'#FCA5A5':'#93C5FD'}`,borderRadius:12,padding:'12px 20px',minWidth:260,boxShadow:'0 8px 24px rgba(0,0,0,0.15)',display:'flex',alignItems:'center',gap:10}}>
+      <span style={{fontSize:14,fontWeight:600,flex:1,color:'#1F2937'}}>{msg}</span>
+      <button onClick={onClose} style={{background:'none',border:'none',cursor:'pointer'}}><Icon name="x" size={16} color="#6B7280"/></button>
+    </div>
+  );
+};
+
+const ProgressBar=({value,max,color=COLORS.accent,height=10,showLabel=true})=>{
+  const pct=Math.min(100,Math.round((value/max)*100));
+  return(
+    <div>
+      {showLabel&&<div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:3,color:'#6B7280'}}>
+        <span>{value} / {max}</span><span style={{fontWeight:700,color}}>{pct}%</span>
+      </div>}
+      <div style={{height,background:'#F3F4F6',borderRadius:999}}>
+        <div style={{height:'100%',width:`${pct}%`,background:pct>=100?COLORS.success:pct>=70?COLORS.accent:COLORS.warning,borderRadius:999,transition:'width 0.4s'}}/>
+      </div>
+    </div>
+  );
+};
+
+const StatCard=({label,value,icon,color=COLORS.accent,sub})=>(
+  <Card style={{display:'flex',alignItems:'center',gap:16,flex:1,minWidth:160}}>
+    <div style={{width:52,height:52,borderRadius:14,background:`${color}18`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+      <Icon name={icon} size={26} color={color}/>
+    </div>
+    <div>
+      <div style={{fontSize:28,fontWeight:800,color:'#1F2937',lineHeight:1}}>{value}</div>
+      <div style={{fontSize:13,color:'#6B7280',marginTop:2,fontWeight:500}}>{label}</div>
+      {sub&&<div style={{fontSize:11,color,marginTop:2,fontWeight:600}}>{sub}</div>}
+    </div>
+  </Card>
+);
+
+// ══════════════════════════════════════════════════════════════════════════
+// AUTENTICACIÓN (demo — credenciales embebidas solo para prototipo)
+// ══════════════════════════════════════════════════════════════════════════
+const ADMIN_USERS = [
+  { id:'admin1', username:'admin',        password:'3DP.Admin2026!', name:'Administrador Academia', role:'admin' },
+  { id:'i1', username:'ing.duarte', password:'3DP#2026', name:'Ing. Rafael Duarte',      role:'instructor' },
+  { id:'i2', username:'arq.mreyes', password:'3DP#2026', name:'Arq. Melissa Reyes',      role:'instructor' },
+  { id:'i3', username:'lic.urena',  password:'3DP#2026', name:'Lic. Carolina Ureña',     role:'instructor' },
+  { id:'i4', username:'tec.payano', password:'3DP#2026', name:'Téc. José Manuel Payano', role:'instructor' },
+  { id:'st-3d3', username:'camila.reynoso', password:'Est2026!', name:'Camila Reynoso',       role:'student' },
+  { id:'st-3d6', username:'kevin.marte',    password:'Est2026!', name:'Kevin Marte',          role:'student' },
+  { id:'st-3d7', username:'daniela.cordero',password:'Est2026!', name:'Daniela Cordero',      role:'student' },
+];
+
+const LoginPage=({onLogin,users=[]})=>{
+  const [username,setUsername]=React.useState('');
+  const [password,setPassword]=React.useState('');
+  const [error,setError]=React.useState('');
+  const [showPass,setShowPass]=React.useState(false);
+
+  const handle=()=>{
+    const u=users.find(u=>u.username&&u.username.toLowerCase()===username.trim().toLowerCase()&&u.password===password);
+    if(u){ setError(''); onLogin(u); }
+    else { setError('Usuario o contraseña incorrectos. Verifica tus credenciales.'); }
+  };
+  const handleKey=e=>{ if(e.key==='Enter') handle(); };
+
+  return(
+    <div style={{minHeight:'100vh',background:`linear-gradient(135deg,${COLORS.primary} 0%,#3A3F4B 100%)`,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+      <div style={{background:'white',borderRadius:20,padding:'40px 44px',width:'100%',maxWidth:440,boxShadow:'0 24px 64px rgba(0,0,0,0.35)'}}>
+        <div style={{textAlign:'center',marginBottom:32}}>
+          <div style={{width:76,height:76,background:COLORS.accent,borderRadius:20,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px',boxShadow:'0 8px 24px rgba(249,115,22,0.35)'}}>
+            <span style={{color:'white',fontWeight:900,fontSize:24}}>3DP</span>
+          </div>
+          <h1 style={{margin:'0 0 4px',color:COLORS.primary,fontSize:26,fontWeight:800}}>3D Printers RD</h1>
+          <p style={{margin:0,color:'#6B7280',fontSize:14}}>Academia — Formación en Impresión 3D</p>
+        </div>
+
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:6}}>Usuario</label>
+          <input value={username} onChange={e=>setUsername(e.target.value)} onKeyDown={handleKey}
+            placeholder="ej: ing.duarte" autoFocus
+            style={{width:'100%',padding:'11px 14px',border:`1.5px solid ${error?'#EF4444':'#D1D5DB'}`,borderRadius:10,fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+        </div>
+        <div style={{marginBottom:error?8:20}}>
+          <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:6}}>Contraseña</label>
+          <div style={{position:'relative'}}>
+            <input type={showPass?'text':'password'} value={password} onChange={e=>setPassword(e.target.value)} onKeyDown={handleKey}
+              placeholder="••••••••"
+              style={{width:'100%',padding:'11px 44px 11px 14px',border:`1.5px solid ${error?'#EF4444':'#D1D5DB'}`,borderRadius:10,fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+            <button onClick={()=>setShowPass(!showPass)} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',color:'#9CA3AF',fontSize:13}}>
+              {showPass?'Ocultar':'Ver'}
+            </button>
+          </div>
+        </div>
+
+        {error&&<div style={{padding:'9px 14px',background:'#FEE2E2',borderRadius:8,fontSize:13,color:'#991B1B',marginBottom:16,fontWeight:500}}>⚠ {error}</div>}
+
+        <button onClick={handle} style={{width:'100%',padding:14,background:COLORS.primary,color:'white',border:'none',borderRadius:10,fontSize:16,fontWeight:700,cursor:'pointer',letterSpacing:0.3}}>
+          Iniciar Sesión
+        </button>
+
+        <div style={{marginTop:20,padding:'12px 14px',background:'#F8FAFC',borderRadius:10,border:'1px solid #E5E7EB'}}>
+          <div style={{fontSize:12,color:'#6B7280',fontWeight:600,marginBottom:6}}>Acceso rápido (demo):</div>
+          <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+            {[['admin','3DP.Admin2026!','🔑 Admin'],['ing.duarte','3DP#2026','🛠️ Instructor'],['camila.reynoso','Est2026!','🎓 Estudiante']].map(([u,p,label])=>(
+              <button key={u} onClick={()=>{setUsername(u);setPassword(p);setError('');}}
+                style={{padding:'4px 10px',borderRadius:6,border:'1.5px solid #D1D5DB',background:'white',fontSize:11,cursor:'pointer',fontWeight:600,color:'#374151'}}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════════════════════════════════════════
+const NAV_ITEMS=[
+  {key:'dashboard',       label:'Dashboard',            icon:'dashboard',   roles:['admin','instructor','student']},
+  {key:'programs',        label:'Programas',             icon:'catalog',    roles:['admin','instructor','student']},
+  {key:'supervision',     label:'Supervisión de Taller', icon:'checklist',  roles:['instructor']},
+  {key:'students',        label:'Estudiantes',           icon:'students',   roles:['admin']},
+  {key:'instructors',     label:'Instructores',          icon:'instructors',roles:['admin']},
+  {key:'locations',       label:'Sedes y Talleres',      icon:'locations',  roles:['admin']},
+  {key:'sessions',        label:'Sesiones',              icon:'sessions',   roles:['admin','instructor']},
+  {key:'calendar',        label:'Calendario',            icon:'calendar',   roles:['admin','instructor','student']},
+  {key:'changes',         label:'Cambios de Horario',    icon:'changes',    roles:['admin','student']},
+  {key:'portfolio',       label:'Portafolio',            icon:'image',      roles:['admin','student']},
+  {key:'checklist',       label:'Checklist de Sesión',   icon:'checklist',  roles:['admin']},
+  {key:'reports',         label:'Reportes',              icon:'reports',    roles:['admin']},
+  {key:'skills',          label:'Destrezas',             icon:'skills',     roles:['admin','instructor']},
+  {key:'workshop_alerts', label:'Alertas de Taller',     icon:'alerts',     roles:['instructor']},
+  {key:'coordinacion',    label:'Coordinación',          icon:'send',       roles:['instructor']},
+  {key:'bot',             label:'Bot ADI',               icon:'bot',        roles:['admin']},
+  {key:'alerts',          label:'Alertas del Sistema',   icon:'alerts',     roles:['admin']},
+  {key:'notifications',   label:'Notificaciones',        icon:'bell',       roles:['admin']},
+];
+
+const ROLE_LABEL={admin:'Administrador',instructor:'Instructor',student:'Estudiante'};
+
+const Sidebar=({user,view,setView,collapsed,setCollapsed})=>{
+  const items=NAV_ITEMS.filter(i=>i.roles.includes(user.role));
+  const W=collapsed?64:240;
+  return(
+    <div style={{width:W,minHeight:'100vh',background:COLORS.primary,display:'flex',flexDirection:'column',transition:'width 0.25s',flexShrink:0}}>
+      <div style={{padding:'20px 16px',borderBottom:'1px solid rgba(255,255,255,0.12)',display:'flex',alignItems:'center',gap:10}}>
+        <div style={{width:36,height:36,background:COLORS.accent,borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><span style={{color:'white',fontWeight:900,fontSize:12}}>3DP</span></div>
+        {!collapsed&&<div><div style={{color:'white',fontWeight:800,fontSize:15,lineHeight:1.2}}>3D Printers RD</div><div style={{color:'rgba(255,255,255,0.5)',fontSize:11}}>Academia LMS</div></div>}
+      </div>
+      <nav style={{flex:1,padding:'12px 8px',overflowY:'auto'}}>
+        {items.map(item=>(
+          <button key={item.key} onClick={()=>setView(item.key)}
+            style={{width:'100%',display:'flex',alignItems:'center',gap:12,padding:'10px 12px',borderRadius:10,border:'none',cursor:'pointer',marginBottom:2,
+              background:view===item.key?'rgba(249,115,22,0.22)':'transparent',
+              color:view===item.key?'white':'rgba(255,255,255,0.65)',
+              fontWeight:view===item.key?700:500,fontSize:13,justifyContent:collapsed?'center':'flex-start'}}>
+            <Icon name={item.icon} size={19} color={view===item.key?COLORS.accent:'rgba(255,255,255,0.65)'}/>
+            {!collapsed&&<span>{item.label}</span>}
+          </button>
+        ))}
+      </nav>
+      <div style={{padding:'12px 8px',borderTop:'1px solid rgba(255,255,255,0.12)'}}>
+        {!collapsed&&<div style={{padding:'10px 12px',marginBottom:4,borderRadius:10,background:'rgba(255,255,255,0.08)'}}>
+          <div style={{color:'white',fontWeight:600,fontSize:13}}>{user.name}</div>
+          <div style={{color:'rgba(255,255,255,0.5)',fontSize:11}}>{ROLE_LABEL[user.role]}</div>
+        </div>}
+        <button onClick={()=>setCollapsed(!collapsed)} style={{width:'100%',display:'flex',alignItems:'center',justifyContent:collapsed?'center':'flex-start',gap:10,padding:'8px 12px',borderRadius:10,border:'none',cursor:'pointer',background:'transparent',color:'rgba(255,255,255,0.5)',fontSize:13}}>
+          <svg width={18} height={18} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          {!collapsed&&'Colapsar'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const Header=({title,user,pendingChanges=0,onLogout})=>(
+  <div style={{height:64,background:'white',borderBottom:'1px solid #E5E7EB',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 28px',position:'sticky',top:0,zIndex:100,boxShadow:'0 1px 4px rgba(0,0,0,0.06)'}}>
+    <h2 style={{margin:0,fontSize:20,fontWeight:700,color:COLORS.primary}}>{title}</h2>
+    <div style={{display:'flex',alignItems:'center',gap:16}}>
+      {pendingChanges>0&&<div style={{position:'relative'}}><Icon name="bell" size={22} color={COLORS.warning}/><span style={{position:'absolute',top:-6,right:-6,background:COLORS.danger,color:'white',borderRadius:999,fontSize:10,fontWeight:700,padding:'1px 5px',lineHeight:1.5}}>{pendingChanges}</span></div>}
+      <div style={{display:'flex',alignItems:'center',gap:8,padding:'6px 12px',background:COLORS.light,borderRadius:10}}>
+        <Icon name="user" size={18} color={COLORS.primary}/>
+        <span style={{fontSize:13,fontWeight:600,color:COLORS.primary}}>{user.name}</span>
+      </div>
+      <button onClick={onLogout} style={{display:'flex',alignItems:'center',gap:6,padding:'6px 12px',background:'#FEE2E2',border:'none',borderRadius:10,cursor:'pointer',color:'#991B1B',fontSize:13,fontWeight:600}}>
+        <Icon name="logout" size={16} color="#991B1B"/>Salir
+      </button>
+    </div>
+  </div>
+);
+
+// ══════════════════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════════════════
+const byId=(arr,id)=>arr.find(x=>x.id===id);
+const paymentBadge=s=>s==='al_día'?<Badge text="Al día" color="green"/>:s==='atrasado'?<Badge text="Atrasado" color="red"/>:<Badge text="Pendiente" color="yellow"/>;
+const statusBadge=s=>s==='completed'?<Badge text="Completada" color="green"/>:s==='scheduled'?<Badge text="Programada" color="blue"/>:<Badge text={s} color="gray"/>;
+const priorityBadge=p=>p==='alta'?<Badge text="Alta" color="red"/>:p==='normal'?<Badge text="Normal" color="blue"/>:<Badge text="Baja" color="gray"/>;
+const tempBadge=t=>t==='caliente'?<Badge text="🔥 Caliente" color="red"/>:t==='tibio'?<Badge text="🌤️ Tibio" color="yellow"/>:<Badge text="❄️ Frío" color="blue"/>;
+
+// ══════════════════════════════════════════════════════════════════════════
+// DASHBOARD — ESTUDIANTE
+// ══════════════════════════════════════════════════════════════════════════
+const StudentDashboardPage=({state,toast,user})=>{
+  const st=state.students.find(s=>s.id===user.id);
+  const prog=state.programs.find(p=>p.id===st?.programId);
+  const mySessions=state.sessions.filter(a=>a.studentId===user.id);
+  const myChecklists=mySessions.map(a=>state.checklists.find(c=>c.sessionId===a.id)).filter(Boolean);
+
+  const attended=myChecklists.filter(c=>c.attendance==='attended'||c.attendance==='late').length;
+  const attendanceRate=myChecklists.length===0?0:Math.round(attended/myChecklists.length*100);
+  const hoursFromChecklists=myChecklists.reduce((s,c)=>s+(c.totalHours||0),0);
+  const totalHours=st?.completedHoursOverride!=null?st.completedHoursOverride:hoursFromChecklists;
+  const requiredHours=st?.requiredHoursOverride||(prog?.requiredHours||30);
+  const totalProjects=myChecklists.reduce((s,c)=>s+(c.projects||[]).reduce((ss,p)=>ss+p.count,0),0);
+
+  const skillMatrix={};
+  myChecklists.forEach(c=>Object.entries(c.skillLevels||{}).forEach(([sk,lv])=>{skillMatrix[sk]=Math.max(skillMatrix[sk]||0,lv);}));
+  const totalSkills=prog?.skills?.length||0;
+  const dominatedSkills=Object.values(skillMatrix).filter(v=>v>=3).length;
+  const pendingSkills=totalSkills>0?prog.skills.filter(sk=>(skillMatrix[sk]||0)===0).length:0;
+
+  const grades=st?.grades&&st.grades.length>0?st.grades:[];
+  const avgGrade=grades.length>0?(grades.reduce((s,g)=>s+Number(g.grade),0)/grades.length).toFixed(1):'—';
+
+  const today='2026-07-20';
+  const nextA=mySessions.filter(a=>a.date>=today&&a.status==='scheduled').sort((a,b)=>a.date.localeCompare(b.date))[0];
+  const nextDate=st?.nextClassDate||(nextA?.date||null);
+  const nextTime=st?.nextClassTime||(nextA?`${nextA.shiftStart}–${nextA.shiftEnd}`:null);
+  const nextModule=st?.nextClassModule||(nextA?(prog?.name||'Sesión de práctica'):null);
+  const nextLoc=nextA?state.locations.find(h=>h.id===nextA.locationId)?.name:null;
+  const nextIns=nextA?state.instructors.find(d=>d.id===nextA.instructorId)?.name:null;
+
+  const totalClasses=st?.totalClasses||(prog?.requiredProjects||10);
+  const completedClasses=st?.completedClasses!=null?st.completedClasses:myChecklists.length;
+  const progressPct=Math.min(100,Math.round((completedClasses/Math.max(totalClasses,1))*100));
+  const hoursPct=Math.min(100,Math.round(totalHours/Math.max(requiredHours,1)*100));
+
+  const material=st?.materialLink||'';
+  const video=st?.videoLink||'';
+  const qbank=st?.questionBankLink||'';
+  const slicer=st?.slicerProfilesLink||'';
+
+  const PHRASES=[
+    'Cada capa cuenta: la precisión de hoy es la pieza perfecta de mañana. 🖨️',
+    'El mejor maker no es el que nunca falla una impresión, sino el que aprende de cada warping. 🔧',
+    'Dominar el slicer es dominar tu creatividad. ¡Sigue imprimiendo! 🧊',
+    'Tu calibración, tu paciencia, tu precisión — así se construye un experto en manufactura aditiva. ⚙️',
+    'Hoy aprendices, mañana referentes de la impresión 3D en RD. ¡Aprovecha cada sesión! 🚀',
+    'La excelencia en impresión 3D se construye pieza a pieza. ¡Sigue sumando! 🌟',
+  ];
+  const phrase=PHRASES[18%PHRASES.length];
+  const projectTypes=prog?.projectTypes?.slice(0,8)||[];
+
+  const ResourceCard=({href,emoji,label,sub,color})=>{
+    const hasLink=href&&href.trim()!=='';
+    return(
+      <a href={hasLink?href:'#'} target={hasLink?'_blank':'_self'}
+        onClick={hasLink?undefined:e=>{e.preventDefault();toast('Enlace no configurado aún. El administrador debe agregar el enlace.','info');}}
+        style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:10,padding:'22px 16px',
+          background:'white',borderRadius:14,textDecoration:'none',transition:'all 0.2s',
+          border:`2px solid ${hasLink?color+'35':'#E5E7EB'}`,
+          boxShadow:`0 2px 8px rgba(0,0,0,${hasLink?'0.08':'0.04'})`,cursor:'pointer',minHeight:130,
+          opacity:hasLink?1:0.7}}>
+        <div style={{width:50,height:50,borderRadius:14,background:`${color}15`,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <span style={{fontSize:26}}>{emoji}</span>
+        </div>
+        <div style={{textAlign:'center'}}>
+          <div style={{fontWeight:700,fontSize:13,color:hasLink?'#1F2937':'#9CA3AF',lineHeight:1.3}}>{label}</div>
+          <div style={{fontSize:11,color:'#9CA3AF',marginTop:3}}>{sub}</div>
+        </div>
+        {!hasLink&&<span style={{fontSize:10,color:'#D1D5DB',fontStyle:'italic',marginTop:-4}}>Pendiente de configurar</span>}
+        {hasLink&&<span style={{fontSize:11,fontWeight:600,color:color,display:'flex',alignItems:'center',gap:3}}>Acceder →</span>}
+      </a>
+    );
+  };
+
+  const pColor=p=>p>=80?COLORS.success:p>=50?COLORS.accent:COLORS.warning;
+  const aColor=r=>r>=80?COLORS.success:r>=60?COLORS.warning:COLORS.danger;
+
+  return(
+    <div style={{padding:'20px 24px 32px',boxSizing:'border-box'}}>
+      <div style={{marginBottom:22,padding:'22px 28px',background:`linear-gradient(135deg,${COLORS.primary} 0%,#3A3F4B 100%)`,borderRadius:18,color:'white',boxShadow:'0 8px 24px rgba(17,24,39,0.28)',position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',right:-20,top:-20,width:120,height:120,borderRadius:'50%',background:'rgba(249,115,22,0.12)'}}></div>
+        <div style={{position:'absolute',right:60,bottom:-30,width:80,height:80,borderRadius:'50%',background:'rgba(249,115,22,0.08)'}}></div>
+        <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',flexWrap:'wrap',gap:12,position:'relative'}}>
+          <div style={{flex:1,minWidth:260}}>
+            <div style={{fontSize:11,opacity:0.72,fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:8}}>Centro de Progreso · 3D Printers RD Academia</div>
+            <h2 style={{margin:'0 0 8px',fontSize:26,fontWeight:900,letterSpacing:-0.5}}>¡Bienvenido, {(st?.name||user.name).split(' ')[0]}! 👋</h2>
+            <p style={{margin:0,fontSize:13.5,opacity:0.88,lineHeight:1.65,maxWidth:560}}>{phrase}</p>
+          </div>
+          <div style={{background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'14px 20px',textAlign:'center',backdropFilter:'blur(4px)',flexShrink:0}}>
+            <div style={{fontSize:10,opacity:0.7,fontWeight:700,textTransform:'uppercase',letterSpacing:1,marginBottom:5}}>Programa Actual</div>
+            <div style={{fontSize:14,fontWeight:800,lineHeight:1.3,maxWidth:180}}>{prog?.name||st?.cohort||'Sin programa asignado'}</div>
+            <div style={{fontSize:11,opacity:0.65,marginTop:5,fontFamily:'monospace'}}>{st?.code||user.id}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:14,marginBottom:18}}>
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(17,24,39,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:COLORS.light,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><span style={{fontSize:18}}>📈</span></div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Progreso General</span>
+          </div>
+          <div style={{display:'flex',alignItems:'baseline',gap:3,marginBottom:10}}>
+            <span style={{fontSize:42,fontWeight:900,color:pColor(progressPct),lineHeight:1}}>{progressPct}</span>
+            <span style={{fontSize:20,fontWeight:700,color:'#CBD5E1'}}>%</span>
+          </div>
+          <div style={{height:8,background:'#F1F5F9',borderRadius:999,marginBottom:8,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${progressPct}%`,background:pColor(progressPct),borderRadius:999,transition:'width 0.7s ease'}}/>
+          </div>
+          <div style={{fontSize:12,color:'#64748B'}}>{completedClasses} de {totalClasses} sesiones completadas</div>
+          {progressPct>=100&&<div style={{marginTop:6,fontSize:11,fontWeight:700,color:COLORS.success}}>🎓 ¡Listo para certificación!</div>}
+        </div>
+
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(17,24,39,0.08)',border:`2px solid ${nextDate?COLORS.accent+'40':'#E5E7EB'}`}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#FFF7ED',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><span style={{fontSize:18}}>📅</span></div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Próxima Sesión</span>
+          </div>
+          {nextDate?(
+            <div>
+              <div style={{fontSize:17,fontWeight:800,color:COLORS.primary,marginBottom:4}}>{nextDate}</div>
+              <div style={{fontSize:12,color:COLORS.accent,fontWeight:700,marginBottom:6,background:COLORS.light,display:'inline-block',padding:'2px 8px',borderRadius:6}}>{nextTime||'—'}</div>
+              <div style={{fontSize:12,color:'#374151',marginBottom:6,lineHeight:1.45,fontWeight:500}}>{nextModule}</div>
+              {(nextLoc||nextIns)&&<div style={{fontSize:11,color:'#9CA3AF',marginBottom:10}}>🏭 {nextLoc}{nextIns?<span> · {nextIns}</span>:null}</div>}
+              <button onClick={()=>toast('📍 Abriendo detalles de tu sesión...','info')} style={{width:'100%',padding:'8px 12px',background:COLORS.accent,color:'white',border:'none',borderRadius:8,fontWeight:700,fontSize:12,cursor:'pointer',marginTop:4}}>
+                Ver Detalles →
+              </button>
+            </div>
+          ):(
+            <div style={{textAlign:'center',padding:'16px 0',color:'#9CA3AF'}}>
+              <div style={{fontSize:28,marginBottom:8}}>📭</div>
+              <div style={{fontSize:13,fontWeight:500}}>Sin sesiones programadas</div>
+            </div>
+          )}
+        </div>
+
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(17,24,39,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#ECFDF5',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><span style={{fontSize:18}}>✅</span></div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Asistencia</span>
+          </div>
+          <div style={{display:'flex',alignItems:'baseline',gap:3,marginBottom:10}}>
+            <span style={{fontSize:42,fontWeight:900,color:aColor(attendanceRate),lineHeight:1}}>{attendanceRate}</span>
+            <span style={{fontSize:20,fontWeight:700,color:'#CBD5E1'}}>%</span>
+          </div>
+          <div style={{height:8,background:'#F1F5F9',borderRadius:999,marginBottom:8,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${attendanceRate}%`,background:aColor(attendanceRate),borderRadius:999}}/>
+          </div>
+          <div style={{fontSize:12,color:'#64748B'}}>{attended} de {myChecklists.length} sesiones</div>
+          {attendanceRate<80&&myChecklists.length>0&&<div style={{marginTop:8,padding:'4px 10px',background:'#FEF3C7',borderRadius:8,fontSize:11,color:'#92400E',fontWeight:600}}>⚠ Mínimo requerido: 80%</div>}
+        </div>
+
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(17,24,39,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#F5F3FF',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><span style={{fontSize:18}}>⏱</span></div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Horas de Taller</span>
+          </div>
+          <div style={{display:'flex',alignItems:'baseline',gap:3,marginBottom:10}}>
+            <span style={{fontSize:42,fontWeight:900,color:'#7C3AED',lineHeight:1}}>{parseFloat(totalHours).toFixed(1)}</span>
+            <span style={{fontSize:15,fontWeight:700,color:'#CBD5E1'}}>/{requiredHours}h</span>
+          </div>
+          <div style={{height:8,background:'#F1F5F9',borderRadius:999,marginBottom:8,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${hoursPct}%`,background:'linear-gradient(90deg,#7C3AED,#A855F7)',borderRadius:999}}/>
+          </div>
+          <div style={{fontSize:12,color:'#64748B'}}>{Math.max(0,requiredHours-totalHours).toFixed(1)}h restantes para cert.</div>
+        </div>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1.5fr',gap:14,marginBottom:18}}>
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(17,24,39,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#ECFDF5',display:'flex',alignItems:'center',justifyContent:'center'}}><span style={{fontSize:18}}>🧊</span></div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Piezas Impresas</span>
+          </div>
+          <div style={{fontSize:48,fontWeight:900,color:COLORS.success,lineHeight:1,marginBottom:4}}>{totalProjects}</div>
+          <div style={{fontSize:12,color:'#64748B',marginBottom:14}}>proyectos / piezas registradas</div>
+          <div style={{borderTop:'1px solid #F1F5F9',paddingTop:12}}>
+            <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',marginBottom:6,textTransform:'uppercase',letterSpacing:0.5}}>Últimas sesiones</div>
+            {myChecklists.length===0&&<div style={{fontSize:12,color:'#9CA3AF',textAlign:'center',padding:'8px 0'}}>Sin sesiones registradas aún</div>}
+            {myChecklists.slice(-3).reverse().map((cl,i)=>{
+              const a=mySessions.find(as=>as.id===cl.sessionId);
+              const n=(cl.projects||[]).reduce((s,p)=>s+p.count,0);
+              return(
+                <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:12,padding:'4px 0',borderBottom:'1px solid #F9FAFB'}}>
+                  <span style={{color:'#64748B'}}>{a?.date||'—'}</span>
+                  <span style={{fontWeight:700,color:COLORS.success,background:'#D1FAE5',padding:'1px 8px',borderRadius:5,fontSize:11}}>+{n} pieza{n!==1?'s':''}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(17,24,39,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#FFF7ED',display:'flex',alignItems:'center',justifyContent:'center'}}><span style={{fontSize:18}}>📝</span></div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Evaluaciones</span>
+          </div>
+          <div style={{display:'flex',gap:16,marginBottom:14}}>
+            <div style={{flex:1,textAlign:'center',padding:'10px 8px',background:COLORS.light,borderRadius:10}}>
+              <div style={{fontSize:32,fontWeight:900,color:COLORS.accent,lineHeight:1}}>{avgGrade}</div>
+              <div style={{fontSize:11,color:'#64748B',marginTop:3}}>Promedio</div>
+            </div>
+            <div style={{flex:1,textAlign:'center',padding:'10px 8px',background:pendingSkills>0?'#FEF3C7':'#F0FDF4',borderRadius:10}}>
+              <div style={{fontSize:32,fontWeight:900,color:pendingSkills>0?COLORS.warning:COLORS.success,lineHeight:1}}>{pendingSkills}</div>
+              <div style={{fontSize:11,color:'#64748B',marginTop:3}}>Pendientes</div>
+            </div>
+          </div>
+          <div style={{borderTop:'1px solid #F1F5F9',paddingTop:12,maxHeight:120,overflowY:'auto'}}>
+            {grades.length===0&&<div style={{fontSize:12,color:'#9CA3AF',textAlign:'center',padding:'8px 0'}}>Sin evaluaciones aún</div>}
+            {grades.slice(-4).reverse().map((g,i)=>{
+              const gc=Number(g.grade);const gcol=gc>=8?COLORS.success:gc>=6?COLORS.warning:COLORS.danger;
+              return(
+                <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'5px 0',fontSize:12,borderBottom:'1px solid #F9FAFB'}}>
+                  <span style={{color:'#374151',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',flex:1,marginRight:8,fontWeight:500}}>{g.subject}</span>
+                  <span style={{fontWeight:700,color:gcol,background:`${gcol}18`,padding:'2px 8px',borderRadius:6,fontSize:11,flexShrink:0}}>{gc}/10</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(17,24,39,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+            <div style={{width:36,height:36,borderRadius:10,background:COLORS.light,display:'flex',alignItems:'center',justifyContent:'center'}}><span style={{fontSize:18}}>🗺️</span></div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Timeline de Progreso</span>
+          </div>
+          <div style={{maxHeight:200,overflowY:'auto',paddingRight:4}}>
+            {(projectTypes.length>0?projectTypes:['Módulo 1 — Inducción','Módulo 2 — Práctica supervisada','Módulo 3 — Participación activa','Módulo 4 — Práctica independiente','Módulo 5 — Evaluación final']).map((ct,i)=>{
+              const done=i<completedClasses;
+              const current=i===completedClasses;
+              return(
+                <div key={i} style={{display:'flex',alignItems:'flex-start',gap:12,marginBottom:10,position:'relative'}}>
+                  <div style={{display:'flex',flexDirection:'column',alignItems:'center',flexShrink:0}}>
+                    <div style={{width:28,height:28,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,fontSize:11,
+                      background:done?COLORS.success:current?COLORS.accent:'#F1F5F9',
+                      color:done||current?'white':'#94A3B8',
+                      border:`2.5px solid ${done?COLORS.success:current?COLORS.accent:'#E2E8F0'}`,
+                      boxShadow:current?`0 0 0 3px ${COLORS.accent}30`:'none',transition:'all 0.3s'}}>
+                      {done?'✓':i+1}
+                    </div>
+                    {i<(projectTypes.length>0?projectTypes.length:5)-1&&<div style={{width:2,height:16,background:done?COLORS.success:'#E2E8F0',margin:'3px 0'}}/>}
+                  </div>
+                  <div style={{flex:1,paddingTop:4}}>
+                    <div style={{fontSize:12,fontWeight:current?700:done?600:400,color:done?'#374151':current?COLORS.primary:'#9CA3AF',lineHeight:1.4}}>{ct}</div>
+                    {done&&<div style={{fontSize:10,color:COLORS.success,fontWeight:700,marginTop:2}}>✓ Completado</div>}
+                    {current&&<div style={{fontSize:10,color:COLORS.accent,fontWeight:700,marginTop:2,display:'flex',alignItems:'center',gap:4}}><span style={{width:6,height:6,borderRadius:'50%',background:COLORS.accent,display:'inline-block',animation:'pulse 1s infinite'}}/>EN PROGRESO</div>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{marginTop:10,padding:'8px 12px',background:COLORS.light,borderRadius:8,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            <span style={{fontSize:12,fontWeight:600,color:COLORS.primary}}>Destrezas dominadas</span>
+            <span style={{fontSize:13,fontWeight:800,color:dominatedSkills===totalSkills&&totalSkills>0?COLORS.success:COLORS.accent}}>{dominatedSkills}<span style={{color:'#9CA3AF',fontWeight:400}}>/{totalSkills}</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:12,display:'flex',alignItems:'center',gap:8}}>
+          <span>⚡</span> Acceso Rápido al Material Académico
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:12}}>
+          <ResourceCard href={material} emoji="📂" label="Material de Estudio" sub="Google Drive" color={COLORS.accent}/>
+          <ResourceCard href={video} emoji="🎬" label="Videos del Programa" sub="Biblioteca de videos" color="#DC2626"/>
+          <ResourceCard href={qbank} emoji="❓" label="Banco de Preguntas" sub="Cuestionarios y exámenes" color="#D97706"/>
+          <ResourceCard href={slicer} emoji="🧩" label="Perfiles de Slicer" sub="Configuraciones descargables" color="#7C3AED"/>
+        </div>
+        {(!material&&!video&&!qbank&&!slicer)&&(
+          <div style={{marginTop:10,padding:'10px 14px',background:'#F8FAFC',border:'1px solid #E2E8F0',borderRadius:10,fontSize:12,color:'#64748B',display:'flex',alignItems:'center',gap:8}}>
+            <span>ℹ️</span> <span>El administrador puede configurar los enlaces de recursos desde <strong>Gestión de Estudiantes → Editar Estudiante</strong>.</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// DASHBOARD — INSTRUCTOR
+// ══════════════════════════════════════════════════════════════════════════
+const InstructorDashboardPage=({state,toast,user,setView})=>{
+  const today='2026-07-20';
+  const mySessions=state.sessions.filter(a=>a.instructorId===user.id);
+  const todaySessions=mySessions.filter(a=>a.date===today);
+  const upcoming=mySessions.filter(a=>a.date>today&&a.status==='scheduled').sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  const myAlerts=state.workshopAlerts.filter(a=>a.instructorId===user.id&&a.status==='active');
+  const myChecklists=state.checklists.filter(c=>mySessions.some(s=>s.id===c.sessionId));
+  const avgPerf=myChecklists.length>0?(myChecklists.reduce((s,c)=>s+(c.performance||0),0)/myChecklists.length).toFixed(1):'—';
+  const pendingSigns=mySessions.filter(a=>a.status==='completed'&&!state.checklists.some(c=>c.sessionId===a.id)).length;
+
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <div style={{marginBottom:22,padding:'22px 28px',background:`linear-gradient(135deg,${COLORS.primary} 0%,#3A3F4B 100%)`,borderRadius:18,color:'white',boxShadow:'0 8px 24px rgba(17,24,39,0.28)'}}>
+        <div style={{fontSize:11,opacity:0.72,fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:8}}>Supervisión de Taller · 3D Printers RD Academia</div>
+        <h2 style={{margin:'0 0 6px',fontSize:24,fontWeight:900}}>Hola, {user.name.split(' ').slice(-1)[0]} 👋</h2>
+        <p style={{margin:0,fontSize:13.5,opacity:0.85}}>Tienes {todaySessions.length} sesión{todaySessions.length!==1?'es':''} programada{todaySessions.length!==1?'s':''} hoy ({today}).</p>
+      </div>
+
+      <div style={{display:'flex',gap:14,flexWrap:'wrap',marginBottom:20}}>
+        <StatCard label="Sesiones Hoy" value={todaySessions.length} icon="calendar" color={COLORS.accent}/>
+        <StatCard label="Desempeño Promedio" value={avgPerf} icon="skills" color={COLORS.success} sub="sobre 10"/>
+        <StatCard label="Alertas Activas" value={myAlerts.length} icon="alerts" color={COLORS.danger}/>
+        <StatCard label="Checklists Pendientes" value={pendingSigns} icon="checklist" color={COLORS.warning}/>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1.3fr 1fr',gap:16}}>
+        <Card>
+          <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:14}}>Sesiones de Hoy</div>
+          {todaySessions.length===0&&<div style={{color:'#9CA3AF',fontSize:13,padding:'12px 0'}}>No tienes sesiones programadas hoy.</div>}
+          {todaySessions.map(a=>{
+            const st=byId(state.students,a.studentId);const loc=byId(state.locations,a.locationId);
+            return(
+              <div key={a.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:'1px solid #F1F5F9'}}>
+                <div>
+                  <div style={{fontWeight:600,fontSize:13,color:'#1F2937'}}>{st?.name}</div>
+                  <div style={{fontSize:11,color:'#9CA3AF'}}>{a.shift} · {a.shiftStart}–{a.shiftEnd} · {loc?.name}</div>
+                </div>
+                {statusBadge(a.status)}
+              </div>
+            );
+          })}
+          <Btn size="sm" style={{marginTop:12}} onClick={()=>setView&&setView('sessions')}>Ver todas las sesiones</Btn>
+        </Card>
+
+        <Card>
+          <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:14}}>Alertas Activas</div>
+          {myAlerts.length===0&&<div style={{color:'#9CA3AF',fontSize:13}}>Sin alertas activas.</div>}
+          {myAlerts.map(a=>{
+            const st=byId(state.students,a.studentId);
+            return(
+              <div key={a.id} style={{padding:'8px 0',borderBottom:'1px solid #F1F5F9'}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <span style={{fontWeight:600,fontSize:13}}>{st?.name}</span>{priorityBadge(a.priority)}
+                </div>
+                <div style={{fontSize:11,color:'#6B7280',marginTop:2}}>{a.description}</div>
+              </div>
+            );
+          })}
+        </Card>
+      </div>
+
+      <Card style={{marginTop:16}}>
+        <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:14}}>Próximas Sesiones</div>
+        <Table headers={['Fecha','Estudiante','Turno','Sede','Estado']} rows={upcoming.map(a=>[a.date,byId(state.students,a.studentId)?.name||'—',`${a.shiftStart}–${a.shiftEnd}`,byId(state.locations,a.locationId)?.name||'—',statusBadge(a.status)])}/>
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// DASHBOARD — ADMIN
+// ══════════════════════════════════════════════════════════════════════════
+const AdminDashboardPage=({state})=>{
+  const activePrograms=state.programs.filter(p=>p.status==='activo').length;
+  const totalStudents=state.students.length;
+  const overduePayments=state.students.filter(s=>s.paymentStatus==='atrasado').length;
+  const pendingChanges=state.scheduleChanges.filter(c=>c.status==='pending').length;
+  const hotLeads=state.leads.filter(l=>l.temperature==='caliente').length;
+  const pipelineValue=state.leads.reduce((s,l)=>s+(l.value||0),0);
+  const revenueActive=state.programs.filter(p=>p.status==='activo').reduce((s,p)=>s+p.studentsCount*p.price,0);
+
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <div style={{marginBottom:22,padding:'22px 28px',background:`linear-gradient(135deg,${COLORS.primary} 0%,#3A3F4B 100%)`,borderRadius:18,color:'white'}}>
+        <div style={{fontSize:11,opacity:0.72,fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:8}}>Panel Administrativo · 3D Printers RD Academia</div>
+        <h2 style={{margin:0,fontSize:24,fontWeight:900}}>Bienvenido al Dashboard Administrativo</h2>
+      </div>
+      <div style={{display:'flex',gap:14,flexWrap:'wrap',marginBottom:20}}>
+        <StatCard label="Programas Activos" value={activePrograms} icon="reports" color={COLORS.accent}/>
+        <StatCard label="Estudiantes Totales" value={totalStudents} icon="students" color={COLORS.success}/>
+        <StatCard label="Pagos Atrasados" value={overduePayments} icon="alerts" color={COLORS.danger}/>
+        <StatCard label="Cambios Pendientes" value={pendingChanges} icon="changes" color={COLORS.warning}/>
+        <StatCard label="Leads Calientes" value={hotLeads} icon="bot" color={COLORS.danger} sub={`Pipeline: RD$${pipelineValue.toLocaleString()}`}/>
+        <StatCard label="Ingresos (cohortes activas)" value={`RD$${revenueActive.toLocaleString()}`} icon="reports" color={COLORS.success}/>
+      </div>
+      <Card>
+        <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:14}}>Programas</div>
+        <Table headers={['Programa','Instructor','Estudiantes','Precio','Estado']}
+          rows={state.programs.map(p=>[p.name,p.instructor,`${p.studentsCount}/${p.maxStudents}`,`RD$${p.price.toLocaleString()}`,<Badge text={p.status} color={p.status==='activo'?'green':'yellow'}/>])}/>
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — PROGRAMAS ACADÉMICOS (admin/instructor/student)
+// ══════════════════════════════════════════════════════════════════════════
+const ProgramCard=({p})=>{
+  const [expanded,setExpanded]=React.useState(false);
+  const cupoPct=Math.min(100,Math.round((p.studentsCount/p.maxStudents)*100));
+  const Chip=({text})=>(<span style={{display:'inline-block',padding:'3px 10px',borderRadius:999,fontSize:11.5,fontWeight:600,background:COLORS.light,color:'#9A3412',marginRight:6,marginBottom:6}}>{text}</span>);
+  return(
+    <Card style={{display:'flex',flexDirection:'column',gap:14}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:10}}>
+        <div>
+          <div style={{fontWeight:800,fontSize:16,color:COLORS.primary,lineHeight:1.3}}>{p.name}</div>
+          <div style={{fontSize:12.5,color:'#6B7280',marginTop:3}}>Instructor: {p.instructor}</div>
+        </div>
+        <Badge text={p.status==='activo'?'Activo':'Próximo'} color={p.status==='activo'?'green':'yellow'}/>
+      </div>
+
+      <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+        <div style={{flex:'1 1 100px',background:'#FAFAF9',borderRadius:10,padding:'10px 12px'}}>
+          <div style={{fontSize:10,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5}}>Precio</div>
+          <div style={{fontSize:17,fontWeight:800,color:COLORS.accent,marginTop:2}}>RD${p.price.toLocaleString()}</div>
+        </div>
+        <div style={{flex:'1 1 100px',background:'#FAFAF9',borderRadius:10,padding:'10px 12px'}}>
+          <div style={{fontSize:10,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5}}>Proyectos req.</div>
+          <div style={{fontSize:17,fontWeight:800,color:COLORS.primary,marginTop:2}}>{p.requiredProjects}</div>
+        </div>
+        <div style={{flex:'1 1 100px',background:'#FAFAF9',borderRadius:10,padding:'10px 12px'}}>
+          <div style={{fontSize:10,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5}}>Horas req.</div>
+          <div style={{fontSize:17,fontWeight:800,color:COLORS.primary,marginTop:2}}>{p.requiredHours}h</div>
+        </div>
+      </div>
+
+      <div>
+        <div style={{display:'flex',justifyContent:'space-between',fontSize:11.5,color:'#6B7280',marginBottom:4}}>
+          <span>Cupo: {p.studentsCount}/{p.maxStudents} estudiantes</span>
+          <span style={{fontWeight:700,color:cupoPct>=90?COLORS.danger:COLORS.accent}}>{cupoPct}%</span>
+        </div>
+        <div style={{height:7,background:'#F1F5F9',borderRadius:999}}><div style={{height:'100%',width:`${cupoPct}%`,background:cupoPct>=90?COLORS.danger:COLORS.accent,borderRadius:999}}/></div>
+      </div>
+
+      <div style={{fontSize:11.5,color:'#6B7280'}}>📅 {p.startDate} → {p.endDate}</div>
+
+      <button onClick={()=>setExpanded(!expanded)} style={{background:'none',border:'none',cursor:'pointer',padding:0,textAlign:'left',fontSize:12.5,fontWeight:700,color:COLORS.accent,display:'flex',alignItems:'center',gap:4}}>
+        {expanded?'Ocultar contenido del programa':'Ver contenido del programa'} {expanded?'▲':'▼'}
+      </button>
+
+      {expanded&&(
+        <div style={{display:'flex',flexDirection:'column',gap:10,paddingTop:4,borderTop:'1px solid #F1F5F9'}}>
+          <div>
+            <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5,marginBottom:6}}>Proyectos del programa</div>
+            <div>{p.projectTypes.map((pt,i)=><Chip key={i} text={pt}/>)}</div>
+          </div>
+          <div>
+            <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5,marginBottom:6}}>Destrezas que se certifican</div>
+            <div>{p.skills.map((sk,i)=><Chip key={i} text={sk}/>)}</div>
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+};
+
+const ProgramsPage=({state})=>{
+  const [filter,setFilter]=React.useState('todos');
+  const filtered=state.programs.filter(p=>filter==='todos'?true:p.status===filter);
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card style={{marginBottom:16,display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
+        <span style={{fontSize:13,fontWeight:600,color:'#374151'}}>Filtrar:</span>
+        {[['todos','Todos'],['activo','Activos'],['próximo','Próximos']].map(([v,label])=>(
+          <button key={v} onClick={()=>setFilter(v)} style={{padding:'6px 14px',borderRadius:999,border:`1.5px solid ${filter===v?COLORS.accent:'#E5E7EB'}`,background:filter===v?COLORS.light:'white',color:filter===v?'#9A3412':'#374151',fontSize:12.5,fontWeight:700,cursor:'pointer'}}>{label}</button>
+        ))}
+        <span style={{marginLeft:'auto',fontSize:12,color:'#9CA3AF'}}>{filtered.length} programa{filtered.length!==1?'s':''}</span>
+      </Card>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:16}}>
+        {filtered.map(p=><ProgramCard key={p.id} p={p}/>)}
+      </div>
+      {filtered.length===0&&<Card><div style={{color:'#9CA3AF',textAlign:'center',padding:20}}>Sin programas en este filtro.</div></Card>}
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — ESTUDIANTES (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const StudentsPage=({state,toast})=>{
+  const [search,setSearch]=React.useState('');
+  const [detail,setDetail]=React.useState(null);
+  const filtered=state.students.filter(s=>s.name.toLowerCase().includes(search.toLowerCase())||s.code.toLowerCase().includes(search.toLowerCase()));
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card style={{marginBottom:16}}>
+        <div style={{display:'flex',gap:12,alignItems:'flex-end',flexWrap:'wrap'}}>
+          <div style={{flex:1,minWidth:220}}><Input label="Buscar" value={search} onChange={setSearch} placeholder="Nombre o código..."/></div>
+          <Btn onClick={()=>toast('Formulario de nuevo estudiante — próximamente en esta demo.','info')}><Icon name="plus" size={16} color="white"/>Nuevo Estudiante</Btn>
+        </div>
+      </Card>
+      <Card>
+        <Table headers={['Código','Nombre','Programa','Progreso','Pago','Estado','']} rows={filtered.map(s=>{
+          const prog=byId(state.programs,s.programId);
+          return[s.code,s.name,prog?.name||'—',<div style={{width:120}}><ProgressBar value={s.progress} max={100} showLabel={false} height={8}/></div>,paymentBadge(s.paymentStatus),s.pendingCert?<Badge text="Cert. pendiente" color="purple"/>:<Badge text="En curso" color="blue"/>,<Btn size="sm" color="ghost" onClick={()=>setDetail(s)}><Icon name="eye" size={15} color={COLORS.accent}/></Btn>];
+        })}/>
+      </Card>
+      {detail&&<Modal title={detail.name} onClose={()=>setDetail(null)} width={520}>
+        <div style={{display:'flex',flexDirection:'column',gap:8,fontSize:13}}>
+          <div><strong>Código:</strong> {detail.code}</div>
+          <div><strong>Programa:</strong> {byId(state.programs,detail.programId)?.name}</div>
+          <div><strong>Teléfono:</strong> {detail.phone}</div>
+          <div><strong>Email:</strong> {detail.email||'—'}</div>
+          <div><strong>Estado de pago:</strong> {paymentBadge(detail.paymentStatus)}</div>
+          <div><strong>Progreso:</strong> {detail.progress}%</div>
+          {detail.materialLink&&<div><strong>Material:</strong> <a href={detail.materialLink} target="_blank">Enlace Drive</a></div>}
+        </div>
+      </Modal>}
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — INSTRUCTORES (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const InstructorsPage=({state,toast})=>(
+  <div style={{padding:'20px 24px 32px'}}>
+    <Card style={{marginBottom:16,display:'flex',justifyContent:'flex-end'}}>
+      <Btn onClick={()=>toast('Formulario de nuevo instructor — próximamente en esta demo.','info')}><Icon name="plus" size={16} color="white"/>Nuevo Instructor</Btn>
+    </Card>
+    <Card>
+      <Table headers={['Nombre','Especialidad','Certificación','Sedes','Contacto']} rows={state.instructors.map(i=>[
+        i.name,i.specialty,i.certification,i.locations.map(lid=>byId(state.locations,lid)?.name).join(', '),
+        <div style={{display:'flex',gap:8}}><Icon name="whatsapp" size={16} color="#25D366"/><span style={{fontSize:12}}>{i.phone}</span></div>,
+      ])}/>
+    </Card>
+  </div>
+);
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — SEDES Y TALLERES (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const LocationsPage=({state})=>(
+  <div style={{padding:'20px 24px 32px',display:'flex',flexDirection:'column',gap:16}}>
+    {state.locations.map(loc=>(
+      <Card key={loc.id}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:12}}>
+          <div>
+            <div style={{fontWeight:700,fontSize:16,color:COLORS.primary}}>{loc.name}</div>
+            <div style={{fontSize:12,color:'#6B7280',marginTop:2}}>{loc.address}, {loc.city} · {loc.contact} · {loc.phone}</div>
+          </div>
+          <Badge text={`${loc.areas.length} estaciones`} color="orange"/>
+        </div>
+        <Table headers={['Estación','Capacidad','Turnos']} rows={loc.areas.map(a=>[a.name,a.capacity,a.shifts.map(s=>`${s.name} (${s.start}-${s.end})`).join(' · ')])}/>
+      </Card>
+    ))}
+  </div>
+);
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — SESIONES (admin/instructor)
+// ══════════════════════════════════════════════════════════════════════════
+const SessionsPage=({state,dispatch,toast,user})=>{
+  const list=user.role==='instructor'?state.sessions.filter(s=>s.instructorId===user.id):state.sessions;
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card style={{marginBottom:16,display:'flex',justifyContent:'flex-end'}}>
+        <Btn onClick={()=>toast('Formulario de nueva sesión — próximamente en esta demo.','info')}><Icon name="plus" size={16} color="white"/>Nueva Sesión</Btn>
+      </Card>
+      <Card>
+        <Table headers={['Fecha','Estudiante','Instructor','Sede','Turno','Estado','']} rows={list.map(a=>[
+          a.date,byId(state.students,a.studentId)?.name||'—',byId(state.instructors,a.instructorId)?.name||'—',
+          byId(state.locations,a.locationId)?.name||'—',`${a.shiftStart}–${a.shiftEnd}`,statusBadge(a.status),
+          a.status==='scheduled'?<Btn size="sm" color="success" onClick={()=>{dispatch({type:'COMPLETE_SESSION',payload:a.id});toast('Sesión marcada como completada.');}}><Icon name="check" size={14} color="white"/></Btn>:null,
+        ])}/>
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — CALENDARIO
+// ══════════════════════════════════════════════════════════════════════════
+const CalendarPage=({state,user})=>{
+  let list=state.sessions;
+  if(user.role==='instructor') list=list.filter(a=>a.instructorId===user.id);
+  if(user.role==='student') list=list.filter(a=>a.studentId===user.id);
+  const byDate={};
+  list.forEach(a=>{ (byDate[a.date]=byDate[a.date]||[]).push(a); });
+  const dates=Object.keys(byDate).sort();
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      {dates.length===0&&<Card><div style={{color:'#9CA3AF',textAlign:'center',padding:20}}>Sin sesiones programadas.</div></Card>}
+      {dates.map(d=>(
+        <Card key={d} style={{marginBottom:14}}>
+          <div style={{fontWeight:700,fontSize:14,color:COLORS.primary,marginBottom:10,display:'flex',alignItems:'center',gap:8}}><Icon name="calendar" size={16} color={COLORS.accent}/>{d}</div>
+          {byDate[d].map(a=>(
+            <div key={a.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:'1px solid #F1F5F9'}}>
+              <div style={{fontSize:13}}>
+                <strong>{byId(state.students,a.studentId)?.name}</strong> · {byId(state.instructors,a.instructorId)?.name} · {byId(state.locations,a.locationId)?.name}
+              </div>
+              <div style={{display:'flex',gap:8,alignItems:'center'}}><span style={{fontSize:12,color:'#6B7280'}}>{a.shiftStart}–{a.shiftEnd}</span>{statusBadge(a.status)}</div>
+            </div>
+          ))}
+        </Card>
+      ))}
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — CAMBIOS DE HORARIO
+// ══════════════════════════════════════════════════════════════════════════
+const ChangesPage=({state,dispatch,toast,user})=>{
+  const list=user.role==='student'?state.scheduleChanges.filter(c=>c.studentId===user.id):state.scheduleChanges;
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card>
+        <Table headers={['Estudiante','Sesión Original','Nueva Fecha','Turno','Motivo','Estado',user.role==='admin'?'Acciones':'']} rows={list.map(c=>[
+          byId(state.students,c.studentId)?.name||'—',c.originalSessionId,c.newDate,c.newShift,c.reason,
+          c.status==='pending'?<Badge text="Pendiente" color="yellow"/>:c.status==='approved'?<Badge text="Aprobado" color="green"/>:<Badge text="Rechazado" color="red"/>,
+          (user.role==='admin'&&c.status==='pending')?(
+            <div style={{display:'flex',gap:6}}>
+              <Btn size="sm" color="success" onClick={()=>{dispatch({type:'APPROVE_CHANGE',payload:c.id});toast('Cambio de horario aprobado.');}}><Icon name="check" size={13} color="white"/></Btn>
+              <Btn size="sm" color="danger" onClick={()=>{dispatch({type:'REJECT_CHANGE',payload:c.id});toast('Cambio de horario rechazado.','warning');}}><Icon name="x" size={13} color="white"/></Btn>
+            </div>
+          ):null,
+        ])}/>
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — PORTAFOLIO (subida de fotos de trabajos — student / admin)
+// ══════════════════════════════════════════════════════════════════════════
+const MAX_UPLOAD_MB = 6;
+
+const PortfolioThumb=({sub,height=160})=>(
+  sub.imageDataUrl
+    ? <img src={sub.imageDataUrl} alt={sub.title} style={{width:'100%',height,objectFit:'cover',borderRadius:10,display:'block'}}/>
+    : <div style={{width:'100%',height,borderRadius:10,background:`${sub.placeholderColor||COLORS.accent}18`,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:6}}>
+        <Icon name="image" size={28} color={sub.placeholderColor||COLORS.accent}/>
+        <span style={{fontSize:11,fontWeight:700,color:sub.placeholderColor||COLORS.accent}}>{sub.placeholderLabel||'Sin foto'}</span>
+      </div>
+);
+
+const submissionStatusBadge=s=>s==='revisado'?<Badge text="Revisado" color="green"/>:<Badge text="Pendiente de revisión" color="yellow"/>;
+
+const StudentUploadForm=({state,dispatch,toast,user})=>{
+  const st=state.students.find(s=>s.id===user.id);
+  const prog=state.programs.find(p=>p.id===st?.programId);
+  const [title,setTitle]=React.useState('');
+  const [projectType,setProjectType]=React.useState('');
+  const [preview,setPreview]=React.useState(null);
+  const [fileName,setFileName]=React.useState('');
+  const fileInputRef=React.useRef(null);
+
+  const onFile=e=>{
+    const file=e.target.files&&e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')){toast('Selecciona un archivo de imagen (JPG, PNG, etc.).','error');return;}
+    if(file.size>MAX_UPLOAD_MB*1024*1024){toast(`La imagen supera el límite de ${MAX_UPLOAD_MB}MB.`,'error');return;}
+    const reader=new FileReader();
+    reader.onload=()=>{setPreview(reader.result);setFileName(file.name);};
+    reader.readAsDataURL(file);
+  };
+
+  const submit=()=>{
+    if(!title.trim()){toast('Ponle un título a tu trabajo.','error');return;}
+    if(!preview){toast('Sube una foto de tu pieza antes de publicar.','error');return;}
+    dispatch({type:'ADD_SUBMISSION',payload:{
+      id:'sub-'+Date.now(),studentId:user.id,programId:st?.programId,
+      projectType:projectType||'Trabajo del taller',title,imageDataUrl:preview,
+      uploadedAt:new Date().toISOString(),status:'pendiente',feedback:'',
+    }});
+    setTitle('');setProjectType('');setPreview(null);setFileName('');
+    if(fileInputRef.current) fileInputRef.current.value='';
+    toast('¡Foto publicada! El director la verá en tu portafolio.');
+  };
+
+  return(
+    <Card style={{marginBottom:16}}>
+      <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:12}}>Subir foto de mi trabajo</div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,alignItems:'start'}}>
+        <div>
+          <Input label="Título del trabajo" value={title} onChange={setTitle} placeholder="ej: Pieza multi-color — proyecto final"/>
+          <Select label="Tipo de proyecto" value={projectType} onChange={setProjectType} options={(prog?.projectTypes||[]).map(pt=>({value:pt,label:pt}))}/>
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={onFile} style={{display:'none'}}/>
+          <Btn color="secondary" onClick={()=>fileInputRef.current&&fileInputRef.current.click()}><Icon name="upload" size={15} color="#374151"/>{fileName?'Cambiar foto':'Elegir foto'}</Btn>
+          {fileName&&<span style={{marginLeft:10,fontSize:12,color:'#6B7280'}}>{fileName}</span>}
+          <div style={{marginTop:16}}><Btn onClick={submit}><Icon name="image" size={15} color="white"/>Publicar en mi portafolio</Btn></div>
+        </div>
+        <div>
+          <div style={{fontSize:11,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',letterSpacing:0.5,marginBottom:6}}>Vista previa</div>
+          {preview
+            ? <img src={preview} alt="Vista previa" style={{width:'100%',maxHeight:180,objectFit:'cover',borderRadius:10}}/>
+            : <div style={{width:'100%',height:180,borderRadius:10,border:'2px dashed #E5E7EB',display:'flex',alignItems:'center',justifyContent:'center',color:'#9CA3AF',fontSize:12}}>Sin foto seleccionada</div>}
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+const PortfolioPage=({state,dispatch,toast,user}) => {
+  const [filterStudent,setFilterStudent]=React.useState('');
+  const [filterStatus,setFilterStatus]=React.useState('');
+  const [detail,setDetail]=React.useState(null);
+  const [feedbackDraft,setFeedbackDraft]=React.useState('');
+
+  const isAdmin=user.role==='admin';
+  let list=isAdmin?state.submissions:state.submissions.filter(s=>s.studentId===user.id);
+  if(isAdmin&&filterStudent) list=list.filter(s=>s.studentId===filterStudent);
+  if(isAdmin&&filterStatus) list=list.filter(s=>s.status===filterStatus);
+  list=[...list].sort((a,b)=>b.uploadedAt.localeCompare(a.uploadedAt));
+
+  const openDetail=sub=>{setDetail(sub);setFeedbackDraft(sub.feedback||'');};
+  const markReviewed=()=>{
+    dispatch({type:'REVIEW_SUBMISSION',payload:{id:detail.id,feedback:feedbackDraft}});
+    toast('Trabajo marcado como revisado.');
+    setDetail(null);
+  };
+
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      {!isAdmin&&<StudentUploadForm state={state} dispatch={dispatch} toast={toast} user={user}/>}
+
+      {isAdmin&&(
+        <Card style={{marginBottom:16,display:'flex',gap:12,alignItems:'flex-end',flexWrap:'wrap'}}>
+          <div style={{minWidth:220}}>
+            <Select label="Estudiante" value={filterStudent} onChange={setFilterStudent} options={state.students.map(s=>({value:s.id,label:s.name}))}/>
+          </div>
+          <div style={{minWidth:200}}>
+            <Select label="Estado" value={filterStatus} onChange={setFilterStatus} options={[{value:'pendiente',label:'Pendiente de revisión'},{value:'revisado',label:'Revisado'}]}/>
+          </div>
+          <span style={{fontSize:12,color:'#9CA3AF',marginBottom:16}}>{list.length} trabajo{list.length!==1?'s':''}</span>
+        </Card>
+      )}
+
+      {list.length===0&&<Card><div style={{color:'#9CA3AF',textAlign:'center',padding:20}}>{isAdmin?'No hay trabajos publicados con este filtro.':'Aún no has publicado ningún trabajo. ¡Sube la foto de tu primera pieza!'}</div></Card>}
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:16}}>
+        {list.map(sub=>{
+          const student=byId(state.students,sub.studentId);
+          return(
+            <Card key={sub.id} style={{padding:0,overflow:'hidden',cursor:isAdmin?'pointer':'default'}} >
+              <div style={{padding:12}} onClick={()=>isAdmin&&openDetail(sub)}>
+                <PortfolioThumb sub={sub}/>
+                <div style={{marginTop:10,fontWeight:700,fontSize:13,color:'#1F2937',lineHeight:1.3}}>{sub.title}</div>
+                {isAdmin&&<div style={{fontSize:11.5,color:'#6B7280',marginTop:2}}>{student?.name} · {student?.code}</div>}
+                <div style={{fontSize:11,color:'#9CA3AF',marginTop:2}}>{sub.projectType}</div>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:8}}>
+                  <span style={{fontSize:10.5,color:'#9CA3AF'}}>{new Date(sub.uploadedAt).toLocaleDateString('es-DO')}</span>
+                  {submissionStatusBadge(sub.status)}
+                </div>
+                {!isAdmin&&sub.feedback&&(
+                  <div style={{marginTop:8,padding:'6px 10px',background:COLORS.light,borderRadius:8,fontSize:11.5,color:'#9A3412'}}>💬 {sub.feedback}</div>
+                )}
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      {detail&&(
+        <Modal title={detail.title} onClose={()=>setDetail(null)} width={520}>
+          <PortfolioThumb sub={detail} height={260}/>
+          <div style={{marginTop:14,fontSize:13,display:'flex',flexDirection:'column',gap:6}}>
+            <div><strong>Estudiante:</strong> {byId(state.students,detail.studentId)?.name}</div>
+            <div><strong>Tipo de proyecto:</strong> {detail.projectType}</div>
+            <div><strong>Publicado:</strong> {new Date(detail.uploadedAt).toLocaleString('es-DO')}</div>
+            <div><strong>Estado:</strong> {submissionStatusBadge(detail.status)}</div>
+          </div>
+          <div style={{marginTop:14}}>
+            <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>Comentario del director</label>
+            <textarea value={feedbackDraft} onChange={e=>setFeedbackDraft(e.target.value)} rows={3} placeholder="Escribe una observación para el estudiante..."
+              style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',fontFamily:'inherit'}}/>
+          </div>
+          <div style={{marginTop:14}}><Btn color="success" onClick={markReviewed}><Icon name="check" size={15} color="white"/>Guardar y marcar como revisado</Btn></div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — CHECKLIST DE SESIÓN (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const ChecklistPage=({state})=>{
+  const [detail,setDetail]=React.useState(null);
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card>
+        <Table headers={['Sesión','Estudiante','Asistencia','Horas','Desempeño','']} rows={state.checklists.map(c=>{
+          const a=byId(state.sessions,c.sessionId);
+          return[a?.date||'—',byId(state.students,a?.studentId)?.name||'—',c.attendance,c.totalHours+'h',
+            <span style={{fontWeight:700,color:c.performance>=8?COLORS.success:c.performance>=6?COLORS.warning:COLORS.danger}}>{c.performance}/10</span>,
+            <Btn size="sm" color="ghost" onClick={()=>setDetail(c)}><Icon name="eye" size={15} color={COLORS.accent}/></Btn>];
+        })}/>
+      </Card>
+      {detail&&<Modal title="Detalle del Checklist" onClose={()=>setDetail(null)} width={560}>
+        <div style={{fontSize:13,display:'flex',flexDirection:'column',gap:10}}>
+          <div><strong>Comentarios:</strong> {detail.comments}</div>
+          <div><strong>Proyectos:</strong>
+            <ul style={{marginTop:4,paddingLeft:18}}>{(detail.projects||[]).map((p,i)=><li key={i}>{p.type} × {p.count} ({p.role}) — {p.notes}</li>)}</ul>
+          </div>
+          <div><strong>Destrezas evaluadas:</strong>
+            <div style={{display:'flex',flexDirection:'column',gap:4,marginTop:6}}>
+              {Object.entries(detail.skillLevels||{}).map(([sk,lv])=>(
+                <div key={sk} style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <span style={{fontSize:12}}>{sk}</span>
+                  <span style={{fontSize:11,fontWeight:700,color:SKILL_COLORS[lv],background:`${SKILL_COLORS[lv]}18`,padding:'1px 8px',borderRadius:6}}>{SKILL_LABELS[lv]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Modal>}
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — REPORTES (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const ReportsPage=({state})=>{
+  const totalStudents=state.students.length;
+  const avgProgress=Math.round(state.students.reduce((s,x)=>s+x.progress,0)/Math.max(totalStudents,1));
+  const avgPerformance=(state.checklists.reduce((s,c)=>s+(c.performance||0),0)/Math.max(state.checklists.length,1)).toFixed(1);
+  const certReady=state.students.filter(s=>s.pendingCert).length;
+  const byProgram=state.programs.map(p=>({name:p.name,count:state.students.filter(s=>s.programId===p.id).length,revenue:p.studentsCount*p.price}));
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <div style={{display:'flex',gap:14,flexWrap:'wrap',marginBottom:20}}>
+        <StatCard label="Progreso Promedio" value={`${avgProgress}%`} icon="reports" color={COLORS.accent}/>
+        <StatCard label="Desempeño Promedio" value={avgPerformance} icon="skills" color={COLORS.success} sub="sobre 10"/>
+        <StatCard label="Listos para Certificar" value={certReady} icon="checklist" color={COLORS.warning}/>
+      </div>
+      <Card>
+        <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:14}}>Estudiantes e Ingresos por Programa</div>
+        {byProgram.map(p=>(
+          <div key={p.name} style={{marginBottom:14}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:4}}>
+              <span style={{fontWeight:600}}>{p.name}</span><span style={{color:'#6B7280'}}>{p.count} estudiantes · RD${p.revenue.toLocaleString()}</span>
+            </div>
+            <div style={{height:8,background:'#F3F4F6',borderRadius:999}}><div style={{height:'100%',width:`${Math.min(100,p.count*8)}%`,background:COLORS.accent,borderRadius:999}}/></div>
+          </div>
+        ))}
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — DESTREZAS (admin/instructor)
+// ══════════════════════════════════════════════════════════════════════════
+const SkillsPage=({state})=>(
+  <div style={{padding:'20px 24px 32px',display:'flex',flexDirection:'column',gap:16}}>
+    {state.programs.map(p=>{
+      const studentsInProgram=state.students.filter(s=>s.programId===p.id);
+      const checklistsForProgram=state.checklists.filter(c=>{const a=byId(state.sessions,c.sessionId);return a&&a.programId===p.id;});
+      const matrix={};
+      checklistsForProgram.forEach(c=>Object.entries(c.skillLevels||{}).forEach(([sk,lv])=>{matrix[sk]=Math.max(matrix[sk]||0,lv);}));
+      return(
+        <Card key={p.id}>
+          <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:4}}>{p.name}</div>
+          <div style={{fontSize:12,color:'#9CA3AF',marginBottom:12}}>{studentsInProgram.length} estudiantes inscritos</div>
+          <div style={{display:'flex',flexDirection:'column',gap:6}}>
+            {p.skills.map(sk=>{
+              const lv=matrix[sk]||0;
+              return(
+                <div key={sk} style={{display:'flex',alignItems:'center',gap:10}}>
+                  <span style={{fontSize:12,width:280,flexShrink:0}}>{sk}</span>
+                  <div style={{flex:1,height:8,background:'#F1F5F9',borderRadius:999}}><div style={{height:'100%',width:`${lv*25}%`,background:SKILL_COLORS[lv],borderRadius:999}}/></div>
+                  <span style={{fontSize:11,fontWeight:700,color:SKILL_COLORS[lv],width:90,textAlign:'right'}}>{SKILL_LABELS[lv]}</span>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      );
+    })}
+  </div>
+);
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — ALERTAS DE TALLER (instructor)
+// ══════════════════════════════════════════════════════════════════════════
+const WorkshopAlertsPage=({state,dispatch,toast,user})=>{
+  const list=state.workshopAlerts.filter(a=>a.instructorId===user.id);
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card>
+        <Table headers={['Estudiante','Tipo','Descripción','Prioridad','Estado','']} rows={list.map(a=>[
+          byId(state.students,a.studentId)?.name||'—',a.alertType,a.description,priorityBadge(a.priority),
+          a.status==='active'?<Badge text="Activa" color="red"/>:<Badge text="Resuelta" color="green"/>,
+          a.status==='active'?<Btn size="sm" color="success" onClick={()=>{dispatch({type:'RESOLVE_ALERT',payload:a.id});toast('Alerta marcada como resuelta.');}}><Icon name="check" size={13} color="white"/></Btn>:null,
+        ])}/>
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — COORDINACIÓN (instructor)
+// ══════════════════════════════════════════════════════════════════════════
+const CoordinationPage=({state,dispatch,toast,user})=>{
+  const [title,setTitle]=React.useState('');
+  const [content,setContent]=React.useState('');
+  const list=state.coordinationNotes.filter(n=>n.instructorId===user.id);
+  const submit=()=>{
+    if(!title.trim()||!content.trim()){toast('Completa título y contenido.','error');return;}
+    dispatch({type:'ADD_COORD_NOTE',payload:{id:'note-'+Date.now(),instructorId:user.id,instructorName:user.name,title,content,type:'solicitud',priority:'normal',createdAt:new Date().toISOString()}});
+    setTitle('');setContent('');toast('Nota enviada a coordinación.');
+  };
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card style={{marginBottom:16}}>
+        <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:12}}>Nueva Nota para Coordinación</div>
+        <Input label="Título" value={title} onChange={setTitle} placeholder="ej: Solicitud de material"/>
+        <div style={{marginBottom:16}}>
+          <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>Contenido</label>
+          <textarea value={content} onChange={e=>setContent(e.target.value)} rows={3} style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',fontFamily:'inherit'}}/>
+        </div>
+        <Btn onClick={submit}><Icon name="send" size={15} color="white"/>Enviar</Btn>
+      </Card>
+      <Card>
+        <div style={{fontWeight:700,fontSize:15,color:COLORS.primary,marginBottom:12}}>Historial</div>
+        {list.length===0&&<div style={{color:'#9CA3AF',fontSize:13}}>Sin notas enviadas.</div>}
+        {list.map(n=>(
+          <div key={n.id} style={{padding:'10px 0',borderBottom:'1px solid #F1F5F9'}}>
+            <div style={{display:'flex',justifyContent:'space-between'}}><strong style={{fontSize:13}}>{n.title}</strong>{priorityBadge(n.priority)}</div>
+            <div style={{fontSize:12,color:'#6B7280',marginTop:4}}>{n.content}</div>
+          </div>
+        ))}
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — BOT ADI / LEADS (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const BotPage=({state})=>(
+  <div style={{padding:'20px 24px 32px'}}>
+    <Card style={{marginBottom:16}}>
+      <div style={{display:'flex',alignItems:'center',gap:12}}>
+        <div style={{width:44,height:44,borderRadius:12,background:COLORS.light,display:'flex',alignItems:'center',justifyContent:'center'}}><Icon name="bot" size={22} color={COLORS.accent}/></div>
+        <div>
+          <div style={{fontWeight:700,fontSize:15,color:COLORS.primary}}>Bot ADI — Asistente de Captación</div>
+          <div style={{fontSize:12,color:'#6B7280'}}>Responde consultas por WhatsApp/Instagram y captura leads automáticamente.</div>
+        </div>
+      </div>
+    </Card>
+    <Card>
+      <Table headers={['Nombre','Programa de Interés','Fuente','Temperatura','Estado','Valor']} rows={state.leads.map(l=>[
+        l.name,l.program,l.source,tempBadge(l.temperature),<Badge text={l.status} color="gray"/>,`RD$${l.value.toLocaleString()}`,
+      ])}/>
+    </Card>
+  </div>
+);
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — ALERTAS DEL SISTEMA (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const SystemAlertsPage=({state})=>{
+  const items=[
+    ...state.students.filter(s=>s.paymentStatus==='atrasado').map(s=>({type:'Pago atrasado',desc:`${s.name} (${s.code}) tiene un pago atrasado.`,priority:'alta'})),
+    ...state.workshopAlerts.filter(a=>a.status==='active').map(a=>({type:'Alerta de taller',desc:a.description,priority:a.priority})),
+    ...state.scheduleChanges.filter(c=>c.status==='pending').map(c=>({type:'Cambio de horario pendiente',desc:`${byId(state.students,c.studentId)?.name} solicitó cambio de horario.`,priority:'normal'})),
+  ];
+  return(
+    <div style={{padding:'20px 24px 32px'}}>
+      <Card>
+        <Table headers={['Tipo','Descripción','Prioridad']} rows={items.map(i=>[i.type,i.desc,priorityBadge(i.priority)])} emptyMsg="Sin alertas activas."/>
+      </Card>
+    </div>
+  );
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// MÓDULO — NOTIFICACIONES (admin)
+// ══════════════════════════════════════════════════════════════════════════
+const NotificationsPage=({state})=>(
+  <div style={{padding:'20px 24px 32px'}}>
+    <Card>
+      <Table headers={['Destinatario','Canal','Tipo','Estado','Enviado','Resumen']} rows={state.notifications.map(n=>[
+        n.recipient,<Icon name={n.channel==='whatsapp'?'whatsapp':'email'} size={16} color={n.channel==='whatsapp'?'#25D366':COLORS.accent}/>,
+        n.type,n.status==='delivered'?<Badge text="Entregado" color="green"/>:<Badge text="Enviado" color="blue"/>,
+        new Date(n.sentAt).toLocaleString('es-DO'),n.summary,
+      ])}/>
+    </Card>
+  </div>
+);
+
+// ══════════════════════════════════════════════════════════════════════════
+// APP PRINCIPAL
+// ══════════════════════════════════════════════════════════════════════════
+const reducer=(state,action)=>{
+  switch(action.type){
+    case 'COMPLETE_SESSION':
+      return {...state, sessions: state.sessions.map(a=>a.id===action.payload?{...a,status:'completed'}:a)};
+    case 'APPROVE_CHANGE':
+      return {...state, scheduleChanges: state.scheduleChanges.map(c=>c.id===action.payload?{...c,status:'approved',reviewedAt:new Date().toISOString()}:c)};
+    case 'REJECT_CHANGE':
+      return {...state, scheduleChanges: state.scheduleChanges.map(c=>c.id===action.payload?{...c,status:'rejected',reviewedAt:new Date().toISOString()}:c)};
+    case 'RESOLVE_ALERT':
+      return {...state, workshopAlerts: state.workshopAlerts.map(a=>a.id===action.payload?{...a,status:'resolved'}:a)};
+    case 'ADD_COORD_NOTE':
+      return {...state, coordinationNotes: [action.payload, ...state.coordinationNotes]};
+    case 'ADD_SUBMISSION':
+      return {...state, submissions: [action.payload, ...state.submissions]};
+    case 'REVIEW_SUBMISSION':
+      return {...state, submissions: state.submissions.map(s=>s.id===action.payload.id?{...s,status:'revisado',feedback:action.payload.feedback}:s)};
+    default:
+      return state;
+  }
+};
+const initialState = { ...SAMPLE_DATA };
+
+function App() {
+  const [user, setUser] = React.useState(null);
+  const [view, setView] = React.useState('dashboard');
+  const [collapsed, setCollapsed] = React.useState(false);
+  const [toastMsg, setToastMsg] = React.useState(null);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  const toast = (msg, type = 'success') => setToastMsg({ msg, type: type === true ? 'success' : type, key: Date.now() });
+  const handleLogout = () => { setUser(null); setView('dashboard'); };
+
+  if (!user) return <LoginPage onLogin={setUser} users={ADMIN_USERS} />;
+
+  const pageTitle = {
+    dashboard: user.role === 'student' ? 'Mi Dashboard' : user.role === 'instructor' ? 'Supervisión de Taller' : 'Dashboard',
+    programs: 'Programas Académicos',
+    supervision: 'Supervisión de Taller',
+    students: 'Gestión de Estudiantes',
+    instructors: 'Gestión de Instructores',
+    locations: 'Sedes y Talleres',
+    sessions: 'Sesiones',
+    calendar: 'Calendario',
+    changes: 'Cambios de Horario',
+    portfolio: user.role === 'admin' ? 'Portafolio de Estudiantes' : 'Mi Portafolio',
+    checklist: 'Checklist de Sesión',
+    reports: 'Reportes',
+    skills: 'Gestión de Destrezas',
+    workshop_alerts: 'Alertas de Taller',
+    coordinacion: 'Coordinación',
+    bot: 'Bot ADI',
+    alerts: 'Alertas del Sistema',
+    notifications: 'Notificaciones',
+  }[view] || '3D Printers RD';
+
+  const pendingChanges = state.scheduleChanges.filter(c => c.status === 'pending').length;
+
+  const renderView = () => {
+    if (view === 'dashboard') {
+      if (user.role === 'student') return <StudentDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} />;
+      if (user.role === 'instructor') return <InstructorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} />;
+      return <AdminDashboardPage state={state} />;
+    }
+    if (view === 'programs') return <ProgramsPage state={state} />;
+    if (view === 'supervision') return <InstructorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} />;
+    if (view === 'students') return <StudentsPage state={state} dispatch={dispatch} toast={toast} />;
+    if (view === 'instructors') return <InstructorsPage state={state} dispatch={dispatch} toast={toast} />;
+    if (view === 'locations') return <LocationsPage state={state} />;
+    if (view === 'sessions') return <SessionsPage state={state} dispatch={dispatch} toast={toast} user={user} />;
+    if (view === 'calendar') return <CalendarPage state={state} user={user} />;
+    if (view === 'changes') return <ChangesPage state={state} dispatch={dispatch} toast={toast} user={user} />;
+    if (view === 'portfolio') return <PortfolioPage state={state} dispatch={dispatch} toast={toast} user={user} />;
+    if (view === 'checklist') return <ChecklistPage state={state} />;
+    if (view === 'reports') return <ReportsPage state={state} />;
+    if (view === 'skills') return <SkillsPage state={state} />;
+    if (view === 'workshop_alerts') return <WorkshopAlertsPage state={state} dispatch={dispatch} toast={toast} user={user} />;
+    if (view === 'coordinacion') return <CoordinationPage state={state} dispatch={dispatch} toast={toast} user={user} />;
+    if (view === 'bot') return <BotPage state={state} />;
+    if (view === 'alerts') return <SystemAlertsPage state={state} />;
+    if (view === 'notifications') return <NotificationsPage state={state} />;
+    return null;
+  };
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar user={user} view={view} setView={setView} collapsed={collapsed} setCollapsed={setCollapsed} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Header title={pageTitle} user={user} pendingChanges={pendingChanges} onLogout={handleLogout} />
+        <div style={{ flex: 1, overflowY: 'auto', background: COLORS.bg }}>
+          {renderView()}
+        </div>
+      </div>
+      <div style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 2000 }}>
+        {toastMsg && <Toast key={toastMsg.key} msg={toastMsg.msg} type={toastMsg.type} onClose={() => setToastMsg(null)} />}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>
