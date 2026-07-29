@@ -291,7 +291,7 @@ const Btn=({children,onClick,color='primary',size='md',disabled=false,style={}})
   return <button onClick={onClick} disabled={disabled} style={{...cs,border:'none',borderRadius:8,fontWeight:600,cursor:disabled?'not-allowed':'pointer',opacity:disabled?0.6:1,display:'inline-flex',alignItems:'center',gap:6,...style}}>{children}</button>;
 };
 
-const Input=({label,value,onChange,type='text',placeholder:'',required=false,style={}})=>(
+const Input=({label,value,onChange,type='text',placeholder='',required=false,style={}})=>(
   <div style={{marginBottom:16}}>
     {label&&<label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>{label}{required&&<span style={{color:'red'}}> *</span>}</label>}
     <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
@@ -533,70 +533,6 @@ const Header=({title,user,pendingChanges=0,onLogout})=>(
   </div>
 );
 
-const [state, dispatch] = React.useReducer(reducer, initialState);
-
-function App() {
-  const [user, setUser] = React.useState(null);
-  const [view, setView] = React.useState('dashboard');
-  const [collapsed, setCollapsed] = React.useState(false);
-  const [toasts, setToasts] = React.useState([]);
-
-  const toast = (msg, type = 'success') => {
-    const id = Date.now();
-    setToasts([...toasts, { id, msg, type }]);
-    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setView('dashboard');
-  };
-
-  if (!user) return <LoginPage onLogin={setUser} users={ADMIN_USERS} />;
-
-  return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <Sidebar user={user} view={view} setView={setView} collapsed={collapsed} setCollapsed={setCollapsed} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Header title="GPA Academy" user={user} onLogout={handleLogout} />
-        <div style={{ flex: 1, overflowY: 'auto', background: COLORS.bg }}>
-          {view === 'dashboard' && <div><p>Dashboard Placeholder</p></div>}
-          {view === 'students' && <div><p>Students Placeholder</p></div>}
-          {view === 'doctors' && <div><p>Doctors Placeholder</p></div>}
-          {view === 'hospitals' && <div><p>Hospitals Placeholder</p></div>}
-        </div>
-      </div>
-      <div style={{ position: 'fixed', bottom: 0, right: 0 }}>
-        {toasts.map(t => <Toast key={t.id} msg={t.msg} type={t.type} onClose={() => setToasts(toasts.filter(x => x.id !== t.id))} />)}
-      </div>
-    </div>
-  );
-}
-
-const reducer = (state, action) => state;
-const initialState = { data: SAMPLE_DATA };
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-</script></body></html>ss:pct>=70?COLORS.accent:COLORS.warning,borderRadius:999,transition:'width 0.4s'}}/>
-      </div>
-    </div>
-  );
-};
-
-const StatCard=({label,value,icon,color='#2E75B6',sub})=>(
-  <Card style={{display:'flex',alignItems:'center',gap:16,flex:1,minWidth:160}}>
-    <div style={{width:52,height:52,borderRadius:14,background:`${color}18`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-      <Icon name={icon} size={26} color={color}/>
-    </div>
-    <div>
-      <div style={{fontSize:28,fontWeight:800,color:'#1F2937',lineHeight:1}}>{value}</div>
-      <div style={{fontSize:13,color:'#6B7280',marginTop:2,fontWeight:500}}>{label}</div>
-      {sub&&<div style={{fontSize:11,color,marginTop:2,fontWeight:600}}>{sub}</div>}
-    </div>
-  </Card>
-);
-
-
 // ── STUDENT PERSONAL DASHBOARD ────────────────────────────────────────────────
 const StudentDashboardPage=({state,dispatch,toast,user})=>{
   const st=state.students.find(s=>s.id===user.id);
@@ -710,7 +646,19 @@ const StudentDashboardPage=({state,dispatch,toast,user})=>{
           </div>
         </div>
       </div>
-{bottom:10}}>
+
+      {/* ════ FILA 1: PROGRESO, PRÓXIMA CLASE, ASISTENCIA, HORAS ════ */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:14,marginBottom:18}}>
+
+        {/* Progreso General */}
+        <div style={{background:'white',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 10px rgba(26,58,92,0.08)',border:'1px solid #EEF2F7'}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+            <div style={{width:36,height:36,borderRadius:10,background:'#EEF6FF',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+              <span style={{fontSize:18}}>📊</span>
+            </div>
+            <span style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>Progreso General</span>
+          </div>
+          <div style={{display:'flex',alignItems:'baseline',gap:3,marginBottom:10}}>
             <span style={{fontSize:42,fontWeight:900,color:pColor(progressPct),lineHeight:1}}>{progressPct}</span>
             <span style={{fontSize:20,fontWeight:700,color:'#CBD5E1'}}>%</span>
           </div>
@@ -875,7 +823,7 @@ const StudentDashboardPage=({state,dispatch,toast,user})=>{
                       transition:'all 0.3s'}}>
                       {done?'✓':i+1}
                     </div>
-                    {i<(caseTypes.length>0?caseTypes.length:5)-1&&<div style={{width:2,height:16,background:done?COLORS.success:'#E2E8F0',margin:'3px 0'}}/>
+                    {i<(caseTypes.length>0?caseTypes.length:5)-1&&<div style={{width:2,height:16,background:done?COLORS.success:'#E2E8F0',margin:'3px 0'}}/>}
                   </div>
                   <div style={{flex:1,paddingTop:4}}>
                     <div style={{fontSize:12,fontWeight:current?700:done?600:400,color:done?'#374151':current?COLORS.primary:'#9CA3AF',lineHeight:1.4}}>{ct}</div>
@@ -1062,7 +1010,7 @@ const DoctorDashboardPage=({state,dispatch,toast,user,setView})=>{
           </div>
           {todayAssignments.length===0?<p style={{color:'#9CA3AF',margin:0}}>Sin prácticas programadas hoy</p>
             :<div style={{display:'flex',flexDirection:'column',gap:10}}>
-              {todayAssignments.map(a=>(       
+              {todayAssignments.map(a=>(
                 <div key={a.id} style={{padding:'12px',background:'#F8FAFC',borderRadius:10,border:'1px solid #E5E7EB'}}>
                   <div style={{fontWeight:700,fontSize:13,color:COLORS.primary}}>{getStudent(a.studentId)?.name}</div>
                   <div style={{fontSize:12,color:'#64748B',marginTop:2}}>{a.shift} ({a.shiftStart}–{a.shiftEnd})</div>
@@ -1080,7 +1028,7 @@ const DoctorDashboardPage=({state,dispatch,toast,user,setView})=>{
           </div>
           {upcomingAssignments.length===0?<p style={{color:'#9CA3AF',margin:0}}>Sin prácticas programadas</p>
             :<div style={{display:'flex',flexDirection:'column',gap:10}}>
-              {upcomingAssignments.slice(0,5).map(a=>(                   
+              {upcomingAssignments.slice(0,5).map(a=>(
                 <div key={a.id} style={{padding:'12px',background:'#F8FAFC',borderRadius:10,border:'1px solid #E5E7EB'}}>
                   <div style={{display:'flex',justifyContent:'space-between',alignItems:'start'}}>
                     <div>
@@ -1135,160 +1083,6 @@ const DoctorDashboardPage=({state,dispatch,toast,user,setView})=>{
   );
 };
 
-function App() {
-  const [user, setUser] = React.useState(null);
-  const [view, setView] = React.useState('dashboard');
-  const [collapsed, setCollapsed] = React.useState(false);
-  const [toasts, setToasts] = React.useState([]);
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  const toast = (msg, type = 'success') => {
-    const id = Date.now();
-    setToasts([...toasts, { id, msg, type }]);
-    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setView('dashboard');
-  };
-
-  if (!user) return <LoginPage onLogin={setUser} users={ADMIN_USERS} />;
-
-  const pageTitle = {
-    dashboard: 'Dashboard',
-    supervision: 'Supervisión Clínica',
-    students: 'Gestión de Estudiantes',
-    doctors: 'Gestión de Doctores',
-    hospitals: 'Gestión de Hospitales',
-    assignments: 'Asignaciones de Prácticas',
-    calendar: 'Calendario',
-    changes: 'Cambios de Día',
-    checklist: 'Checklist de Prácticas',
-    reports: 'Reportes',
-    skills: 'Destrezas',
-    doc_alerts: 'Alertas Clínicas',
-    coordinacion: 'Coordinación',
-    botluz: 'Bot Luz',
-    alerts: 'Alertas del Sistema',
-    notifications: 'Notificaciones',
-  }[view] || 'GPA Academy';
-
-  const pendingChanges = state.dayChanges?.filter(dc => dc.status === 'pending')?.length || 0;
-
-  return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <Sidebar user={user} view={view} setView={setView} collapsed={collapsed} setCollapsed={setCollapsed} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Header title={pageTitle} user={user} pendingChanges={pendingChanges} onLogout={handleLogout} />
-        <div style={{ flex: 1, overflowY: 'auto', background: COLORS.bg }}>
-          {user.role === 'admin' && (
-            <>
-              {view === 'dashboard' && <div><p>Dashboard Admin</p></div>}
-              {view === 'students' && <div><p>Gestión de Estudiantes</p></div>}
-              {view === 'doctors' && <div><p>Gestión de Doctores</p></div>}
-              {view === 'hospitals' && <div><p>Gestión de Hospitales</p></div>}
-              {view === 'assignments' && <div><p>Asignaciones</p></div>}
-              {view === 'checklist' && <div><p>Checklist</p></div>}
-              {view === 'reports' && <div><p>Reportes</p></div>}
-              {view === 'botluz' && <div><p>Bot Luz</p></div>}
-            </>
-          )}
-          {(user.role === 'admin' || user.role === 'doctor') && (
-            <>
-              {view === 'dashboard' && (user.role === 'doctor' ? <DoctorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} /> : <div><p>Admin Dashboard</p></div>)}
-              {view === 'calendar' && <div><p>Calendario</p></div>}
-            </>
-          )}
-          {user.role === 'doctor' && (
-            <>
-              {view === 'supervision' && <div><p>Supervisión Clínica</p></div>}
-              {view === 'doc_alerts' && <div><p>Alertas Clínicas</p></div>}
-              {view === 'coordinacion' && <div><p>Coordinación</p></div>}
-            </>
-          )}
-          {(user.role === 'admin' || user.role === 'student') && (
-            <>
-              {view === 'calendar' && <div><p>Calendario Estudiante</p></div>}
-              {view === 'changes' && <div><p>Cambios de Día</p></div>}
-            </>
-          )}
-          {user.role === 'student' && view === 'dashboard' && <StudentDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} />}
-        </div>
-      </div>
-      <div style={{ position: 'fixed', bottom: 0, right: 0 }}>
-        {toasts.map(t => <Toast key={t.id} msg={t.msg} type={t.type} onClose={() => setToasts(toasts.filter(x => x.id !== t.id))} />)}
-      </div>
-    </div>
-  );
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'COMPLETE_ASSIGNMENT':
-      return {
-        ...state,
-        assignments: state.assignments.map(a => a.id === action.payload ? { ...a, status: 'completed' } : a),
-      };
-    case 'ADD_CHECKLIST':
-      return {
-        ...state,
-        checklists: [...state.checklists, action.payload],
-      };
-    case 'UPDATE_CHECKLIST':
-      return {
-        ...state,
-        checklists: state.checklists.map(c => c.id === action.payload.id ? action.payload : c),
-      };
-    default:
-      return state;
-  }
-};
-
-const initialState = { ...SAMPLE_DATA };
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-</script></body></html>
-
-        {/* Módulo de Evaluación Rápida */}
-        <Card style={{padding:'20px 24px'}}>
-          <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>⚡ Evaluación Rápida</h3>
-          {pendingEvals.length===0?(
-            <p style={{margin:0,color:'#9CA3AF'}}>Todas las prácticas están evaluadas</p>
-          ):(
-            <div style={{display:'flex',flexDirection:'column',gap:12}}>
-              <select value={evalModal?.id||''} onChange={e=>{const a=pendingEvals.find(x=>x.id===e.target.value);openEval(a);}} style={{width:'100%',padding:'10px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14}}>
-                <option value="">Selecciona una práctica para evaluar...</option>
-                {pendingEvals.map(a=><option key={a.id} value={a.id}>{getStudent(a.studentId)?.name||'?'} · {a.date}</option>)}
-              </select>
-              <div style={{padding:'10px 12px',background:'#F0F9FF',borderRadius:9,fontSize:12,color:'#0369A1'}}>
-                💡 Selecciona una práctica para abrir el formulario de evaluación rápida.
-              </div>
-            </div>
-          )}
-        </Card>
-
-        {/* Mis estadísticas de supervisor */}
-        <Card style={{padding:'20px 24px'}}>
-          <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>📊 Mis Estadísticas</h3>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
-            <div>
-              <div style={{fontSize:11,color:'#9CA3AF',fontWeight:700,textTransform:'uppercase',marginBottom:4}}>Promedio de Desempeño</div>
-              <div style={{fontSize:32,fontWeight:900,color:COLORS.accent,lineHeight:1}}>{avgPerf()}</div>
-              <div style={{fontSize:12,color:'#64748B',marginTop:4}}>en estudiantes evaluados</div>
-            </div>
-            <div>
-              <div style={{fontSize:11,color:'#9CA3AF',fontWeight:700,textTransform:'uppercase',marginBottom:4}}>Tasa de Asistencia</div>
-              <div style={{fontSize:32,fontWeight:900,color:attendRate>=80?COLORS.success:COLORS.warning,lineHeight:1}}>{attendRate}%</div>
-              <div style={{fontSize:12,color:'#64748B',marginTop:4}}>{attendRate>=80?'excelente':'necesita mejora'}</div>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-};
-
 const DoctorPerformancePanel = ({ state, doctor, toast }) => {
   const assignments = state.assignments.filter(a => a.doctorId === doctor.id);
   const checklists = state.checklists.filter(c => assignments.some(a => a.id === c.assignmentId));
@@ -1315,11 +1109,71 @@ const DoctorPerformancePanel = ({ state, doctor, toast }) => {
   );
 };
 
+// ── GESTIÓN DE ESTUDIANTES (ADMIN) ─────────────────────────────────────────
+const StudentsPage=({state,dispatch,toast})=>{
+  const [moveModal,setMoveModal]=React.useState(null);
+  const [targetProgram,setTargetProgram]=React.useState('');
+
+  const getProgram=id=>state.programs?.find(p=>p.id===id);
+
+  const openMove=(student)=>{
+    setMoveModal(student);
+    setTargetProgram('');
+  };
+
+  const confirmMove=()=>{
+    if(!targetProgram){ toast('Selecciona un programa de destino','error'); return; }
+    const newProgram=getProgram(targetProgram);
+    const oldProgram=getProgram(moveModal.programId);
+    dispatch({type:'MOVE_STUDENT_PROGRAM',payload:{studentId:moveModal.id,programId:targetProgram,cohort:newProgram?.name||''}});
+    toast(`✅ ${moveModal.name} movido de "${oldProgram?.name||'Sin programa'}" a "${newProgram?.name}"`);
+    setMoveModal(null);
+  };
+
+  const paymentColor=p=>p==='al_día'?'green':p==='atrasado'?'red':'yellow';
+
+  return(
+    <div style={{padding:'20px 24px'}}>
+      <Card>
+        <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>Estudiantes ({state.students.length})</h3>
+        <Table headers={['Nombre','Código','Programa Actual','Progreso','Pago','Acción']}
+          rows={state.students.map(s=>{
+            const prog=getProgram(s.programId);
+            return [
+              s.name,
+              s.code,
+              prog?.name||s.cohort||'Sin programa',
+              <div key={'p'+s.id} style={{minWidth:120}}><ProgressBar value={s.progress||0} max={100} showLabel={false}/></div>,
+              <Badge key={'b'+s.id} text={s.paymentStatus} color={paymentColor(s.paymentStatus)}/>,
+              <Btn key={'btn'+s.id} size="sm" onClick={()=>openMove(s)}>Cambiar de Programa</Btn>,
+            ];
+          })}/>
+      </Card>
+
+      {moveModal&&(
+        <Modal title={`Cambiar de Programa — ${moveModal.name}`} onClose={()=>setMoveModal(null)}>
+          <p style={{margin:'0 0 16px',fontSize:13,color:'#6B7280'}}>
+            Programa actual: <strong>{getProgram(moveModal.programId)?.name||moveModal.cohort||'Sin programa asignado'}</strong>
+          </p>
+          <Select label="Nuevo Programa" value={targetProgram} onChange={setTargetProgram} required
+            options={state.programs.filter(p=>p.id!==moveModal.programId).map(p=>({value:p.id,label:p.name}))}/>
+          <div style={{padding:'10px 12px',background:'#F0F9FF',borderRadius:9,fontSize:12,color:'#0369A1',marginBottom:16}}>
+            ℹ️ El estudiante conserva su progreso, calificaciones e historial. Solo cambia el programa/cohorte asignado — no es necesario reinscribirlo.
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
+            <Btn color="secondary" onClick={()=>setMoveModal(null)}>Cancelar</Btn>
+            <Btn onClick={confirmMove}>Confirmar Cambio</Btn>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
 function App() {
   const [user, setUser] = React.useState(null);
   const [view, setView] = React.useState('dashboard');
   const [collapsed, setCollapsed] = React.useState(false);
-  const [toasts, setToasts] = React.useState([]);
   const [toastMsg, setToastMsg] = React.useState(null);
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
@@ -1364,11 +1218,12 @@ function App() {
           {view === 'dashboard' && user.role === 'student' && <StudentDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} />}
           {view === 'dashboard' && user.role === 'doctor' && <DoctorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} />}
           {view === 'dashboard' && user.role === 'admin' && <div><p style={{padding:20}}>Bienvenido al Dashboard Administrativo</p></div>}
-          {view !== 'dashboard' && <div style={{padding:20,color:'#9CA3AF'}}><p>Sección de {pageTitle} - Próximamente</p></div>}
+          {view === 'students' && user.role === 'admin' && <StudentsPage state={state} dispatch={dispatch} toast={toast} />}
+          {view !== 'dashboard' && view !== 'students' && <div style={{padding:20,color:'#9CA3AF'}}><p>Sección de {pageTitle} - Próximamente</p></div>}
         </div>
       </div>
       <div style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 1000 }}>
-        {toastMsg&&<Toast msg={toastMsg.msg} type={toastMsg.type} onClose={()=>setToastMsg(null)}/>
+        {toastMsg&&<Toast msg={toastMsg.msg} type={toastMsg.type} onClose={()=>setToastMsg(null)}/>}
       </div>
     </div>
   );
@@ -1390,6 +1245,13 @@ const reducer = (state, action) => {
       return {
         ...state,
         checklists: state.checklists.map(c => c.id === action.payload.id ? action.payload : c),
+      };
+    case 'MOVE_STUDENT_PROGRAM':
+      return {
+        ...state,
+        students: state.students.map(s => s.id === action.payload.studentId
+          ? { ...s, programId: action.payload.programId, cohort: action.payload.cohort }
+          : s),
       };
     default:
       return state;
