@@ -236,6 +236,16 @@ const SAMPLE_DATA = {
     { id:'note-001', doctorId:'d1', doctorName:'Dr. Ramón Espinal', title:'Solicitud de nuevo horario para Orlando Peña', content:'Solicito reprogramar la práctica de Orlando al turno de tarde del 16/05 por conflicto de agenda hospitalaria.', type:'solicitud', priority:'alta', createdAt:'2026-05-08T09:00:00Z' },
     { id:'note-002', doctorId:'d4', doctorName:'Dra. Patricia Lora', title:'Observación clínica — Rosa Cabrera', content:'Rosa mejoró notablemente su puntualidad en la última práctica. Recomiendo mantener seguimiento.', type:'observacion', priority:'normal', createdAt:'2026-05-09T11:00:00Z' },
   ],
+  threads: [
+    { id:'th-001', titulo:'Bienvenida al programa 2026-I 🎉', descripcion:'Bienvenidos a la cohorte de Asistencia Quirúrgica 2026-I. Usen este espacio para presentarse, resolver dudas y compartir experiencias de sus prácticas.', autorId:'admin1', fijado:true, oculto:false, createdAt:'2026-03-02T09:00:00Z', updatedAt:'2026-03-02T09:00:00Z' },
+    { id:'th-002', titulo:'¿Cómo manejan el conteo de gasas cuando hay cambio de turno?', descripcion:'En mi última práctica tuve dudas sobre el protocolo de conteo cuando el equipo cambia a mitad de cirugía. ¿Alguien puede compartir cómo lo manejan en su hospital?', autorId:'st-003', fijado:false, oculto:false, createdAt:'2026-05-10T14:30:00Z', updatedAt:'2026-05-10T14:30:00Z' },
+    { id:'th-003', titulo:'Recomendaciones para la evaluación de electrocauterio', descripcion:'¿Qué debo repasar antes de la evaluación práctica de manejo del Bovie?', autorId:'st-007', fijado:false, oculto:false, createdAt:'2026-05-08T08:15:00Z', updatedAt:'2026-05-08T08:15:00Z' },
+  ],
+  comments: [
+    { id:'cm-001', hiloId:'th-002', autorId:'d1', contenido:'Buena pregunta, Orlando. Lo correcto es hacer un conteo completo antes de que el equipo saliente se retire, con ambos circulantes presentes.', oculto:false, createdAt:'2026-05-10T15:00:00Z' },
+    { id:'cm-002', hiloId:'th-002', autorId:'st-006', contenido:'En HGEDMTD lo hacemos igual, y además lo registramos en la hoja de conteo con ambas firmas.', oculto:false, createdAt:'2026-05-10T16:20:00Z' },
+    { id:'cm-003', hiloId:'th-003', autorId:'d4', contenido:'Repasa los niveles de potencia según tejido y las medidas de seguridad para evitar quemaduras. Lo revisamos en la próxima práctica.', oculto:false, createdAt:'2026-05-08T09:00:00Z' },
+  ],
 };
 
 const COLORS={primary:'#1A3A5C',accent:'#2E75B6',light:'#D6E4F0',success:'#1D6B3B',warning:'#D97706',danger:'#DC2626',bg:'#F0F5FB'};
@@ -270,6 +280,7 @@ const Icon=({name,size=20,color='currentColor'})=>{
     email:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
     download:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
     eye:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+    community:<svg width={size} height={size} fill="none" stroke={color} strokeWidth="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>,
   };
   return icons[name]||null;
 };
@@ -465,6 +476,7 @@ const LoginPage=({onLogin,users=[]})=>{
 
 const NAV_ITEMS=[
   {key:'dashboard',    label:'Dashboard',          icon:'dashboard',   roles:['admin','doctor','student']},
+  {key:'comunidad',    label:'Comunidad',          icon:'community',   roles:['admin','doctor','student']},
   {key:'supervision',  label:'Supervisión Clínica', icon:'checklist',   roles:['doctor']},
   {key:'students',     label:'Estudiantes',         icon:'students',    roles:['admin']},
   {key:'doctors',      label:'Doctores',            icon:'doctors',     roles:['admin']},
@@ -1170,6 +1182,209 @@ const StudentsPage=({state,dispatch,toast})=>{
   );
 };
 
+// ── COMUNIDAD (FORO) ────────────────────────────────────────────────────────
+const getAuthorName=(state,id)=>{
+  const s=state.students.find(x=>x.id===id); if(s) return s.name;
+  const d=state.doctors.find(x=>x.id===id); if(d) return d.name;
+  const a=ADMIN_USERS.find(x=>x.id===id); if(a) return a.name;
+  return 'Usuario';
+};
+
+const timeAgo=(iso)=>{
+  const diff=Date.now()-new Date(iso).getTime();
+  const mins=Math.floor(diff/60000);
+  if(mins<1) return 'justo ahora';
+  if(mins<60) return `hace ${mins} min`;
+  const hrs=Math.floor(mins/60);
+  if(hrs<24) return `hace ${hrs} h`;
+  const days=Math.floor(hrs/24);
+  return `hace ${days} d`;
+};
+
+const ComunidadPage=({state,dispatch,toast,user})=>{
+  const [subView,setSubView]=React.useState('lista'); // 'lista' | 'detalle' | 'nuevo'
+  const [selectedId,setSelectedId]=React.useState(null);
+  const [form,setForm]=React.useState({titulo:'',descripcion:''});
+  const [commentText,setCommentText]=React.useState('');
+
+  const isAdmin=user.role==='admin';
+  const threads=state.threads||[];
+  const comments=state.comments||[];
+
+  const visibleThreads=threads.filter(t=>isAdmin||!t.oculto);
+  const sortedThreads=[...visibleThreads].sort((a,b)=>{
+    if(a.fijado!==b.fijado) return a.fijado?-1:1;
+    return new Date(b.createdAt)-new Date(a.createdAt);
+  });
+
+  const openThread=(id)=>{ setSelectedId(id); setSubView('detalle'); };
+  const backToList=()=>{ setSubView('lista'); setSelectedId(null); setCommentText(''); };
+
+  const submitThread=()=>{
+    if(!form.titulo.trim()){ toast('El título es obligatorio','error'); return; }
+    const id='th'+Date.now();
+    const now=new Date().toISOString();
+    dispatch({type:'ADD_THREAD',payload:{
+      id, titulo:form.titulo.trim(), descripcion:form.descripcion.trim(),
+      autorId:user.id, fijado:false, oculto:false, createdAt:now, updatedAt:now,
+    }});
+    toast('✅ Hilo publicado');
+    setForm({titulo:'',descripcion:''});
+    setSelectedId(id);
+    setSubView('detalle');
+  };
+
+  const submitComment=()=>{
+    if(!commentText.trim()) return;
+    dispatch({type:'ADD_COMMENT',payload:{
+      id:'cm'+Date.now(), hiloId:selectedId, autorId:user.id,
+      contenido:commentText.trim(), oculto:false, createdAt:new Date().toISOString(),
+    }});
+    setCommentText('');
+  };
+
+  const togglePin=(id)=>dispatch({type:'TOGGLE_PIN_THREAD',payload:id});
+  const toggleHideThread=(id)=>dispatch({type:'TOGGLE_HIDE_THREAD',payload:id});
+  const deleteThread=(id)=>{
+    if(!window.confirm('¿Eliminar este hilo y todos sus comentarios? Esta acción no se puede deshacer.')) return;
+    dispatch({type:'DELETE_THREAD',payload:id});
+    toast('Hilo eliminado');
+    backToList();
+  };
+  const toggleHideComment=(id)=>dispatch({type:'TOGGLE_HIDE_COMMENT',payload:id});
+  const deleteComment=(id)=>{
+    if(!window.confirm('¿Eliminar este comentario?')) return;
+    dispatch({type:'DELETE_COMMENT',payload:id});
+    toast('Comentario eliminado');
+  };
+
+  // ── NUEVO HILO ──
+  if(subView==='nuevo'){
+    return (
+      <div style={{padding:'20px 24px',maxWidth:640}}>
+        <button onClick={backToList} style={{background:'none',border:'none',color:COLORS.accent,fontWeight:600,fontSize:13,cursor:'pointer',marginBottom:16,padding:0}}>← Volver a Comunidad</button>
+        <Card>
+          <h3 style={{margin:'0 0 16px',color:COLORS.primary,fontSize:16,fontWeight:700}}>Nuevo Hilo</h3>
+          <Input label="Título" value={form.titulo} onChange={v=>setForm({...form,titulo:v})} required placeholder="Ej: ¿Cómo preparan el campo estéril en su hospital?"/>
+          <div style={{marginBottom:16}}>
+            <label style={{display:'block',fontWeight:600,fontSize:13,color:'#374151',marginBottom:4}}>Descripción</label>
+            <textarea value={form.descripcion} onChange={e=>setForm({...form,descripcion:e.target.value})} rows={5}
+              style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',fontFamily:'inherit',resize:'vertical'}}/>
+          </div>
+          <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
+            <Btn color="secondary" onClick={backToList}>Cancelar</Btn>
+            <Btn onClick={submitThread}>Publicar</Btn>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // ── DETALLE ──
+  if(subView==='detalle'){
+    const thread=threads.find(t=>t.id===selectedId);
+    if(!thread){
+      return (
+        <div style={{padding:'20px 24px'}}>
+          <p style={{color:'#9CA3AF'}}>Este hilo ya no existe.</p>
+          <Btn onClick={backToList}>Volver a Comunidad</Btn>
+        </div>
+      );
+    }
+    const threadComments=comments
+      .filter(c=>c.hiloId===thread.id&&(isAdmin||!c.oculto))
+      .sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+
+    return (
+      <div style={{padding:'20px 24px',maxWidth:760}}>
+        <button onClick={backToList} style={{background:'none',border:'none',color:COLORS.accent,fontWeight:600,fontSize:13,cursor:'pointer',marginBottom:16,padding:0}}>← Volver a Comunidad</button>
+
+        <Card style={{marginBottom:16}}>
+          <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6,flexWrap:'wrap'}}>
+            {thread.fijado&&<Badge text="📌 Fijado" color="yellow"/>}
+            {thread.oculto&&<Badge text="Oculto (solo admin)" color="gray"/>}
+          </div>
+          <h2 style={{margin:'0 0 6px',color:COLORS.primary,fontSize:20,fontWeight:800}}>{thread.titulo}</h2>
+          <div style={{fontSize:12,color:'#9CA3AF',marginBottom:14}}>{getAuthorName(state,thread.autorId)} · {timeAgo(thread.createdAt)}</div>
+          <p style={{margin:0,fontSize:14,color:'#374151',lineHeight:1.6,whiteSpace:'pre-wrap'}}>{thread.descripcion}</p>
+          {isAdmin&&(
+            <div style={{display:'flex',gap:8,marginTop:16,paddingTop:16,borderTop:'1px solid #F1F5F9',flexWrap:'wrap'}}>
+              <Btn size="sm" color="secondary" onClick={()=>togglePin(thread.id)}>{thread.fijado?'Desfijar':'Fijar'}</Btn>
+              <Btn size="sm" color="secondary" onClick={()=>toggleHideThread(thread.id)}>{thread.oculto?'Mostrar':'Ocultar'}</Btn>
+              <Btn size="sm" color="danger" onClick={()=>deleteThread(thread.id)}>Eliminar Hilo</Btn>
+            </div>
+          )}
+        </Card>
+
+        <h4 style={{margin:'0 0 12px',color:COLORS.primary,fontSize:14,fontWeight:700}}>Comentarios ({threadComments.length})</h4>
+        <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:20}}>
+          {threadComments.length===0&&<p style={{color:'#9CA3AF',fontSize:13}}>Aún no hay comentarios.</p>}
+          {threadComments.map(c=>(
+            <div key={c.id} style={{background:'white',borderRadius:10,padding:'12px 16px',boxShadow:'0 1px 4px rgba(26,58,92,0.06)',opacity:c.oculto?0.6:1,border:c.oculto?'1.5px dashed #D1D5DB':'1px solid transparent'}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}>
+                <div style={{fontSize:12,fontWeight:700,color:COLORS.primary}}>{getAuthorName(state,c.autorId)}{c.oculto&&<span style={{color:'#9CA3AF',fontWeight:400}}> · oculto</span>}</div>
+                <div style={{fontSize:11,color:'#9CA3AF'}}>{timeAgo(c.createdAt)}</div>
+              </div>
+              <p style={{margin:'0 0 8px',fontSize:13,color:'#374151',lineHeight:1.5,whiteSpace:'pre-wrap'}}>{c.contenido}</p>
+              {isAdmin&&(
+                <div style={{display:'flex',gap:12}}>
+                  <button onClick={()=>toggleHideComment(c.id)} style={{background:'none',border:'none',color:COLORS.accent,fontSize:11,fontWeight:600,cursor:'pointer',padding:0}}>{c.oculto?'Mostrar':'Ocultar'}</button>
+                  <button onClick={()=>deleteComment(c.id)} style={{background:'none',border:'none',color:COLORS.danger,fontSize:11,fontWeight:600,cursor:'pointer',padding:0}}>Eliminar</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <Card>
+          <div style={{marginBottom:10}}>
+            <textarea value={commentText} onChange={e=>setCommentText(e.target.value)} rows={3} placeholder="Escribe un comentario..."
+              style={{width:'100%',padding:'8px 12px',border:'1.5px solid #D1D5DB',borderRadius:8,fontSize:14,outline:'none',boxSizing:'border-box',fontFamily:'inherit',resize:'vertical'}}/>
+          </div>
+          <div style={{display:'flex',justifyContent:'flex-end'}}>
+            <Btn onClick={submitComment} disabled={!commentText.trim()}>Comentar</Btn>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // ── LISTA ──
+  return (
+    <div style={{padding:'20px 24px'}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+        <h3 style={{margin:0,color:COLORS.primary,fontSize:18,fontWeight:700}}>Comunidad</h3>
+        <Btn onClick={()=>setSubView('nuevo')}>+ Nuevo Hilo</Btn>
+      </div>
+      {sortedThreads.length===0?(
+        <Card><p style={{color:'#9CA3AF',margin:0,textAlign:'center'}}>Aún no hay publicaciones. ¡Sé el primero en crear un hilo!</p></Card>
+      ):(
+        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+          {sortedThreads.map(t=>{
+            const commentCount=comments.filter(c=>c.hiloId===t.id&&(isAdmin||!c.oculto)).length;
+            return (
+              <div key={t.id} onClick={()=>openThread(t.id)} className="hover-card"
+                style={{background:'white',borderRadius:12,padding:'16px 20px',boxShadow:'0 2px 8px rgba(26,58,92,0.09)',cursor:'pointer',border:t.oculto?'1.5px dashed #D1D5DB':'1px solid transparent',opacity:t.oculto?0.6:1,transition:'box-shadow 0.2s'}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6,flexWrap:'wrap'}}>
+                  {t.fijado&&<Badge text="📌 Fijado" color="yellow"/>}
+                  {t.oculto&&<Badge text="Oculto" color="gray"/>}
+                  <span style={{fontWeight:700,fontSize:15,color:COLORS.primary}}>{t.titulo}</span>
+                </div>
+                <p style={{margin:'0 0 8px',fontSize:13,color:'#6B7280',overflow:'hidden',textOverflow:'ellipsis',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>{t.descripcion}</p>
+                <div style={{fontSize:12,color:'#9CA3AF',display:'flex',gap:12}}>
+                  <span>{getAuthorName(state,t.autorId)}</span>
+                  <span>{timeAgo(t.createdAt)}</span>
+                  <span>💬 {commentCount}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
 function App() {
   const [user, setUser] = React.useState(null);
   const [view, setView] = React.useState('dashboard');
@@ -1190,6 +1405,7 @@ function App() {
 
   const pageTitle = {
     dashboard: user.role === 'student' ? 'Mi Dashboard' : user.role === 'doctor' ? 'Supervisión Clínica' : 'Dashboard',
+    comunidad: 'Comunidad',
     supervision: 'Supervisión Clínica',
     students: 'Gestión de Estudiantes',
     doctors: 'Gestión de Doctores',
@@ -1219,7 +1435,8 @@ function App() {
           {view === 'dashboard' && user.role === 'doctor' && <DoctorDashboardPage state={state} dispatch={dispatch} toast={toast} user={user} setView={setView} />}
           {view === 'dashboard' && user.role === 'admin' && <div><p style={{padding:20}}>Bienvenido al Dashboard Administrativo</p></div>}
           {view === 'students' && user.role === 'admin' && <StudentsPage state={state} dispatch={dispatch} toast={toast} />}
-          {view !== 'dashboard' && view !== 'students' && <div style={{padding:20,color:'#9CA3AF'}}><p>Sección de {pageTitle} - Próximamente</p></div>}
+          {view === 'comunidad' && <ComunidadPage state={state} dispatch={dispatch} toast={toast} user={user} />}
+          {view !== 'dashboard' && view !== 'students' && view !== 'comunidad' && <div style={{padding:20,color:'#9CA3AF'}}><p>Sección de {pageTitle} - Próximamente</p></div>}
         </div>
       </div>
       <div style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 1000 }}>
@@ -1252,6 +1469,42 @@ const reducer = (state, action) => {
         students: state.students.map(s => s.id === action.payload.studentId
           ? { ...s, programId: action.payload.programId, cohort: action.payload.cohort }
           : s),
+      };
+    case 'ADD_THREAD':
+      return {
+        ...state,
+        threads: [action.payload, ...state.threads],
+      };
+    case 'TOGGLE_PIN_THREAD':
+      return {
+        ...state,
+        threads: state.threads.map(t => t.id === action.payload ? { ...t, fijado: !t.fijado, updatedAt: new Date().toISOString() } : t),
+      };
+    case 'TOGGLE_HIDE_THREAD':
+      return {
+        ...state,
+        threads: state.threads.map(t => t.id === action.payload ? { ...t, oculto: !t.oculto, updatedAt: new Date().toISOString() } : t),
+      };
+    case 'DELETE_THREAD':
+      return {
+        ...state,
+        threads: state.threads.filter(t => t.id !== action.payload),
+        comments: state.comments.filter(c => c.hiloId !== action.payload),
+      };
+    case 'ADD_COMMENT':
+      return {
+        ...state,
+        comments: [...state.comments, action.payload],
+      };
+    case 'TOGGLE_HIDE_COMMENT':
+      return {
+        ...state,
+        comments: state.comments.map(c => c.id === action.payload ? { ...c, oculto: !c.oculto } : c),
+      };
+    case 'DELETE_COMMENT':
+      return {
+        ...state,
+        comments: state.comments.filter(c => c.id !== action.payload),
       };
     default:
       return state;
