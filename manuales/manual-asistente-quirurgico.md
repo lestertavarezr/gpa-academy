@@ -5,7 +5,7 @@
 
 ---
 
-> **Estado del documento:** Versión en construcción — Parte 1 de 5 (Introducción institucional + Módulo 1)
+> **Estado del documento:** Versión completa — Introducción institucional + Módulos 1 a 5
 > **Población objetivo:** Estudiantes de medicina, estudiantes de enfermería, licenciados/as en enfermería, médicos generales y médicos residentes que cursan el Programa de Asistencia Quirúrgica de GPA Academy.
 
 ---
@@ -48,7 +48,7 @@
 1.10 Errores comunes de ruptura de asepsia y su manejo correctivo inmediato
 1.11 Puntos clave y autoevaluación del Módulo 1
 
-### MÓDULO 2 — Heridas, Cicatrización y Técnicas de Sutura *(pendiente de desarrollo)*
+### MÓDULO 2 — Heridas, Cicatrización y Técnicas de Sutura
 2.1 Clasificación de heridas quirúrgicas (limpia, limpia-contaminada, contaminada, sucia)
 2.2 Fisiología de la cicatrización: fases hemostática, inflamatoria, proliferativa y de remodelación
 2.3 Factores locales y sistémicos que alteran la cicatrización
@@ -59,7 +59,7 @@
 2.8 [Marcador multimedia — técnicas de sutura]
 2.9 Puntos clave y autoevaluación del Módulo 2
 
-### MÓDULO 3 — Equipamiento y Tecnología en Quirófano *(pendiente de desarrollo)*
+### MÓDULO 3 — Equipamiento y Tecnología en Quirófano
 3.1 Mesa quirúrgica: posiciones, accesorios y seguridad del paciente
 3.2 Lámparas cialíticas: principios ópticos e higiene lumínica
 3.3 Unidad electroquirúrgica: modos monopolar y bipolar, seguridad y placa de retorno
@@ -67,14 +67,14 @@
 3.5 Arco en C y radioprotección en quirófano
 3.6 Mantenimiento, bioseguridad y checklist prequirúrgico del equipamiento
 
-### MÓDULO 4 — Instrumental Quirúrgico Básico *(pendiente de desarrollo)*
+### MÓDULO 4 — Instrumental Quirúrgico Básico
 4.1 Instrumental de corte y disección
 4.2 Instrumental de hemostasia
 4.3 Instrumental de separación y exposición
 4.4 Instrumental de sujeción y sutura
 4.5 Ergonomía en el manejo del instrumental
 
-### MÓDULO 5 — Equipo Quirúrgico, Roles y Comunicación Estéril *(pendiente de desarrollo)*
+### MÓDULO 5 — Equipo Quirúrgico, Roles y Comunicación Estéril
 5.1 Cirujano, primer ayudante y asistente quirúrgico
 5.2 Instrumentista y circulante
 5.3 Anestesiólogo y equipo de anestesia
