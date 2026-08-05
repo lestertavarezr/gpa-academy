@@ -5,84 +5,6 @@
 
 ---
 
-> **Estado del documento:** Versión completa — Introducción institucional + Módulos 1 a 5
-> **Población objetivo:** Estudiantes de medicina, estudiantes de enfermería, licenciados/as en enfermería, médicos generales y médicos residentes que cursan el Programa de Asistencia Quirúrgica de GPA Academy.
-
----
-
-## ÍNDICE GENERAL DEL MANUAL
-
-### Portada institucional y créditos
-### Presentación de GPA Academy: historia, misión, visión y valores del programa
-### Objetivos generales y específicos del curso
-### Metodología de enseñanza y sistema de evaluación por competencias
-
----
-
-### MÓDULO 1 — Asepsia, Antisepsia y Ambiente Quirúrgico
-1.1 Fundamentos conceptuales: asepsia, antisepsia, desinfección y esterilización
-1.2 Historia de la asepsia quirúrgica: de Semmelweis a Lister y su vigencia clínica actual
-1.3 La cadena de infección y los mecanismos de transmisión en el quirófano
-1.4 Clasificación de Spaulding de dispositivos médicos (críticos, semicríticos, no críticos)
-1.5 Métodos de esterilización
- 1.5.1 Esterilización por calor húmedo (autoclave a vapor)
- 1.5.2 Esterilización por calor seco (estufa/Poupinel)
- 1.5.3 Esterilización por óxido de etileno
- 1.5.4 Esterilización por plasma de peróxido de hidrógeno
- 1.5.5 Indicadores biológicos, químicos y físicos de esterilización; prueba de Bowie-Dick
-1.6 Lavado de manos quirúrgico
- 1.6.1 Diferencias entre lavado social, higiénico y quirúrgico
- 1.6.2 Técnica de fricción quirúrgica por tiempos y por conteo
- 1.6.3 Agentes antisépticos: clorhexidina al 4%, povidona yodada, alcohol gel quirúrgico
- 1.6.4 [Marcador multimedia — procedimiento completo]
-1.7 Colocación de bata y guantes estériles (técnica cerrada)
-1.8 Organización arquitectónica y funcional del quirófano
- 1.8.1 Zonificación: área negra, área gris y área blanca (restringida)
- 1.8.2 Flujo de personal, material y desechos; principio de "no retroceso"
- 1.8.3 Presión positiva, recambios de aire y control de bioseguridad ambiental
-1.9 Montaje de campos estériles
- 1.9.1 Principios de la técnica aséptica en el montaje de mesa e instrumental
- 1.9.2 Secuencia de apertura de paquetes estériles y verificación de indicadores
- 1.9.3 Delimitación del campo estéril: márgenes de seguridad y zonas de contaminación
- 1.9.4 [Marcador multimedia — procedimiento completo]
-1.10 Errores comunes de ruptura de asepsia y su manejo correctivo inmediato
-1.11 Puntos clave y autoevaluación del Módulo 1
-
-### MÓDULO 2 — Heridas, Cicatrización y Técnicas de Sutura
-2.1 Clasificación de heridas quirúrgicas (limpia, limpia-contaminada, contaminada, sucia)
-2.2 Fisiología de la cicatrización: fases hemostática, inflamatoria, proliferativa y de remodelación
-2.3 Factores locales y sistémicos que alteran la cicatrización
-2.4 Evaluación TIME (Tejido, Infección/Inflamación, Humedad, Bordes epiteliales)
-2.5 Drenajes quirúrgicos: tipos, indicaciones y cuidados (Penrose, Jackson-Pratt, Hemovac, tórax)
-2.6 Materiales de sutura: absorbibles vs. no absorbibles, monofilamento vs. multifilamento
-2.7 Técnicas de sutura: simple, continua, colchonero vertical y horizontal, subcuticular
-2.8 [Marcador multimedia — técnicas de sutura]
-2.9 Puntos clave y autoevaluación del Módulo 2
-
-### MÓDULO 3 — Equipamiento y Tecnología en Quirófano
-3.1 Mesa quirúrgica: posiciones, accesorios y seguridad del paciente
-3.2 Lámparas cialíticas: principios ópticos e higiene lumínica
-3.3 Unidad electroquirúrgica: modos monopolar y bipolar, seguridad y placa de retorno
-3.4 Torre de laparoscopía: componentes, insuflador, fuente de luz, cámara
-3.5 Arco en C y radioprotección en quirófano
-3.6 Mantenimiento, bioseguridad y checklist prequirúrgico del equipamiento
-
-### MÓDULO 4 — Instrumental Quirúrgico Básico
-4.1 Instrumental de corte y disección
-4.2 Instrumental de hemostasia
-4.3 Instrumental de separación y exposición
-4.4 Instrumental de sujeción y sutura
-4.5 Ergonomía en el manejo del instrumental
-
-### MÓDULO 5 — Equipo Quirúrgico, Roles y Comunicación Estéril
-5.1 Cirujano, primer ayudante y asistente quirúrgico
-5.2 Instrumentista y circulante
-5.3 Anestesiólogo y equipo de anestesia
-5.4 Comunicación estéril y protocolos de seguridad (checklist OMS)
-
----
----
-
 ## PRESENTACIÓN DE GPA ACADEMY
 
 ### Historia y misión del programa
@@ -120,11 +42,7 @@ Al finalizar el Curso Avanzado de Asistente Quirúrgico, el participante estará
 
 ### Metodología de enseñanza y evaluación
 
-El programa combina fundamentación teórica (fisiológica, anatómica y microbiológica), demostración práctica documentada en video y evaluación por competencias mediante listas de cotejo (*checklists*) observacionales. A lo largo de este manual, los procedimientos de mayor complejidad técnica —como el lavado quirúrgico o el montaje de campos estériles— incluyen un marcador de apoyo audiovisual, que remite al estudiante al material práctico complementario disponible en la plataforma institucional:
-
-**[ESPACIO PARA CÓDIGO QR - ESCANEA PARA VER EL VIDEO PRÁCTICO EN GOOGLE DRIVE]**
-
-Se recomienda al estudiante revisar el video correspondiente **antes** de la práctica presencial supervisada, y nuevamente **después** de recibir retroalimentación del instructor, como parte del ciclo de aprendizaje reflexivo.
+El programa combina fundamentación teórica (fisiológica, anatómica y microbiológica), demostración práctica supervisada en quirófano simulado y evaluación por competencias mediante listas de cotejo (*checklists*) observacionales. Cada módulo cierra con una síntesis de puntos clave que consolida los criterios sobre los que el instructor evaluará el desempeño práctico del estudiante.
 
 ---
 
@@ -141,7 +59,7 @@ Es indispensable que el asistente quirúrgico distinga con precisión estos cuat
 - **Asepsia:** conjunto de procedimientos y prácticas destinados a **impedir la llegada de microorganismos patógenos** a un medio determinado (por ejemplo, el campo operatorio), ya sea por destrucción o por prevención del contacto. Es un concepto preventivo y proactivo.
 - **Antisepsia:** conjunto de procedimientos destinados a **destruir o inhibir el crecimiento de microorganismos** presentes en tejidos vivos (piel, mucosas), mediante el uso de sustancias químicas denominadas antisépticos. A diferencia de la desinfección, la antisepsia se aplica sobre tejido vivo.
 - **Desinfección:** proceso físico o químico mediante el cual se eliminan microorganismos patógenos (en su forma vegetativa, no necesariamente esporas) de **objetos o superficies inanimadas**.
-- **Esterilización:** proceso mediante el cual se eliminan o destruyen **todas las formas de vida microbiana**, incluidas las esporas bacterianas, de un objeto o sustancia, alcanzando un nivel de seguridad de esterilidad (*Sterility Assurance Level*, SAL) de 10⁻⁶, es decir, una probabilidad menor a una en un millón de que un microorganismo viable sobreviva en el producto procesado.
+- **Esterilización:** proceso mediante el cual se eliminan o destruyen **todas las formas de vida microbiana**, incluidas las esporas bacterianas, de un objeto o sustancia, alcanzando un nivel de seguridad de esterilidad (*Sterility Assurance Level*, SAL) de 10<sup>-6</sup>, es decir, una probabilidad menor a una en un millón de que un microorganismo viable sobreviva en el producto procesado.
 
 La correcta aplicación jerárquica de estos conceptos —esterilización del instrumental, desinfección de superficies, antisepsia de la piel del paciente y de las manos del equipo, y asepsia como marco general de conducta— constituye la primera línea de defensa contra la infección del sitio quirúrgico.
 
@@ -191,6 +109,7 @@ Todo instrumental que ingrese al campo operatorio estéril se clasifica, por def
 Es el método de referencia (*gold standard*) para la esterilización de instrumental quirúrgico metálico y textiles resistentes al calor, por su eficacia, rapidez, bajo costo y ausencia de residuos tóxicos. El mecanismo de acción se basa en la **coagulación y desnaturalización irreversible de proteínas microbianas** mediante vapor de agua saturado bajo presión.
 
 Parámetros estándar de ciclo:
+
 - **134 °C** durante **3–4 minutos** de exposición (ciclo rápido tipo *flash* solo para emergencias justificadas), o
 - **121 °C** durante **15–20 minutos** (ciclo estándar de gravedad), o
 - Ciclos de **prevacío fraccionado** (mayor eficacia en penetración de paquetes porosos y lúmenes).
@@ -236,6 +155,7 @@ El lavado quirúrgico es el único de los tres diseñado para actuar también so
 Existen dos metodologías validadas, ambas aceptadas por las guías institucionales de GPA Academy:
 
 **Técnica por tiempos (método tradicional):**
+
 1. Retirar anillos, relojes y pulseras; uñas cortas, sin esmalte ni uñas artificiales.
 2. Mojar manos y antebrazos hasta 5 cm por encima del codo, manteniendo siempre las manos **por encima** del nivel de los codos para que el agua escurra desde la zona más limpia (dedos) hacia la más contaminada (codos), y nunca al revés.
 3. Aplicar antiséptico y realizar limpieza subungueal con cepillo/palillo estéril de un solo uso.
@@ -244,6 +164,7 @@ Existen dos metodologías validadas, ambas aceptadas por las guías instituciona
 6. Mantener las manos en alto y alejadas del cuerpo al ingresar al quirófano, sin tocar superficies no estériles.
 
 **Técnica por conteo anatómico (método de Ayliffe/OMS):**
+
 Se establece un número fijo de fricciones por superficie anatómica (por ejemplo, 5 fricciones por cada cara de cada dedo, 5 por espacio interdigital, etc.), garantizando cobertura sistemática independientemente del tiempo transcurrido. Ambas técnicas son válidas siempre que se documente cobertura anatómica completa.
 
 #### 1.6.3 Agentes antisépticos de uso quirúrgico
@@ -251,10 +172,6 @@ Se establece un número fijo de fricciones por superficie anatómica (por ejempl
 - **Gluconato de clorhexidina al 4%:** mecanismo de acción por disrupción de la membrana celular bacteriana; posee **efecto residual acumulativo** (aumenta su eficacia con lavados repetidos) y amplio espectro contra grampositivos y gramnegativos. Es el agente de elección en la mayoría de guías internacionales actuales por su perfil de seguridad y persistencia.
 - **Povidona yodada al 7,5–10%:** libera yodo libre que oxida proteínas y ácidos nucleicos microbianos; de acción rápida pero con menor efecto residual que la clorhexidina y riesgo de reacciones alérgicas o irritativas en pacientes/personal sensibles al yodo.
 - **Alcohol gel quirúrgico (etanol o isopropanol 60–80%) con emolientes:** de uso creciente como alternativa validada al lavado con agua y jabón en lavados subsecuentes del mismo turno quirúrgico, siempre que las manos estén visiblemente limpias (sin materia orgánica visible).
-
-#### 1.6.4 Apoyo audiovisual del procedimiento
-
-**[ESPACIO PARA CÓDIGO QR - ESCANEA PARA VER EL VIDEO PRÁCTICO EN GOOGLE DRIVE]**
 
 ### 1.7 Colocación de bata y guantes estériles (técnica cerrada)
 
@@ -283,7 +200,7 @@ El diseño funcional del quirófano se rige por el **principio de no retroceso**
 
 #### 1.8.3 Control ambiental
 
-Los quirófanos modernos mantienen **presión positiva** respecto a las áreas adyacentes, de forma que el flujo de aire siempre se dirige del quirófano hacia el exterior, impidiendo la entrada de aire potencialmente contaminado. Se exige un mínimo de **20 a 25 recambios de aire por hora**, con filtración HEPA (eficiencia ≥99,97% para partículas de 0,3 micras), y control estricto de temperatura (18–24 °C) y humedad relativa (30–60%), parámetros que además de bioseguridad garantizan el confort y rendimiento del equipo quirúrgico durante procedimientos prolongados.
+Los quirófanos modernos mantienen **presión positiva** respecto a las áreas adyacentes, de forma que el flujo de aire siempre se dirige del quirófano hacia el exterior, impidiendo la entrada de aire potencialmente contaminado. Se exige un mínimo de **20 a 25 recambios de aire por hora**, con filtración HEPA (eficiencia igual o superior al 99,97% para partículas de 0,3 micras), y control estricto de temperatura (18–24 °C) y humedad relativa (30–60%), parámetros que además de bioseguridad garantizan el confort y rendimiento del equipo quirúrgico durante procedimientos prolongados.
 
 ### 1.9 Montaje de campos estériles
 
@@ -307,10 +224,6 @@ El montaje de la mesa de instrumental y de los campos estériles se rige por pri
 #### 1.9.3 Delimitación del campo estéril
 
 El campo estéril se delimita físicamente mediante campos quirúrgicos (textiles o desechables) que se colocan alrededor del sitio operatorio, fijados con pinzas de campo (Backhaus) en sus intersecciones, estableciendo un perímetro claro entre la zona estéril y la zona no estéril circundante. El asistente debe mantener en todo momento conciencia espacial de este perímetro y de la distancia de seguridad (habitualmente no menor a 30 cm) que debe guardarse respecto a los bordes del campo al manipular instrumental o al desplazarse alrededor de la mesa.
-
-#### 1.9.4 Apoyo audiovisual del procedimiento
-
-**[ESPACIO PARA CÓDIGO QR - ESCANEA PARA VER EL VIDEO PRÁCTICO EN GOOGLE DRIVE]**
 
 ### 1.10 Errores comunes de ruptura de asepsia y manejo correctivo
 
@@ -399,10 +312,12 @@ El asistente debe conocer el manejo básico de estos sistemas: verificación de 
 Los materiales de sutura se clasifican según dos criterios fundamentales:
 
 **Por su capacidad de absorción:**
+
 - **Absorbibles:** se degradan progresivamente en el organismo por hidrólisis (ácido poliglicólico, poliglactina 910, polidioxanona) o por proteólisis enzimática (catgut, de uso actual muy restringido). Indicados en tejidos de cicatrización rápida o profundos que no requieren retiro (planos musculares, subcutáneo, mucosas).
 - **No absorbibles:** permanecen en el tejido indefinidamente salvo retiro manual, o se encapsulan de forma permanente (seda, nylon, polipropileno, poliéster). Indicados en piel (con retiro programado), tejidos de alta tensión, o cuando se requiere resistencia tensil prolongada (hernioplastias con malla, anastomosis vasculares).
 
 **Por su estructura física:**
+
 - **Monofilamento:** hebra única y continua (nylon, polipropileno, polidioxanona). Menor reacción tisular y menor riesgo de albergar bacterias en su superficie (menor "efecto mecha"), pero mayor memoria elástica y menor manejabilidad en el anudado.
 - **Multifilamento (trenzado):** múltiples hebras entrelazadas (seda, poliéster, poliglactina trenzada). Mejor manejabilidad y seguridad del nudo, pero mayor reacción tisular y mayor riesgo teórico de colonización bacteriana intersticial.
 
@@ -421,8 +336,6 @@ La elección del material considera además el calibre (escala USP, donde a mayo
 **Sutura subcuticular (intradérmica):** técnica continua que discurre horizontalmente dentro de la dermis, sin atravesar la epidermis, dejando un resultado estético superior al no generar marcas puntiformes ("de riel de tren") en la piel. Requiere mayor destreza técnica y habitualmente se emplea con material absorbible o con hilo no absorbible extraíble por ambos extremos.
 
 En todas las técnicas, el asistente quirúrgico debe respetar los principios universales de la sutura: eversión discreta de los bordes cutáneos (nunca inversión), equidistancia entre puntos, simetría de la profundidad y el ancho de cada "bocado" de tejido a ambos lados de la herida, y tensión suficiente para afrontar sin generar isquemia tisular local.
-
-**[ESPACIO PARA CÓDIGO QR - ESCANEA PARA VER EL VIDEO PRÁCTICO EN GOOGLE DRIVE]**
 
 ### 2.8 Puntos clave del Módulo 2
 
@@ -462,7 +375,7 @@ El asistente quirúrgico debe conocer las medidas básicas de seguridad eléctri
 
 La torre de laparoscopía integra los componentes tecnológicos necesarios para la cirugía mínimamente invasiva:
 
-- **Insuflador de CO₂:** crea y mantiene el neumoperitoneo (habitualmente a una presión de 12–15 mmHg) mediante insuflación controlada de dióxido de carbono, gas elegido por su alta solubilidad sanguínea, incoloración, y perfil de seguridad frente a la combustión durante el uso simultáneo de electrocirugía.
+- **Insuflador de CO<sub>2</sub>:** crea y mantiene el neumoperitoneo (habitualmente a una presión de 12–15 mmHg) mediante insuflación controlada de dióxido de carbono, gas elegido por su alta solubilidad sanguínea, incoloración, y perfil de seguridad frente a la combustión durante el uso simultáneo de electrocirugía.
 - **Fuente de luz:** habitualmente de tecnología LED o xenón, transmite luz de alta intensidad a través de un cable de fibra óptica hasta el laparoscopio.
 - **Cámara y procesador de imagen:** captura la imagen óptica del laparoscopio y la proyecta en los monitores en alta definición, permitiendo la visualización simultánea de todo el equipo quirúrgico (a diferencia de la cirugía abierta tradicional).
 - **Monitores:** posicionados estratégicamente para óptima ergonomía visual del cirujano, primer ayudante y asistente, minimizando la rotación cervical sostenida.
@@ -486,7 +399,7 @@ Antes de cada procedimiento, el asistente quirúrgico participa en la verificaci
 - El posicionamiento del paciente en la mesa quirúrgica exige protección activa de prominencias óseas y estructuras neurovasculares vulnerables.
 - La iluminación cialítica se evalúa por intensidad (lux), temperatura de color e índice de reproducción cromática.
 - El modo monopolar del electrobisturí requiere placa de retorno correctamente adherida; su mal contacto es causa directa de quemadura del paciente.
-- El neumoperitoneo laparoscópico se establece con CO₂ por su perfil de seguridad y solubilidad.
+- El neumoperitoneo laparoscópico se establece con CO<sub>2</sub> por su perfil de seguridad y solubilidad.
 - El uso del arco en C exige aplicación estricta de los principios ALARA de radioprotección (tiempo, distancia, blindaje).
 - La verificación prequirúrgica del equipamiento es una responsabilidad compartida del equipo, no exclusiva del personal técnico.
 
@@ -583,21 +496,21 @@ Adicionalmente, la cultura de comunicación estéril de GPA Academy promueve el 
 
 ## GLOSARIO DE TÉRMINOS CLAVE
 
-**Antisepsia:** destrucción o inhibición de microorganismos en tejido vivo mediante agentes químicos.
-**Asepsia:** conjunto de prácticas para impedir la llegada de microorganismos a un medio determinado.
-**Dehiscencia:** apertura espontánea de una herida previamente suturada, parcial o total.
-**Esterilización:** eliminación de toda forma de vida microbiana, incluidas esporas, con SAL de 10⁻⁶.
-**Flora residente vs. transitoria:** flora residente coloniza permanentemente la piel (folículos, glándulas); flora transitoria se adquiere por contacto reciente y se elimina con mayor facilidad.
-**ISQ:** Infección del Sitio Quirúrgico.
-**Neumoperitoneo:** insuflación de gas (habitualmente CO₂) en la cavidad peritoneal para crear espacio de trabajo en laparoscopía.
-**SAL (Sterility Assurance Level):** nivel de seguridad de esterilidad, probabilidad de supervivencia microbiana tras un proceso de esterilización.
-**Tejido de granulación:** tejido conectivo vascularizado formado durante la fase proliferativa de la cicatrización.
+- **Antisepsia:** destrucción o inhibición de microorganismos en tejido vivo mediante agentes químicos.
+- **Asepsia:** conjunto de prácticas para impedir la llegada de microorganismos a un medio determinado.
+- **Dehiscencia:** apertura espontánea de una herida previamente suturada, parcial o total.
+- **Esterilización:** eliminación de toda forma de vida microbiana, incluidas esporas, con SAL de 10<sup>-6</sup>.
+- **Flora residente vs. transitoria:** flora residente coloniza permanentemente la piel (folículos, glándulas); flora transitoria se adquiere por contacto reciente y se elimina con mayor facilidad.
+- **ISQ:** Infección del Sitio Quirúrgico.
+- **Neumoperitoneo:** insuflación de gas (habitualmente CO<sub>2</sub>) en la cavidad peritoneal para crear espacio de trabajo en laparoscopía.
+- **SAL (Sterility Assurance Level):** nivel de seguridad de esterilidad, probabilidad de supervivencia microbiana tras un proceso de esterilización.
+- **Tejido de granulación:** tejido conectivo vascularizado formado durante la fase proliferativa de la cicatrización.
 
 ---
 
 ## REFERENCIAS Y MARCO DE EVIDENCIA
 
-Este manual se fundamenta en los principios y guías de organismos y publicaciones de referencia internacional en bioseguridad y práctica quirúrgica, entre ellos: la Organización Mundial de la Salud (Lista de Verificación de la Cirugía Segura), los Centros para el Control y Prevención de Enfermedades de EE. UU. (CDC, clasificación de heridas quirúrgicas y guías de prevención de ISQ), la Asociación de Enfermeras Perioperatorias (AORN, estándares de práctica perioperatoria) y la literatura clásica de fisiología de la cicatrización y técnica quirúrgica. Se recomienda a los docentes de GPA Academy actualizar las citas específicas de cada edición según la bibliografía institucional vigente al momento de la impresión final del manual.
+Este manual se fundamenta en los principios y guías de organismos y publicaciones de referencia internacional en bioseguridad y práctica quirúrgica, entre ellos: la Organización Mundial de la Salud (Lista de Verificación de la Cirugía Segura), los Centros para el Control y Prevención de Enfermedades de EE. UU. (CDC, clasificación de heridas quirúrgicas y guías de prevención de ISQ), la Asociación de Enfermeras Perioperatorias (AORN, estándares de práctica perioperatoria) y la literatura clásica de fisiología de la cicatrización y técnica quirúrgica.
 
 ---
 
@@ -608,7 +521,3 @@ Con la finalización de los cinco módulos, el estudiante del Curso Avanzado de 
 GPA Academy reitera su compromiso institucional: la excelencia técnica sin excelencia ética y comunicativa es incompleta. Se invita a cada estudiante a portar este manual —y los principios que en él se desarrollan— como referencia permanente a lo largo de su ejercicio profesional.
 
 **GPA Academy — Formación Médico Quirúrgica Avanzada, Est. 2018**
-
----
-
-*(Manual completo: Introducción institucional + Módulos 1 a 5, glosario y cierre institucional.)*
