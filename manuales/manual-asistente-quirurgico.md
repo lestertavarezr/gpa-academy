@@ -335,4 +335,280 @@ La cultura de seguridad de GPA Academy exige que **cualquier miembro del equipo*
 
 ---
 
-*(Fin de la Parte 1 del manual: Introducción institucional + Módulo 1 completo. Próxima entrega: Módulo 2 — Heridas, Cicatrización y Técnicas de Sutura, con el mismo nivel de profundidad.)*
+## MÓDULO 2 — HERIDAS, CICATRIZACIÓN Y TÉCNICAS DE SUTURA
+
+### Introducción al módulo
+
+Todo acto quirúrgico produce, por definición, una herida controlada. La capacidad del asistente quirúrgico para comprender la fisiopatología de la cicatrización, clasificar correctamente el tipo de herida y dominar las técnicas básicas de sutura determina directamente la calidad del resultado estético y funcional, así como el riesgo de complicaciones como dehiscencia, seroma, hematoma o infección del sitio quirúrgico (ISQ). Este módulo integra fundamentos de biología celular con destreza técnica manual.
+
+### 2.1 Clasificación de heridas quirúrgicas
+
+La clasificación adoptada internacionalmente (CDC / National Research Council) estratifica las heridas según el grado de contaminación microbiana presente al momento de la cirugía, lo cual permite predecir el riesgo de ISQ y orientar la profilaxis antibiótica:
+
+| Clase | Definición | Ejemplo | Riesgo estimado de ISQ |
+|---|---|---|---|
+| **I — Limpia** | Herida electiva, no traumática, sin inflamación, sin apertura de tracto respiratorio, digestivo, genitourinario ni orofaríngeo, cerrada por primera intención | Herniorrafia, tiroidectomía | 1–5% |
+| **II — Limpia-contaminada** | Apertura controlada de tracto digestivo, respiratorio o genitourinario, sin contaminación inusual | Colecistectomía, apendicectomía no perforada | 3–11% |
+| **III — Contaminada** | Herida traumática reciente, ruptura mayor de técnica aséptica, o derrame importante de contenido gastrointestinal | Apendicectomía perforada, herida traumática de menos de 4 horas | 10–17% |
+| **IV — Sucia/infectada** | Herida traumática con tejido desvitalizado, contaminación fecal, cuerpo extraño, o infección clínica preexistente con pus | Absceso drenado, perforación intestinal con peritonitis | Mayor a 27% |
+
+Esta clasificación debe registrarse en el reporte operatorio, ya que condiciona decisiones clínicas posteriores como el tipo de cierre (primera vs. segunda intención), el uso de drenajes y la duración de la profilaxis antibiótica.
+
+### 2.2 Fisiología de la cicatrización
+
+La cicatrización es un proceso biológico continuo, aunque didácticamente se describe en cuatro fases superpuestas:
+
+**Fase hemostática (minutos a horas):** ante la lesión tisular, se produce vasoconstricción refleja inmediata seguida de activación plaquetaria. Las plaquetas se adhieren al colágeno subendotelial expuesto, se agregan y liberan gránulos alfa que contienen factor de crecimiento derivado de plaquetas (PDGF), factor de crecimiento transformante beta (TGF-β) y factor de von Willebrand, formando el tapón plaquetario inicial y activando la cascada de coagulación hasta la formación del coágulo de fibrina, que además de detener el sangrado sirve como matriz provisional para la migración celular posterior.
+
+**Fase inflamatoria (0–3 días):** los neutrófilos son las primeras células en infiltrar la herida (primeras 24–48 horas), fagocitando bacterias y detritos mediante liberación de especies reactivas de oxígeno y enzimas proteolíticas. Posteriormente predominan los monocitos, que se diferencian en macrófagos: estos son las células centrales de esta fase, ya que además de fagocitar continúan liberando factores de crecimiento (PDGF, factor de crecimiento endotelial vascular VEGF, factor de crecimiento de fibroblastos FGF) que orquestan el reclutamiento de fibroblastos y la angiogénesis de la fase siguiente. Clínicamente, esta fase se manifiesta con los signos cardinales de la inflamación: eritema, calor, edema y dolor, que **no deben confundirse automáticamente con infección** durante los primeros días del postoperatorio.
+
+**Fase proliferativa (3–21 días):** los fibroblastos migran hacia la herida y sintetizan colágeno tipo III inicialmente (más débil y desorganizado), junto con proteoglicanos y fibronectina, formando el llamado tejido de granulación. Simultáneamente ocurre la angiogénesis, con formación de nuevos capilares que otorgan al tejido de granulación su característico aspecto rojo-granular. La epitelización avanza desde los bordes de la herida mediante migración de queratinocitos. Finalmente, los fibroblastos se diferencian en miofibroblastos, células con capacidad contráctil que aproximan los bordes de la herida (contracción de la herida).
+
+**Fase de remodelación o maduración (21 días a 1–2 años):** el colágeno tipo III es progresivamente sustituido por colágeno tipo I, más resistente y organizado en fibras alineadas según las líneas de tensión mecánica del tejido (líneas de Langer). La resistencia tensil de la cicatriz aumenta progresivamente pero **nunca alcanza el 100% de la resistencia del tejido original**, estabilizándose alrededor del 70–80% de la resistencia de la piel indemne. Comprender este límite biológico es clínicamente relevante para las recomendaciones postoperatorias sobre esfuerzo físico y retorno a la actividad.
+
+### 2.3 Factores que alteran la cicatrización
+
+**Factores locales:** presencia de cuerpo extraño, tejido desvitalizado o necrótico, hematoma o seroma no drenado, infección local, isquemia tisular (por tensión excesiva de la sutura, vendaje compresivo inadecuado o compromiso vascular), radiación previa del área.
+
+**Factores sistémicos:** diabetes mellitus (glicación de proteínas, microangiopatía, disfunción leucocitaria), desnutrición proteico-calórica (déficit de sustrato para síntesis de colágeno), tabaquismo (vasoconstricción por nicotina e hipoxia tisular por monóxido de carbono), obesidad (menor perfusión del tejido adiposo, mayor tensión de la herida), inmunosupresión (corticoterapia crónica, quimioterapia, VIH), edad avanzada (menor respuesta angiogénica y proliferativa), y deficiencias vitamínicas específicas (la vitamina C es cofactor indispensable de la hidroxilación de prolina y lisina en la síntesis de colágeno; su déficit severo —escorbuto— produce dehiscencia franca de heridas).
+
+### 2.4 Evaluación TIME
+
+El acrónimo **TIME**, desarrollado originalmente para el manejo de heridas crónicas pero de aplicación práctica también en el seguimiento postoperatorio de heridas complejas, estructura la valoración sistemática del lecho de la herida:
+
+- **T (Tissue / Tejido):** evaluar presencia de tejido viable (rojo, granular) versus tejido no viable (esfacelo amarillento, escara necrótica negra) que requiera desbridamiento.
+- **I (Infection/Inflammation / Infección-Inflamación):** diferenciar inflamación fisiológica esperada de signos de infección activa (eritema progresivo más allá de los bordes, calor local aumentado, secreción purulenta, dehiscencia, fiebre, dolor desproporcionado o en aumento tras el tercer día postoperatorio).
+- **M (Moisture / Humedad):** valorar el balance de humedad del lecho; tanto la sequedad excesiva (retrasa la migración de queratinocitos) como el exudado excesivo (macera los bordes y favorece la proliferación bacteriana) son deletéreos.
+- **E (Edge / Borde epitelial):** evaluar el avance del borde epitelial; un borde que no progresa (herida "estancada") obliga a reevaluar los tres componentes anteriores y descartar factores sistémicos no controlados.
+
+### 2.5 Drenajes quirúrgicos
+
+Los drenajes tienen como objetivo evacuar colecciones líquidas (sangre, linfa, exudado seroso, contenido purulento) que de otro modo predispondrían a infección, dehiscencia o compromiso de la cicatrización por acumulación a tensión.
+
+| Tipo de drenaje | Mecanismo | Indicación típica |
+|---|---|---|
+| **Penrose** | Pasivo, por capilaridad y gravedad, abierto al exterior | Drenaje de cavidades superficiales, abscesos |
+| **Jackson-Pratt (JP)** | Activo, aspiración cerrada con reservorio de fuelle (presión negativa constante y medible) | Postoperatorio de cirugía mamaria, abdominal, plástica |
+| **Hemovac** | Activo, aspiración cerrada con reservorio de resorte/acordeón | Cirugía ortopédica, grandes disecciones |
+| **Tubo torácico (pleural)** | Activo, conectado a sello de agua con o sin succión continua | Neumotórax, hemotórax, postoperatorio de toracotomía |
+
+El asistente debe conocer el manejo básico de estos sistemas: verificación de la permeabilidad, registro cuantitativo y cualitativo del débito (volumen y características del líquido drenado), mantenimiento de la presión negativa en sistemas cerrados activos, y reconocimiento de los criterios habituales de retiro (débito seroso menor a 25–30 mL en 24 horas para drenajes JP/Hemovac, según protocolo institucional y criterio del cirujano tratante).
+
+### 2.6 Materiales de sutura
+
+Los materiales de sutura se clasifican según dos criterios fundamentales:
+
+**Por su capacidad de absorción:**
+- **Absorbibles:** se degradan progresivamente en el organismo por hidrólisis (ácido poliglicólico, poliglactina 910, polidioxanona) o por proteólisis enzimática (catgut, de uso actual muy restringido). Indicados en tejidos de cicatrización rápida o profundos que no requieren retiro (planos musculares, subcutáneo, mucosas).
+- **No absorbibles:** permanecen en el tejido indefinidamente salvo retiro manual, o se encapsulan de forma permanente (seda, nylon, polipropileno, poliéster). Indicados en piel (con retiro programado), tejidos de alta tensión, o cuando se requiere resistencia tensil prolongada (hernioplastias con malla, anastomosis vasculares).
+
+**Por su estructura física:**
+- **Monofilamento:** hebra única y continua (nylon, polipropileno, polidioxanona). Menor reacción tisular y menor riesgo de albergar bacterias en su superficie (menor "efecto mecha"), pero mayor memoria elástica y menor manejabilidad en el anudado.
+- **Multifilamento (trenzado):** múltiples hebras entrelazadas (seda, poliéster, poliglactina trenzada). Mejor manejabilidad y seguridad del nudo, pero mayor reacción tisular y mayor riesgo teórico de colonización bacteriana intersticial.
+
+La elección del material considera además el calibre (escala USP, donde a mayor número de ceros —por ejemplo 6-0 frente a 2-0— menor es el diámetro del hilo), seleccionado según la resistencia tensil requerida por el tejido y la finalidad estética o funcional de la sutura.
+
+### 2.7 Técnicas de sutura
+
+**Sutura simple discontinua (punto simple):** cada punto se anuda y corta de forma independiente. Es la técnica más versátil y de referencia para el aprendizaje inicial, ya que permite ajustar la tensión de cada punto individualmente y, si uno falla, no compromete el resto de la línea de sutura. Indicada en piel y planos de tensión variable.
+
+**Sutura continua (surgete):** una única hebra recorre toda la longitud de la herida sin anudarse entre cada paso, anclándose únicamente al inicio y al final. Ofrece cierre más rápido y distribución más homogénea de la tensión, pero presenta la desventaja de que la ruptura de un solo segmento puede comprometer la integridad de toda la línea de sutura ("efecto cordón de bolsa" al aflojarse).
+
+**Punto de colchonero vertical (Donati / *vertical mattress*):** combina un paso profundo y amplio con un paso superficial y estrecho en el mismo punto, en dirección perpendicular a la línea de la herida. Proporciona excelente eversión de los bordes cutáneos y afrontamiento de planos profundos simultáneamente, siendo de elección en piel de alta tensión o con tendencia a la inversión de bordes.
+
+**Punto de colchonero horizontal:** ambos pasos (entrada y salida, y su retorno) se realizan paralelos a la línea de la herida. Distribuye la tensión sobre una mayor superficie de tejido, útil en tejidos friables o con riesgo de desgarro con puntos simples.
+
+**Sutura subcuticular (intradérmica):** técnica continua que discurre horizontalmente dentro de la dermis, sin atravesar la epidermis, dejando un resultado estético superior al no generar marcas puntiformes ("de riel de tren") en la piel. Requiere mayor destreza técnica y habitualmente se emplea con material absorbible o con hilo no absorbible extraíble por ambos extremos.
+
+En todas las técnicas, el asistente quirúrgico debe respetar los principios universales de la sutura: eversión discreta de los bordes cutáneos (nunca inversión), equidistancia entre puntos, simetría de la profundidad y el ancho de cada "bocado" de tejido a ambos lados de la herida, y tensión suficiente para afrontar sin generar isquemia tisular local.
+
+**[ESPACIO PARA CÓDIGO QR - ESCANEA PARA VER EL VIDEO PRÁCTICO EN GOOGLE DRIVE]**
+
+### 2.8 Puntos clave del Módulo 2
+
+- La clasificación CDC de heridas (limpia a sucia) predice el riesgo de ISQ y orienta la profilaxis antibiótica y el tipo de cierre.
+- La cicatrización avanza en cuatro fases superpuestas (hemostática, inflamatoria, proliferativa, remodelación); ninguna herida recupera el 100% de la resistencia tisular original.
+- Diabetes, tabaquismo, desnutrición e inmunosupresión son los factores sistémicos de mayor impacto negativo sobre la cicatrización.
+- La evaluación TIME estructura el seguimiento sistemático del lecho de toda herida compleja.
+- La elección del material de sutura (absorbible/no absorbible, mono/multifilamento, calibre) debe fundamentarse en el tejido, la tensión y la finalidad estética-funcional.
+- El dominio de las técnicas de sutura básicas (simple, continua, colchonero vertical y horizontal, subcuticular) es una competencia manual central del asistente quirúrgico.
+
+---
+
+## MÓDULO 3 — EQUIPAMIENTO Y TECNOLOGÍA EN QUIRÓFANO
+
+### Introducción al módulo
+
+El quirófano contemporáneo integra tecnología de alta complejidad cuyo manejo seguro es responsabilidad compartida de todo el equipo, incluido el asistente quirúrgico. El desconocimiento de los principios básicos de funcionamiento de estos equipos no solo compromete la eficiencia quirúrgica, sino que constituye un riesgo directo de lesión térmica, eléctrica o mecánica para el paciente.
+
+### 3.1 Mesa quirúrgica
+
+La mesa quirúrgica es un dispositivo motorizado y articulado que permite posicionar al paciente según los requerimientos de exposición anatómica de cada procedimiento (decúbito supino, prono, lateral, posición de litotomía, Trendelenburg y Trendelenburg invertido, entre otras). El asistente debe conocer los riesgos asociados a cada posición: la posición de litotomía prolongada puede generar síndrome compartimental de miembros inferiores; el decúbito prono compromete la ventilación y exige protección ocular y de prominencias óseas; el Trendelenburg pronunciado incrementa la presión intracraneal e intraocular. La correcta fijación del paciente, el acolchado de puntos de presión y prominencias óseas (para prevención de úlceras y lesiones neurológicas por compresión, como la lesión del plexo braquial por hiperabducción del brazo) son responsabilidades directas del equipo asistencial durante el posicionamiento.
+
+### 3.2 Lámparas cialíticas
+
+Las lámparas cialíticas (del griego *skia*, sombra, y *lytos*, disolver) están diseñadas para proporcionar iluminación intensa y libre de sombras sobre el campo operatorio, mediante múltiples fuentes de luz LED de alta intensidad orientadas desde distintos ángulos que se compensan entre sí para eliminar la sombra proyectada por la cabeza y las manos del equipo quirúrgico. Los parámetros técnicos relevantes incluyen la intensidad luminosa (medida en lux, típicamente entre 40.000 y 160.000 lux en el campo operatorio), la temperatura de color (idealmente entre 4.000 y 5.000 K, similar a la luz natural, para una discriminación óptima de tonalidades tisulares) y el índice de reproducción cromática (IRC), que debe ser superior a 90 para permitir distinguir con precisión matices sutiles de coloración tisular relevantes clínicamente (por ejemplo, la diferenciación entre tejido viable y tejido isquémico).
+
+### 3.3 Unidad electroquirúrgica (electrobisturí)
+
+La unidad electroquirúrgica utiliza corriente eléctrica de alta frecuencia (300 kHz a 5 MHz, fuera del rango que produciría estimulación neuromuscular) para lograr corte, coagulación o ambos efectos combinados sobre el tejido, mediante la generación de calor por resistencia tisular al paso de la corriente.
+
+- **Modo monopolar:** la corriente circula desde el electrodo activo (el instrumental que manipula el cirujano) a través del cuerpo del paciente hasta una placa de retorno (electrodo neutro o dispersivo) adherida a una masa muscular grande y bien vascularizada del paciente, generalmente el muslo. La correcta colocación de esta placa es una medida de seguridad crítica: una placa mal adherida, colocada sobre prominencias óseas, tejido cicatricial, zonas pilosas sin rasurar o con contacto parcial concentra la densidad de corriente en un área reducida, pudiendo producir una **quemadura eléctrica grave** en el sitio de contacto. Es responsabilidad compartida del equipo verificar la correcta adherencia de la placa antes del inicio de la cirugía.
+- **Modo bipolar:** la corriente circula únicamente entre las dos ramas de un instrumento tipo pinza, atravesando solo el tejido tomado entre ellas, sin necesidad de placa de retorno externa. Es más seguro en tejidos de menor masa o alto riesgo (dedos, estructuras vasculonerviosas, cirugía en pacientes con marcapasos), aunque de menor potencia de corte que el modo monopolar.
+
+El asistente quirúrgico debe conocer las medidas básicas de seguridad eléctrica: evitar el contacto del electrodo activo con instrumental metálico no aislado mientras está energizado, mantener el electrodo en su funda aislante cuando no esté en uso activo, evitar la acumulación de soluciones antisépticas alcohólicas bajo el campo (riesgo de combustión por chispa electroquirúrgica) y estar atento a señales acústicas de activación prolongada o inadecuada.
+
+### 3.4 Torre de laparoscopía
+
+La torre de laparoscopía integra los componentes tecnológicos necesarios para la cirugía mínimamente invasiva:
+
+- **Insuflador de CO₂:** crea y mantiene el neumoperitoneo (habitualmente a una presión de 12–15 mmHg) mediante insuflación controlada de dióxido de carbono, gas elegido por su alta solubilidad sanguínea, incoloración, y perfil de seguridad frente a la combustión durante el uso simultáneo de electrocirugía.
+- **Fuente de luz:** habitualmente de tecnología LED o xenón, transmite luz de alta intensidad a través de un cable de fibra óptica hasta el laparoscopio.
+- **Cámara y procesador de imagen:** captura la imagen óptica del laparoscopio y la proyecta en los monitores en alta definición, permitiendo la visualización simultánea de todo el equipo quirúrgico (a diferencia de la cirugía abierta tradicional).
+- **Monitores:** posicionados estratégicamente para óptima ergonomía visual del cirujano, primer ayudante y asistente, minimizando la rotación cervical sostenida.
+
+El asistente quirúrgico en cirugía laparoscópica cumple frecuentemente el rol de manejo de la cámara o de instrumental auxiliar (separación, tracción), lo que exige comprensión precisa de la orientación espacial bidimensional-a-tridimensional y coordinación mano-ojo entrenada específicamente para este entorno.
+
+### 3.5 Arco en C y radioprotección en quirófano
+
+El arco en C es un equipo de fluoroscopía intraoperatoria (rayos X en tiempo real) utilizado frecuentemente en cirugía ortopédica, traumatológica, vascular y urológica para guía de reducción de fracturas, colocación de material de osteosíntesis o procedimientos endovasculares. Su uso implica exposición a radiación ionizante tanto para el paciente como para el equipo quirúrgico, por lo que el asistente debe conocer y aplicar los principios ALARA (*As Low As Reasonably Achievable*, tan bajo como razonablemente sea posible):
+
+- **Tiempo:** minimizar el tiempo de exposición y de activación del equipo.
+- **Distancia:** la intensidad de radiación disminuye con el cuadrado de la distancia a la fuente; alejarse del haz primario siempre que la función lo permita.
+- **Blindaje:** uso obligatorio de delantal plomado (habitualmente equivalente a 0,5 mm de plomo), protector tiroideo y, cuando esté disponible, dosímetro personal para monitoreo acumulativo de exposición.
+
+### 3.6 Mantenimiento, bioseguridad y checklist prequirúrgico del equipamiento
+
+Antes de cada procedimiento, el asistente quirúrgico participa en la verificación funcional del equipamiento crítico: comprobación de la calibración y funcionamiento de la unidad electroquirúrgica (incluida la integridad del cable y del electrodo de retorno), verificación de la presión y el nivel de gas del insuflador de laparoscopía, comprobación del enfoque y balance de blancos de la cámara, verificación de la disponibilidad y carga de baterías de respaldo, y confirmación de que el mantenimiento preventivo periódico del equipo (registrado por el departamento de biomedicina o ingeniería clínica) se encuentra vigente. Esta verificación previa, integrada habitualmente al *checklist* de seguridad quirúrgica, previene interrupciones críticas del procedimiento por fallo técnico evitable.
+
+### 3.7 Puntos clave del Módulo 3
+
+- El posicionamiento del paciente en la mesa quirúrgica exige protección activa de prominencias óseas y estructuras neurovasculares vulnerables.
+- La iluminación cialítica se evalúa por intensidad (lux), temperatura de color e índice de reproducción cromática.
+- El modo monopolar del electrobisturí requiere placa de retorno correctamente adherida; su mal contacto es causa directa de quemadura del paciente.
+- El neumoperitoneo laparoscópico se establece con CO₂ por su perfil de seguridad y solubilidad.
+- El uso del arco en C exige aplicación estricta de los principios ALARA de radioprotección (tiempo, distancia, blindaje).
+- La verificación prequirúrgica del equipamiento es una responsabilidad compartida del equipo, no exclusiva del personal técnico.
+
+---
+
+## MÓDULO 4 — INSTRUMENTAL QUIRÚRGICO BÁSICO
+
+### Introducción al módulo
+
+El dominio del instrumental quirúrgico —su identificación, función específica y manejo ergonómico— es una competencia distintiva del asistente quirúrgico. El instrumental se clasifica funcionalmente en cuatro grandes familias: corte y disección, hemostasia, separación/exposición, y sujeción/sutura.
+
+### 4.1 Instrumental de corte y disección
+
+- **Bisturí (mango Bard-Parker con hoja intercambiable):** instrumento de corte primario. El asistente debe conocer la numeración estándar de hojas (por ejemplo, hoja N.º 10 para incisiones cutáneas amplias, hoja N.º 11 de punta aguda para incisiones puntiformes o drenaje de abscesos, hoja N.º 15 de perfil pequeño para disección fina y precisa).
+- **Tijeras de Mayo:** de hoja recta o curva, robustas, diseñadas para corte de tejidos densos (fascia, material de sutura grueso).
+- **Tijeras de Metzenbaum:** de hoja más fina y delicada que las de Mayo, diseñadas para disección roma y corte de tejidos delicados (grasa, tejido areolar, planos vasculares).
+
+### 4.2 Instrumental de hemostasia
+
+- **Pinza hemostática de Kelly:** de puntas romas, estriadas transversalmente en toda su longitud, utilizada para pinzamiento de vasos de mediano calibre antes de su ligadura o cauterización.
+- **Pinza hemostática de Mosquito (Halsted):** de menor tamaño y mayor delicadeza que la Kelly, indicada para vasos de pequeño calibre y tejidos finos (cirugía pediátrica, disección vascular delicada).
+- **Pinza de Crile:** similar en función a la Kelly, con estriado transversal en toda la longitud de las ramas; ampliamente utilizada como pinza hemostática de propósito general.
+
+### 4.3 Instrumental de separación y exposición
+
+- **Separador de Farabeuf:** separador manual, en forma de "S", utilizado para retracción simple de bordes de la herida en disecciones superficiales.
+- **Separador de Richardson:** de mayor profundidad y ángulo recto, utilizado en cavidades abdominales para exposición de planos profundos.
+- **Separador autoestático de Balfour / Gosset:** mecanismo autorretentivo que mantiene la separación de la pared abdominal sin requerir sujeción manual continua, liberando manos del equipo para otras tareas durante procedimientos abdominales prolongados.
+- **Valvas maleables:** láminas metálicas flexibles y adaptables, utilizadas para proteger y retraer vísceras o estructuras delicadas durante la exposición del campo profundo.
+
+### 4.4 Instrumental de sujeción y sutura
+
+- **Pinza de disección con dientes (Adson con dientes):** utilizada para sujeción de tejidos resistentes (piel, fascia) donde se requiere firmeza sin deslizamiento, minimizando el traumatismo por aplastamiento repetido.
+- **Pinza de disección sin dientes:** para manipulación de tejidos delicados (vasos, intestino, peritoneo) donde los dientes causarían laceración indeseada.
+- **Portaagujas (Mayo-Hegar, Crile-Wood):** instrumento diseñado específicamente para sujetar la aguja de sutura con firmeza y precisión durante el punto de sutura, con superficie interna estriada o de carburo de tungsteno para prevenir el deslizamiento de la aguja durante la aplicación de fuerza.
+- **Pinzas de campo (Backhaus):** de extremo puntiagudo curvo, utilizadas para fijar los campos quirúrgicos entre sí en sus puntos de intersección, delimitando el perímetro estéril.
+
+### 4.5 Ergonomía en el manejo del instrumental
+
+La correcta prensión del instrumental —habitualmente mediante la técnica de "prensión de lápiz" para instrumental de precisión (bisturí, portaagujas en suturas finas) frente a la prensión palmar completa para instrumental de mayor fuerza aplicada (tijeras de Mayo, separadores)— reduce la fatiga muscular acumulada durante procedimientos prolongados y mejora la precisión del gesto quirúrgico. El asistente debe además dominar la **técnica de transferencia segura de instrumental** con el instrumentista: el paso del instrumento se realiza con un movimiento firme y decidido, colocando el mango directamente en la palma de la mano receptora, en la orientación funcional correcta (punta hacia abajo en instrumental cortopunzante), evitando el contacto accidental con las manos del receptor y minimizando el riesgo de lesión percutánea por manipulación descuidada de objetos cortopunzantes.
+
+### 4.6 Puntos clave del Módulo 4
+
+- El instrumental quirúrgico se clasifica funcionalmente en corte/disección, hemostasia, separación/exposición y sujeción/sutura.
+- La selección de la hoja de bisturí y del tipo de tijera (Mayo vs. Metzenbaum) depende de la densidad y delicadeza del tejido a intervenir.
+- Los separadores autoestáticos optimizan la exposición prolongada sin requerir sujeción manual continua.
+- El portaagujas y las pinzas de disección con/sin dientes se seleccionan según la resistencia y delicadeza del tejido suturado.
+- La técnica de transferencia segura de instrumental cortopunzante es una medida de bioseguridad para todo el equipo, no solo de eficiencia quirúrgica.
+
+---
+
+## MÓDULO 5 — EQUIPO QUIRÚRGICO, ROLES Y COMUNICACIÓN ESTÉRIL
+
+### Introducción al módulo
+
+La cirugía es, por naturaleza, un acto de equipo. La claridad en la definición de roles y la efectividad de la comunicación dentro del campo estéril son determinantes de seguridad tan relevantes como la destreza técnica individual. Este módulo cierra el manual situando al asistente quirúrgico dentro del engranaje humano del quirófano.
+
+### 5.1 Cirujano, primer ayudante y asistente quirúrgico
+
+- **Cirujano principal (operador):** responsable último de las decisiones técnicas y clínicas del procedimiento, ejecuta los tiempos quirúrgicos centrales.
+- **Primer ayudante:** habitualmente otro médico (residente senior o especialista), asiste directamente al cirujano en exposición, hemostasia, corte de suturas y, en ocasiones, en tiempos quirúrgicos delegados bajo supervisión directa.
+- **Asistente quirúrgico** (rol central de este manual): brinda apoyo técnico activo y continuo al campo estéril —separación, tracción, aspiración, corte de hilos, manejo de cámara laparoscópica, entre otras funciones— bajo la dirección del cirujano y en estrecha coordinación con el primer ayudante y el instrumentista. Su desempeño exige anticipación de las necesidades del campo, conocimiento anatómico suficiente para prever los pasos siguientes del procedimiento, y disciplina absoluta en el mantenimiento de la técnica estéril.
+
+### 5.2 Instrumentista y circulante
+
+- **Instrumentista (enfermero/a instrumentista):** vestido/a estérilmente, gestiona la mesa de instrumental, anticipa y provee al cirujano y al asistente el instrumental requerido en cada tiempo quirúrgico, y mantiene el conteo riguroso de gasas, compresas e instrumental a lo largo de todo el procedimiento.
+- **Circulante:** no viste técnica estéril; opera en la periferia del campo, gestionando el suministro de material adicional, la documentación del procedimiento, la comunicación con servicios de apoyo (patología, banco de sangre, radiología) y el conteo cruzado de gasas e instrumental junto con el instrumentista, constituyendo una salvaguarda crítica contra la retención accidental de cuerpos extraños.
+
+### 5.3 Anestesiólogo y equipo de anestesia
+
+El anestesiólogo y su equipo son responsables del manejo integral del estado fisiológico del paciente durante todo el procedimiento: inducción y mantenimiento anestésico, monitoreo hemodinámico y respiratorio continuo, manejo del dolor perioperatorio y respuesta inmediata ante eventos adversos (hemorragia masiva, inestabilidad hemodinámica, reacciones anafilácticas). La comunicación fluida y bidireccional entre el campo quirúrgico y el equipo de anestesia —particularmente en momentos de sangrado significativo o hallazgos intraoperatorios inesperados— es esencial para la toma de decisiones conjunta y oportuna.
+
+### 5.4 Comunicación estéril y protocolos de seguridad (Lista de verificación de la OMS)
+
+La **Lista de Verificación de la Cirugía Segura de la Organización Mundial de la Salud** (OMS, 2008) estructura la comunicación del equipo en tres momentos críticos, cada uno con verificación verbal explícita y participación activa de todos los miembros presentes:
+
+1. **Entrada (*Sign In*)**, antes de la inducción anestésica: confirmación de identidad del paciente, sitio quirúrgico marcado, consentimiento informado firmado, verificación de alergias conocidas, riesgo de vía aérea difícil y riesgo de pérdida sanguínea significativa.
+2. **Pausa quirúrgica (*Time Out*)**, inmediatamente antes de la incisión: presentación verbal de todos los miembros del equipo por nombre y rol, confirmación en voz alta del paciente, procedimiento y sitio quirúrgico correctos, revisión de profilaxis antibiótica administrada, y anticipación verbal de eventos críticos por parte de cirujano, anestesiólogo y equipo de enfermería.
+3. **Salida (*Sign Out*)**, antes de que el paciente abandone el quirófano: confirmación verbal del procedimiento realizado, conteo final y correcto de instrumental, gasas y agujas, etiquetado correcto de muestras enviadas a patología, y revisión conjunta de aspectos críticos para la recuperación del paciente.
+
+La evidencia acumulada desde su implementación demuestra que esta lista de verificación reduce de forma estadísticamente significativa la mortalidad y las complicaciones postoperatorias mayores, al forzar una comunicación estructurada que de otro modo depende únicamente de la memoria y la iniciativa individual.
+
+Adicionalmente, la cultura de comunicación estéril de GPA Academy promueve el principio de **"stop the line"** introducido en el Módulo 1: cualquier miembro del equipo, sin importar su jerarquía, tiene la autoridad y la obligación ética de detener verbalmente el procedimiento ante la percepción de un riesgo de seguridad, ya sea una ruptura de asepsia, una discrepancia en el conteo de instrumental o cualquier otra señal de alarma. La jerarquía tradicional del quirófano no debe, bajo ninguna circunstancia, inhibir esta comunicación de seguridad.
+
+### 5.5 Puntos clave del Módulo 5
+
+- Cada rol del equipo quirúrgico (cirujano, primer ayudante, asistente, instrumentista, circulante, anestesiólogo) tiene responsabilidades específicas y complementarias.
+- El asistente quirúrgico debe anticipar las necesidades del campo mediante conocimiento anatómico y coordinación activa con instrumentista y cirujano.
+- El conteo cruzado de gasas e instrumental entre instrumentista y circulante es una salvaguarda esencial contra la retención de cuerpos extraños.
+- La Lista de Verificación de Cirugía Segura de la OMS estructura la comunicación del equipo en tres momentos: entrada, pausa quirúrgica y salida.
+- El principio de "stop the line" garantiza que cualquier miembro del equipo pueda señalar un riesgo de seguridad sin restricción jerárquica.
+
+---
+
+## GLOSARIO DE TÉRMINOS CLAVE
+
+**Antisepsia:** destrucción o inhibición de microorganismos en tejido vivo mediante agentes químicos.
+**Asepsia:** conjunto de prácticas para impedir la llegada de microorganismos a un medio determinado.
+**Dehiscencia:** apertura espontánea de una herida previamente suturada, parcial o total.
+**Esterilización:** eliminación de toda forma de vida microbiana, incluidas esporas, con SAL de 10⁻⁶.
+**Flora residente vs. transitoria:** flora residente coloniza permanentemente la piel (folículos, glándulas); flora transitoria se adquiere por contacto reciente y se elimina con mayor facilidad.
+**ISQ:** Infección del Sitio Quirúrgico.
+**Neumoperitoneo:** insuflación de gas (habitualmente CO₂) en la cavidad peritoneal para crear espacio de trabajo en laparoscopía.
+**SAL (Sterility Assurance Level):** nivel de seguridad de esterilidad, probabilidad de supervivencia microbiana tras un proceso de esterilización.
+**Tejido de granulación:** tejido conectivo vascularizado formado durante la fase proliferativa de la cicatrización.
+
+---
+
+## REFERENCIAS Y MARCO DE EVIDENCIA
+
+Este manual se fundamenta en los principios y guías de organismos y publicaciones de referencia internacional en bioseguridad y práctica quirúrgica, entre ellos: la Organización Mundial de la Salud (Lista de Verificación de la Cirugía Segura), los Centros para el Control y Prevención de Enfermedades de EE. UU. (CDC, clasificación de heridas quirúrgicas y guías de prevención de ISQ), la Asociación de Enfermeras Perioperatorias (AORN, estándares de práctica perioperatoria) y la literatura clásica de fisiología de la cicatrización y técnica quirúrgica. Se recomienda a los docentes de GPA Academy actualizar las citas específicas de cada edición según la bibliografía institucional vigente al momento de la impresión final del manual.
+
+---
+
+## CIERRE INSTITUCIONAL
+
+Con la finalización de los cinco módulos, el estudiante del Curso Avanzado de Asistente Quirúrgico de GPA Academy habrá recorrido el ciclo completo de competencias fundamentales del rol: desde la disciplina invisible pero decisiva de la asepsia, pasando por la comprensión biológica de la herida y la destreza manual de la sutura, el dominio técnico del instrumental y la tecnología del quirófano, hasta la integración final como miembro activo, comunicativo y seguro de un equipo quirúrgico.
+
+GPA Academy reitera su compromiso institucional: la excelencia técnica sin excelencia ética y comunicativa es incompleta. Se invita a cada estudiante a portar este manual —y los principios que en él se desarrollan— como referencia permanente a lo largo de su ejercicio profesional.
+
+**GPA Academy — Formación Médico Quirúrgica Avanzada, Est. 2018**
+
+---
+
+*(Manual completo: Introducción institucional + Módulos 1 a 5, glosario y cierre institucional.)*
