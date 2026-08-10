@@ -37,7 +37,7 @@ export default function SectionCard({
           )}
           <div>
             <h3 className="text-sm font-semibold text-white">{title}</h3>
-            {subtitle && <p className="text-[11px] text-os-textDim mt-0.5">{subtitle}</p>}
+            {subtitle && <p className="font-tech text-os-textDim mt-0.5">{subtitle}</p>}
           </div>
         </div>
         {action && <div>{action}</div>}

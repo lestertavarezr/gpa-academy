@@ -58,7 +58,7 @@ export default function CEODashboard() {
 
         {/* KPI Grid */}
         <div>
-          <h2 className="text-xs font-semibold text-os-textDim uppercase tracking-wider mb-3">Indicadores Clave</h2>
+          <h2 className="font-tech text-os-textDim mb-3">Indicadores Clave</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <KPICard title="Leads este mes"        value={kpis.leadsMonth}                          icon={Users}          variant="accent"  trend={{ value: 17, label: '+17 vs anterior', direction: 'up' }} />
             <KPICard title="Conversaciones activas" value={kpis.activeConversations}                icon={MessageCircle}  variant="default" subtitle="Bot Luz activo" />
