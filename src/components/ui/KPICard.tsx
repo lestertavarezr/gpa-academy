@@ -11,7 +11,7 @@ interface KPICardProps {
     label: string
     direction: 'up' | 'down' | 'neutral'
   }
-  variant?: 'default' | 'accent' | 'success' | 'warning' | 'danger'
+  variant?: 'default' | 'accent' | 'success' | 'warning' | 'danger' | 'gold'
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
@@ -46,6 +46,12 @@ const variants = {
     icon: 'bg-os-dangerDim text-os-danger',
     value: 'text-os-danger',
     glow: 'shadow-glow-danger',
+  },
+  gold: {
+    card: 'border-os-gold/30',
+    icon: 'bg-os-goldDim text-os-gold',
+    value: 'text-os-gold',
+    glow: 'shadow-glow-gold',
   },
 }
 
@@ -104,7 +110,7 @@ export default function KPICard({
         </div>
 
         {/* Title */}
-        <p className="text-xs font-medium text-os-muted leading-tight">{title}</p>
+        <p className="font-tech text-os-muted leading-tight" style={{ fontSize: '0.67rem' }}>{title}</p>
 
         {/* Subtitle/trend label */}
         {(subtitle || trend?.label) && (

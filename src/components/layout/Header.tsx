@@ -45,8 +45,8 @@ export default function Header({ title, subtitle }: HeaderProps) {
     <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-3.5 bg-os-surface/95 backdrop-blur-md border-b border-os-border">
       {/* Left: Title */}
       <div>
-        <h1 className="text-lg font-semibold text-white leading-tight">{title}</h1>
-        {subtitle && <p className="text-xs text-os-textDim mt-0.5">{subtitle}</p>}
+        <h1 className="font-display text-xl text-os-text leading-tight">{title}</h1>
+        {subtitle && <p className="font-tech text-os-textDim mt-0.5">{subtitle}</p>}
       </div>
 
       {/* Center: Search */}
@@ -78,8 +78,8 @@ export default function Header({ title, subtitle }: HeaderProps) {
       <div className="flex items-center gap-3">
         {/* Clock */}
         <div className="hidden md:flex flex-col items-end">
-          <span className="text-sm font-semibold text-white tabular-nums">{clock}</span>
-          <span className="text-[10px] text-os-textDim capitalize">{dateStr}</span>
+          <span className="font-mono text-sm font-semibold text-os-accent tabular-nums">{clock}</span>
+          <span className="font-tech text-os-textDim capitalize" style={{ fontSize: '0.62rem' }}>{dateStr}</span>
         </div>
 
         {/* Refresh */}
@@ -104,7 +104,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
 
         {/* User */}
         <button className="flex items-center gap-2 pl-3 pr-2 py-1.5 bg-os-card border border-os-border rounded-xl hover:border-os-accent transition-all">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-os-accent to-purple-700 flex items-center justify-center text-[10px] font-bold text-white">
+          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-os-accent to-[#006B73] flex items-center justify-center text-[10px] font-bold text-[#050B16]">
             L
           </div>
           <span className="text-xs font-medium text-os-text hidden sm:block">CEO</span>

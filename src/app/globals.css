@@ -2,12 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── JARVIS Fonts ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,600&family=Fragment+Mono&display=swap');
+
+/* ── CSS Variables ────────────────────────────────────────────── */
 :root {
-  --os-bg: #07070f;
-  --os-surface: #0d0d1a;
-  --os-card: #11111f;
-  --os-border: #1a1a2e;
-  --os-accent: #6366f1;
+  --os-bg:       #050B16;
+  --os-surface:  #081222;
+  --os-card:     #0C1828;
+  --os-border:   #112035;
+  --os-accent:   #00C7D6;
+  --os-gold:     #D4AF37;
+  --os-text:     #EEF3F9;
+  --os-text-sec: #7E93B5;
+  --os-text-dim: #48587A;
 }
 
 * {
@@ -20,134 +28,128 @@ html {
 
 body {
   background-color: var(--os-bg);
-  color: #e2e8f0;
+  color: var(--os-text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+/* ── Custom scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 5px; height: 5px; }
+::-webkit-scrollbar-track  { background: var(--os-surface); }
+::-webkit-scrollbar-thumb  { background: #1A3050; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--os-accent); }
 
-::-webkit-scrollbar-track {
-  background: var(--os-surface);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #252540;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--os-accent);
-}
-
-/* Selection */
+/* ── Selection ────────────────────────────────────────────────── */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(0, 199, 214, 0.25);
   color: #f8fafc;
 }
 
-/* Animated gradient border */
-@keyframes borderGlow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-.glow-border {
-  animation: borderGlow 2s ease-in-out infinite;
-}
-
-/* Pulse dot */
-@keyframes pulseDot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.4); opacity: 0.7; }
-}
-
-.pulse-dot {
-  animation: pulseDot 1.5s ease-in-out infinite;
-}
-
-/* Grid pattern background */
+/* ── Grid background (patrón sutil cyan) ──────────────────────── */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0, 199, 214, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 199, 214, 0.025) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
-/* Glassmorphism */
+/* ── Glassmorphism ────────────────────────────────────────────── */
 .glass {
-  background: rgba(17, 17, 31, 0.8);
+  background: rgba(12, 24, 40, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Fade in animation */
+/* ── Animations ───────────────────────────────────────────────── */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.animate-fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.4s ease-out forwards;
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
 }
+.glow-border { animation: borderGlow 2s ease-in-out infinite; }
 
-/* Number counter */
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.7; }
+}
+.pulse-dot { animation: pulseDot 1.5s ease-in-out infinite; }
+
+@keyframes progressFill {
+  from { width: 0; }
+}
+.progress-fill { animation: progressFill 1s ease-out forwards; }
+
 @keyframes countUp {
   from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.count-animate { animation: countUp 0.5s ease-out forwards; }
+
+/* ── Shimmer skeleton ─────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #0C1828 25%, #112035 50%, #0C1828 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.6s linear infinite;
 }
 
-.count-animate {
-  animation: countUp 0.5s ease-out forwards;
+/* ── Gold pulse (logros / módulo nuevo) ───────────────────────── */
+@keyframes pulseGoldRing {
+  0%   { box-shadow: 0 0 0 0 rgba(212,175,55,0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(212,175,55,0); }
+  100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+}
+.pulse-gold { animation: pulseGoldRing 1.8s ease-out infinite; }
+
+/* ── Table hover ──────────────────────────────────────────────── */
+.table-row-hover:hover { background: rgba(0, 199, 214, 0.04); }
+
+/* ── Status indicators ────────────────────────────────────────── */
+.status-operational { color: #22c55e; }
+.status-degraded    { color: #f59e0b; }
+.status-down        { color: #ef4444; }
+
+/* ── Sidebar active ───────────────────────────────────────────── */
+.sidebar-active {
+  background: linear-gradient(90deg, rgba(0,199,214,0.12), rgba(0,199,214,0.04));
+  border-left: 2px solid #00C7D6;
 }
 
-/* OS scanline effect (subtle) */
+/* ── Scanline sutil ────────────────────────────────────────────── */
 .scanline::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: repeating-linear-gradient(
     0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.03) 2px,
-    rgba(0,0,0,0.03) 4px
+    transparent, transparent 2px,
+    rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px
   );
   pointer-events: none;
 }
 
-/* Table hover */
-.table-row-hover:hover {
-  background: rgba(99, 102, 241, 0.05);
+/* ── Hairline separador (reemplaza card-sobre-card) ──────────── */
+.section-divider { border-top: 1px solid rgba(255,255,255,0.06); }
+
+/* ── Tipografía JARVIS ────────────────────────────────────────── */
+/* Fraunces: saludo emocional, headers de sección */
+.font-display {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
 }
-
-/* Progress bar animation */
-@keyframes progressFill {
-  from { width: 0; }
-}
-
-.progress-fill {
-  animation: progressFill 1s ease-out forwards;
-}
-
-/* Status indicator */
-.status-operational { color: #10b981; }
-.status-degraded { color: #f59e0b; }
-.status-down { color: #ef4444; }
-
-/* Sidebar active */
-.sidebar-active {
-  background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), rgba(99, 102, 241, 0.05));
-  border-left: 2px solid #6366f1;
+/* Fragment Mono: labels técnicos, fechas, eyebrows */
+.font-tech {
+  font-family: 'Fragment Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
 }

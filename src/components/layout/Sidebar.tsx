@@ -71,14 +71,14 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-os-border">
         <div className="relative">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-os-accent to-purple-700 flex items-center justify-center shadow-glow-accent">
-            <Shield size={16} className="text-white" />
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-os-accent to-[#006B73] flex items-center justify-center shadow-glow-accent">
+            <Shield size={16} className="text-[#050B16]" />
           </div>
           <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-os-success rounded-full border-2 border-os-surface pulse-dot" />
         </div>
         <div>
-          <p className="text-xs font-bold text-white tracking-wider">GPA ACADEMY</p>
-          <p className="text-[10px] text-os-accent font-medium tracking-[0.15em] uppercase">OS v1.0</p>
+          <p className="font-display text-sm font-normal text-os-text tracking-wide">GPA Academy</p>
+          <p className="font-tech text-os-accent" style={{ fontSize: '0.6rem' }}>OS v1.0</p>
         </div>
       </div>
 
@@ -86,7 +86,7 @@ export default function Sidebar() {
       <nav className="flex-1 px-3 py-4 space-y-6">
         {navItems.map((group) => (
           <div key={group.group}>
-            <p className="px-2 mb-2 text-[10px] font-semibold tracking-[0.12em] text-os-textDim uppercase">
+            <p className="font-tech px-2 mb-2 text-os-textDim">
               {group.group}
             </p>
             <ul className="space-y-0.5">
