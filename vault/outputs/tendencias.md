@@ -1,4 +1,7 @@
-# Tendencias — semana del 2026-08-11
+# Tendencias — sin investigar todavía
 
-- [claude-code] Adopción de skills de un solo propósito en vez de prompts gigantes — confirma el diseño de este sistema — (fuente: uso interno)
-- [voz-local] Web Speech API sigue siendo la vía más rápida para STT/TTS sin costo ni latencia de red — (fuente: uso interno)
+Este archivo lo llena la skill `tendencias` corriendo una investigación real
+(WebSearch) sobre lo que se mueve en Reels/Instagram para tu nicho.
+
+Necesita `vault/wiki/nicho.md` completo primero — sin eso, la skill te va a
+preguntar tu nicho en vez de investigar algo genérico.

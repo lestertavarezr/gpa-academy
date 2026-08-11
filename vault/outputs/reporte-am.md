@@ -3,11 +3,9 @@
 ## Bandeja
 Sin pendientes urgentes. Calendario despejado hasta mediodía.
 
-## Métricas (corte anterior)
-- Tareas resueltas: 3
-- Notas en bóveda: 8
-- Señales activas: 0
-- Consultas: 0
+## Instagram (estado)
+Cuenta sin conectar todavía — sigue `INSTAGRAM_SETUP.md` para traer
+métricas reales de seguidores, alcance y engagement.
 
 ## Agenda del día
 - 07:00 — Resumen matutino
@@ -16,5 +14,5 @@ Sin pendientes urgentes. Calendario despejado hasta mediodía.
 - 19:00 — Cierre del día + reflexión
 
 ## Observaciones
-Sistema recién inicializado. Las métricas están en baseline — todo lo que
-se registre hoy será el primer delta real.
+Sistema recién inicializado. Una vez conectada la cuenta de Instagram,
+este reporte incluirá el delta real de seguidores y engagement día a día.

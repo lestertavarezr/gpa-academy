@@ -1,0 +1,7 @@
+# credenciales — nunca se suben al repo
+.env
+.env.local
+
+# sistema
+.DS_Store
+node_modules/

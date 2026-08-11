@@ -16,17 +16,35 @@ python3 -m http.server 8080
 
 Concede permiso de microfono cuando el navegador lo pida.
 
+## Redes sociales: Instagram
+
+El sistema esta conectado a **Instagram** (metricas reales + sugerencias de
+contenido). Para activarlo:
+
+1. Sigue **`INSTAGRAM_SETUP.md`** — te guia para sacar un token real de la
+   Instagram Graph API (15-20 min, gratis).
+2. Completa `vault/wiki/nicho.md` con tu nicho real — las skills de
+   tendencias/sugerencias lo necesitan para no inventar contenido generico.
+3. Con Claude Code corriendo localmente (donde vive tu `.env`), pide que
+   corra las skills `instagram` → `tendencias` → `sugerencias`, en ese
+   orden.
+
+Sin esos pasos, el HUD muestra "INSTAGRAM SIN CONECTAR" honestamente en vez
+de numeros inventados.
+
 ## Paso 1 — Cerebro (`.claude/skills/`)
 
-5 skills con formato SKILL.md, cargadas automaticamente por Claude Code:
+7 skills con formato SKILL.md, cargadas automaticamente por Claude Code:
 
 | Skill | Que hace |
 |---|---|
-| `metricas` | Extrae numeros del dia a `vault/outputs/metrics.json` |
+| `instagram` | Llama la Instagram Graph API real → `metrics.json` + `instagram-posts.md` |
+| `tendencias` | Investiga (WebSearch) que se mueve en tu nicho → `tendencias.md` |
+| `sugerencias` | Cruza tus posts reales + tendencias investigadas → `sugerencias.md` |
 | `bandeja` | Resume correo + calendario en `vault/outputs/bandeja-hoy.md` |
-| `tendencias` | Escanea senales externas a `vault/outputs/tendencias.md` |
 | `plan` | Escribe las 3 prioridades del dia en `vault/outputs/plan-hoy.md` |
 | `boveda` | Lee/escribe `vault/`, mantiene el grafo de `[[wikilinks]]` |
+| `metricas` | Plantilla generica para cuando conectes una segunda red social |
 
 ## Paso 2 — Memoria (`vault/`)
 
@@ -40,18 +58,18 @@ vault/
 
 Archivos de salida disponibles:
 
-| Archivo | Comando del HUD |
-|---|---|
-| `metrics.json` | EXTRAER METRICAS |
-| `reporte-am.md` | REPORTE AM |
-| `bandeja-hoy.md` | RESUMEN BANDEJA |
-| `tendencias-gh.md` | TENDENCIAS GH |
-| `tendencias.md` | ESCANEO TENDENCIAS |
-| `yt-semanal.md` | YT SEMANAL |
-| `plan-hoy.md` | PLAN DE HOY |
-| `plan-manana.md` | PLAN MANANA |
-| `revision-semanal.md` | REVISION SEMANAL |
-| `agenda.json` | leido automaticamente por la agenda |
+| Archivo | Comando del HUD | Quien lo escribe |
+|---|---|---|
+| `metrics.json` | EXTRAER METRICAS | skill `instagram` |
+| `instagram-posts.md` | TOP POSTS IG | skill `instagram` |
+| `tendencias.md` | ESCANEO TENDENCIAS | skill `tendencias` |
+| `sugerencias.md` | SUGERENCIAS | skill `sugerencias` |
+| `reporte-am.md` | REPORTE AM | skill `bandeja` |
+| `bandeja-hoy.md` | RESUMEN BANDEJA | skill `bandeja` |
+| `plan-hoy.md` | PLAN DE HOY | skill `plan` |
+| `plan-manana.md` | PLAN MANANA | skill `plan` |
+| `revision-semanal.md` | REVISION SEMANAL | skill `boveda` |
+| `agenda.json` | leido automaticamente por la agenda | manual |
 
 Todo es Markdown y JSON plano — sin base de datos.
 
@@ -82,8 +100,9 @@ Integrada en el HUD con Web Speech API del navegador:
 
 Di cualquiera de estas palabras y el sistema ejecuta la skill:
 
-`metricas` · `bandeja` · `resumen` · `reporte` · `tendencias` · `github` ·
-`plan` · `manana` · `boveda` · `limpieza` · `youtube` · `semanal` · `revision`
+`metricas` · `bandeja` · `resumen` · `reporte` · `posts` · `top` ·
+`tendencias` · `sugerencias` · `sugerir` · `plan` · `manana` · `boveda` ·
+`limpieza` · `semanal` · `revision`
 
 ## Paso 4 — La cara (`jarvis/index.html`)
 
@@ -98,7 +117,8 @@ Una pantalla, sin pestanas, sin dependencias, sin build step.
   y lo muestra + lee en voz alta. Indicador de actividad animado
 - **Visualizacion central**: 350 particulas animadas en canvas, reacciona
   cuando el sistema escucha, habla o ejecuta. Stat ciclico que rota cada 5s
-  entre senales, consultas, tareas, notas y seguidores
+  entre seguidores, alcance, impresiones, visitas al perfil y engagement
+  promedio (o "INSTAGRAM SIN CONECTAR" si `.env` no esta configurado)
 - **Agenda**: leida de `agenda.json`, resalta el bloque actual, atenua los pasados
 - **Audio E/S**: estado de STT/TTS/privacidad con indicadores visuales
 - **Toast**: notificacion emergente al completar cada comando
@@ -118,11 +138,13 @@ Una pantalla, sin pestanas, sin dependencias, sin build step.
 ```
 gpa-academy/
   .claude/skills/
-    metricas/SKILL.md
-    bandeja/SKILL.md
+    instagram/SKILL.md
     tendencias/SKILL.md
+    sugerencias/SKILL.md
+    bandeja/SKILL.md
     plan/SKILL.md
     boveda/SKILL.md
+    metricas/SKILL.md   (plantilla generica, no se usa para Instagram)
   vault/
     raw/
       2026-08-11-captura-inicial.md
@@ -133,30 +155,41 @@ gpa-academy/
       voz.md
       cara.md
       directivas.md
+      nicho.md           (completar con tu nicho real)
     outputs/
       metrics.json
+      instagram-posts.md
+      sugerencias.md
       agenda.json
       plan-hoy.md
       plan-manana.md
       bandeja-hoy.md
       tendencias.md
-      tendencias-gh.md
-      yt-semanal.md
       reporte-am.md
       revision-semanal.md
     manifest.json
   jarvis/
     index.html
-  JARVIS.md           (este archivo)
-  GPA_Academy_App.html (app existente, no modificada)
+  .env.example          (copiar a .env, llenar, nunca commitear)
+  .gitignore
+  JARVIS.md              (este archivo)
+  INSTAGRAM_SETUP.md      (guia para conectar tu cuenta)
+  GPA_Academy_App.html   (app existente, no modificada)
 ```
 
 ## Limites honestos
 
 - Los vitales son los que un navegador puede leer de verdad — no hay acceso a
   CPU/RAM real del OS desde JavaScript. Se etiquetan con su fuente real.
-- TENDENCIAS GH y YT SEMANAL tienen contenido de ejemplo — para datos en vivo
-  necesitan GitHub API / YouTube Data API v3 con credenciales reales.
+- Sin token de Instagram, `metrics.json` queda en cero con
+  `"estado":"sin_conectar"` — el HUD lo muestra tal cual, no rellena con
+  numeros de ejemplo. Sigue `INSTAGRAM_SETUP.md` para conectarlo de verdad.
+- Instagram no tiene una API publica de tendencias (a diferencia de
+  YouTube) — la skill `tendencias` investiga con WebSearch en vez de llamar
+  un endpoint que no existe. Es investigacion real, pero no es un feed
+  oficial de Meta.
+- La skill `sugerencias` se niega a inventar ideas si no hay datos reales
+  (posts propios + tendencias investigadas) — por diseno, no por bug.
 - El STT (reconocimiento de voz) en Chrome envia el audio a los servidores de
   Google para transcribirlo — no es on-device ni 100% privado, a pesar de que
   una version anterior de este documento lo describia asi. Si necesitas STT

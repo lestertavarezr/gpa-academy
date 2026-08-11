@@ -226,7 +226,7 @@
   </main>
 
   <footer>
-    <span>boveda: <span id="vaultCount">0</span> notas · skills: 5 activas · seguridad central: nivel 6</span>
+    <span>boveda: <span id="vaultCount">0</span> notas · skills: 7 activas · seguridad central: nivel 6</span>
     <span id="log">iniciando sistema...</span>
   </footer>
 
@@ -332,24 +332,30 @@
   let metricsHistory = [];
   let statIdx = 0;
   const STAT_KEYS = [
-    {key:'senales_activas', label:'SENALES ACTIVAS', fmt: v=>v.toLocaleString('es-DO')},
-    {key:'consultas', label:'CONSULTAS PROCESADAS', fmt: v=>v.toLocaleString('es-DO')},
-    {key:'tareas_resueltas', label:'TAREAS RESUELTAS', fmt: v=>v.toLocaleString('es-DO')},
-    {key:'notas_boveda', label:'NOTAS EN BOVEDA', fmt: v=>v.toLocaleString('es-DO')},
-    {key:'seguidores_activos', label:'SEGUIDORES ACTIVOS', fmt: v=>v.toLocaleString('es-DO'), sub: m=>'OBJETIVO: '+((m.objetivo_seguidores||0).toLocaleString('es-DO'))},
+    {key:'seguidores', label:'SEGUIDORES', fmt: v=>v.toLocaleString('es-DO'), sub: m=>(m.seguidores_delta_7d>=0?'+':'')+(m.seguidores_delta_7d||0)+' EN 7 DIAS'},
+    {key:'alcance_7d', label:'ALCANCE (7 DIAS)', fmt: v=>v.toLocaleString('es-DO')},
+    {key:'impresiones_7d', label:'IMPRESIONES (7 DIAS)', fmt: v=>v.toLocaleString('es-DO')},
+    {key:'visitas_perfil_7d', label:'VISITAS AL PERFIL', fmt: v=>v.toLocaleString('es-DO')},
+    {key:'tasa_engagement_promedio', label:'ENGAGEMENT PROMEDIO', fmt: v=>v.toFixed(1)+'%', sub: m=>(m.posts_analizados||0)+' POSTS ANALIZADOS'},
   ];
 
   async function loadMetrics(){
     const m = await fetchJSON('outputs/metrics.json');
     if(!m) return;
     metrics = m;
-    metricsHistory.push(m.tareas_resueltas??0);
+    metricsHistory.push(m.seguidores??0);
     if(metricsHistory.length>50) metricsHistory.shift();
     cycleStat();
     drawSpark();
   }
   function cycleStat(){
     if(!metrics) return;
+    if(metrics.estado==='sin_conectar'){
+      $('bigStat').textContent = '0';
+      $('bigStatLbl').textContent = 'INSTAGRAM SIN CONECTAR';
+      $('bigStatSub').textContent = 'ver INSTAGRAM_SETUP.md';
+      return;
+    }
     const s = STAT_KEYS[statIdx % STAT_KEYS.length];
     const v = metrics[s.key] ?? 0;
     $('bigStat').textContent = s.fmt(v);
@@ -465,16 +471,16 @@
 
   /* ===== COMMANDS — all 10 functional ===== */
   const COMMANDS = [
-    {id:'metricas',      label:'EXTRAER METRICAS',    file:'outputs/metrics.json',       type:'json'},
-    {id:'reporte-am',    label:'REPORTE AM',           file:'outputs/reporte-am.md',      type:'md'},
-    {id:'bandeja',       label:'RESUMEN BANDEJA',      file:'outputs/bandeja-hoy.md',     type:'md'},
-    {id:'tendencias-gh', label:'TENDENCIAS GH',        file:'outputs/tendencias-gh.md',   type:'md'},
-    {id:'tendencias',    label:'ESCANEO TENDENCIAS',   file:'outputs/tendencias.md',      type:'md'},
-    {id:'yt-semanal',    label:'YT SEMANAL',           file:'outputs/yt-semanal.md',      type:'md'},
-    {id:'plan',          label:'PLAN DE HOY',          file:'outputs/plan-hoy.md',        type:'md'},
-    {id:'plan-manana',   label:'PLAN MANANA',          file:'outputs/plan-manana.md',     type:'md'},
-    {id:'revision',      label:'REVISION SEMANAL',     file:'outputs/revision-semanal.md',type:'md'},
-    {id:'boveda',        label:'LIMPIEZA BOVEDA',      file:null,                         type:'action'},
+    {id:'metricas',      label:'EXTRAER METRICAS',    file:'outputs/metrics.json',        type:'json'},
+    {id:'reporte-am',    label:'REPORTE AM',           file:'outputs/reporte-am.md',       type:'md'},
+    {id:'bandeja',       label:'RESUMEN BANDEJA',      file:'outputs/bandeja-hoy.md',      type:'md'},
+    {id:'top-posts',     label:'TOP POSTS IG',         file:'outputs/instagram-posts.md',  type:'md'},
+    {id:'tendencias',    label:'ESCANEO TENDENCIAS',   file:'outputs/tendencias.md',       type:'md'},
+    {id:'sugerencias',   label:'SUGERENCIAS',          file:'outputs/sugerencias.md',      type:'md'},
+    {id:'plan',          label:'PLAN DE HOY',          file:'outputs/plan-hoy.md',         type:'md'},
+    {id:'plan-manana',   label:'PLAN MANANA',          file:'outputs/plan-manana.md',      type:'md'},
+    {id:'revision',      label:'REVISION SEMANAL',     file:'outputs/revision-semanal.md', type:'md'},
+    {id:'boveda',        label:'LIMPIEZA BOVEDA',      file:null,                          type:'action'},
   ];
   let activeCount = 0;
   let queueCount = 0;
@@ -504,7 +510,9 @@
     let result = '';
     if(cmd.type==='json'){
       await loadMetrics();
-      result = 'Metricas actualizadas: '+(metrics?metrics.tareas_resueltas+' tareas, '+metrics.notas_boveda+' notas, '+metrics.senales_activas+' senales':'sin datos');
+      result = (!metrics) ? 'sin datos'
+        : metrics.estado==='sin_conectar' ? 'Instagram sin conectar todavia — sigue INSTAGRAM_SETUP.md para traer datos reales.'
+        : metrics.seguidores+' seguidores, '+metrics.alcance_7d+' de alcance en 7 dias, '+metrics.tasa_engagement_promedio.toFixed(1)+'% de engagement promedio.';
     } else if(cmd.type==='md'){
       const txt = await fetchText(cmd.file);
       result = txt ? stripMd(txt) : 'Archivo no encontrado: '+cmd.file;
@@ -585,10 +593,11 @@
 
   function matchVoiceCommand(said){
     const KEYWORDS = {
-      'metricas':'metricas','metricas':'metricas','bandeja':'bandeja','resumen':'bandeja',
-      'reporte':'reporte-am','tendencias':'tendencias','github':'tendencias-gh',
+      'metricas':'metricas','bandeja':'bandeja','resumen':'bandeja',
+      'reporte':'reporte-am','posts':'top-posts','top':'top-posts',
+      'tendencias':'tendencias','sugerencias':'sugerencias','sugerir':'sugerencias',
       'plan':'plan','manana':'plan-manana','boveda':'boveda','limpieza':'boveda',
-      'youtube':'yt-semanal','semanal':'revision','revision':'revision',
+      'semanal':'revision','revision':'revision',
     };
     let cmdId = null;
     const hit = COMMANDS.find(c=>said.includes(c.label.toLowerCase()));
@@ -600,7 +609,7 @@
       const btn = document.querySelector('.cmd-btn[data-cmd="'+cmdId+'"]');
       runCommand(cmdId, btn);
     } else {
-      speak('No reconozco ese comando. Di: metricas, bandeja, plan, tendencias, boveda, reporte, revision, youtube, o github.');
+      speak('No reconozco ese comando. Di: metricas, bandeja, plan, tendencias, sugerencias, posts, boveda, reporte, o revision.');
     }
   }
 

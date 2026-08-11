@@ -1,5 +1,5 @@
 # Plan — 2026-08-12
 
-1. [ ] Conectar primera fuente externa (GitHub trending o YouTube API)
-2. [ ] Completar el primer ciclo completo del día (7 AM → 7 PM)
-3. [ ] Revisar las notas raw/ del día y depurar al menos una a wiki/
+1. [ ] Conectar Instagram (seguir `INSTAGRAM_SETUP.md`, generar el token)
+2. [ ] Completar `vault/wiki/nicho.md` con el nicho y pilares de contenido reales
+3. [ ] Correr la skill `instagram` y confirmar que `metrics.json` trae datos reales
