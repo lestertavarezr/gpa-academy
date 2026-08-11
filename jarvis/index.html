@@ -183,7 +183,7 @@
         <h2>AUDIO E/S <span id="ttsLabel" style="font-weight:400;">TTS/LOCAL</span></h2>
         <div id="audioStatus"></div>
         <button class="mic-btn" id="micBtn">MANTÉN PRESIONADO PARA HABLAR</button>
-        <div class="mic-hint" id="micHint">STT + TTS 100% locales · Espacio = push-to-talk</div>
+        <div class="mic-hint" id="micHint">STT vía Chrome (usa red) · TTS local · Espacio = push-to-talk</div>
       </div>
     </div>
   </main>
@@ -499,9 +499,9 @@
   let isListening = false;
 
   const audioRows = [
-    ['stt','ESCUCHANDO...','STT local'],
-    ['tts','HABLANDO...','TTS local'],
-    ['net','PRIVADO','audio local'],
+    ['stt','ESCUCHANDO...','STT — Chrome/Google, requiere red'],
+    ['tts','HABLANDO...','TTS local — voces del sistema'],
+    ['net','PRIVADO','sin backend propio, sin API key'],
   ];
   $('audioStatus').innerHTML = audioRows.map(([id,,l])=>'<div class="audio-row"><span class="audio-dot" id="dot-'+id+'"></span>'+l+'</div>').join('');
 

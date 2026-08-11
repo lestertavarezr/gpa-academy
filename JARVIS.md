@@ -55,13 +55,22 @@ Archivos de salida disponibles:
 
 Todo es Markdown y JSON plano — sin base de datos.
 
-## Paso 3 — Voz local
+## Paso 3 — Voz (navegador)
 
 Integrada en el HUD con Web Speech API del navegador:
 
-- **STT**: `SpeechRecognition` / `webkitSpeechRecognition`
-- **TTS**: `speechSynthesis`
-- El audio nunca sale de la maquina — gratis, privado, sin latencia
+- **STT** (te escucha): `SpeechRecognition` / `webkitSpeechRecognition`. En
+  Chrome/Edge, el audio se envia a los servidores de Google para
+  transcribirlo — **requiere internet, no es on-device**. Sin costo de API
+  propia porque el navegador la trae integrada, pero no es privado en el
+  sentido estricto (Google procesa el audio).
+- **TTS** (te habla): `speechSynthesis` — esto si corre localmente, con las
+  voces instaladas en tu sistema operativo.
+- Ni STT ni TTS requieren una API key tuya ni un backend propio.
+- El microfono necesita un origen seguro (`https://` o `localhost`) — no
+  funciona abriendo el archivo con `file://`, y probablemente tampoco dentro
+  de un iframe con sandbox (como una vista previa embebida) que no delegue
+  el permiso de microfono.
 
 ### Controles
 
@@ -148,6 +157,13 @@ gpa-academy/
   CPU/RAM real del OS desde JavaScript. Se etiquetan con su fuente real.
 - TENDENCIAS GH y YT SEMANAL tienen contenido de ejemplo — para datos en vivo
   necesitan GitHub API / YouTube Data API v3 con credenciales reales.
+- El STT (reconocimiento de voz) en Chrome envia el audio a los servidores de
+  Google para transcribirlo — no es on-device ni 100% privado, a pesar de que
+  una version anterior de este documento lo describia asi. Si necesitas STT
+  verdaderamente local, hay que reemplazar `webkitSpeechRecognition` por un
+  modelo on-device (ej. whisper.cpp corriendo en tu maquina, expuesto por un
+  pequeno servidor local) — eso ya requiere un backend propio, no solo el
+  navegador.
 - STT funciona en Chromium (Chrome, Edge, Brave). Firefox y Safari no
   implementan `webkitSpeechRecognition` de la misma forma — el HUD lo detecta
   y avisa en vez de fallar.
