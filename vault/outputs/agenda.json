@@ -1,0 +1,6 @@
+[
+  { "hora": "07:00", "icono": "luna", "titulo": "Resumen matutino", "detalle": "Bandeja, calendario y noticias — se lee en voz alta.", "skill": "bandeja" },
+  { "hora": "09:00", "icono": "sol", "titulo": "Plan de hoy", "detalle": "Las 3 prioridades aterrizan en la bóveda.", "skill": "plan" },
+  { "hora": "14:00", "icono": "tendencia", "titulo": "Métricas obtenidas", "detalle": "Suscripciones, vistas y tareas — rastreadas.", "skill": "metricas" },
+  { "hora": "19:00", "icono": "check", "titulo": "Cierra el día", "detalle": "Reflexión registrada. Mañana en cola.", "skill": "boveda" }
+]

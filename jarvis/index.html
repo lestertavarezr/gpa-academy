@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V.A.U.L.T. — HUD</title>
+<style>
+  :root{
+    --bg:#07090a;
+    --panel:#0d1210;
+    --panel-border:#1c2622;
+    --ink:#c9f7c9;
+    --ink-dim:#5f8f74;
+    --accent:#c8ff3d;
+    --accent-dim:#7a9a2e;
+    --red:#ff5f56;
+    --yellow:#ffbd2e;
+    --green:#27c93f;
+    --warn:#ff8a3d;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    height:100%;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'SF Mono',ui-monospace,'Courier New',monospace;
+    overflow:hidden;
+  }
+  #app{
+    display:grid;
+    grid-template-rows:auto 1fr auto;
+    height:100vh;
+    padding:14px;
+    gap:10px;
+  }
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--panel-border);
+    padding-bottom:10px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .dots{display:flex;gap:6px;}
+  .dot{width:11px;height:11px;border-radius:50%;}
+  .dot.r{background:var(--red);} .dot.y{background:var(--yellow);} .dot.g{background:var(--green);}
+  .title{font-size:20px;letter-spacing:.35em;font-weight:700;color:var(--ink);}
+  .title small{display:block;font-size:9px;letter-spacing:.25em;color:var(--ink-dim);font-weight:400;margin-top:2px;}
+  .clock{text-align:right;font-size:18px;color:var(--accent);}
+  .clock small{display:block;font-size:9px;letter-spacing:.2em;color:var(--ink-dim);}
+
+  main{
+    display:grid;
+    grid-template-columns:260px 1fr 300px;
+    gap:10px;
+    min-height:0;
+  }
+  .col{display:flex;flex-direction:column;gap:10px;min-height:0;overflow:hidden;}
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:6px;
+    padding:10px 12px;
+  }
+  .panel h2{
+    margin:0 0 8px;
+    font-size:10px;
+    letter-spacing:.2em;
+    color:var(--ink-dim);
+    font-weight:600;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .scroll{overflow-y:auto;}
+  .scroll::-webkit-scrollbar{width:6px;}
+  .scroll::-webkit-scrollbar-thumb{background:var(--panel-border);border-radius:3px;}
+
+  .vital{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px dashed var(--panel-border);font-size:12px;}
+  .vital:last-child{border-bottom:none;}
+  .vital b{font-size:15px;color:var(--accent);}
+  .vital span{color:var(--ink-dim);font-size:9px;letter-spacing:.1em;}
+  canvas#spark{width:100%;height:36px;display:block;margin-top:6px;}
+
+  ul.list{list-style:none;margin:0;padding:0;font-size:11px;line-height:1.7;}
+  ul.list li{color:var(--ink-dim);padding-left:12px;position:relative;}
+  ul.list li::before{content:"—";position:absolute;left:0;color:var(--accent-dim);}
+  ul.list a{color:var(--ink);text-decoration:none;display:flex;justify-content:space-between;padding:3px 0;}
+  ul.list a:hover{color:var(--accent);}
+  ul.list a::after{content:"→";color:var(--ink-dim);}
+
+  #globe{width:100%;height:100%;display:block;border-radius:8px;background:radial-gradient(circle at 50% 50%,#0b140c 0%,#050706 70%);}
+  .center-wrap{position:relative;flex:1;min-height:0;}
+  .center-overlay{position:absolute;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;}
+  .center-overlay .big{font-size:34px;color:var(--accent);font-weight:700;text-shadow:0 0 18px rgba(200,255,61,.35);}
+  .center-overlay .lbl{font-size:9px;letter-spacing:.25em;color:var(--ink-dim);margin-top:2px;}
+  .center-status{position:absolute;top:10px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.15em;color:var(--ink-dim);}
+  .center-status.live{color:var(--accent);}
+
+  .cmd-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .cmd-btn{
+    background:#0a0f0d;border:1px solid var(--panel-border);color:var(--ink);
+    font-family:inherit;font-size:9.5px;letter-spacing:.06em;padding:8px 6px;border-radius:4px;
+    cursor:pointer;text-align:left;transition:border-color .15s,color .15s;
+  }
+  .cmd-btn:hover{border-color:var(--accent-dim);color:var(--accent);}
+  .cmd-btn.active{border-color:var(--accent);color:var(--accent);background:#101b0f;}
+  .cmd-btn.active::after{content:" •";color:var(--accent);}
+
+  .agenda-item{display:flex;gap:8px;padding:6px 0;border-bottom:1px dashed var(--panel-border);font-size:11px;}
+  .agenda-item:last-child{border-bottom:none;}
+  .agenda-time{color:var(--ink-dim);width:42px;flex:none;}
+  .agenda-title{color:var(--ink);}
+  .agenda-detail{color:var(--ink-dim);font-size:10px;}
+  .agenda-now{background:var(--accent);color:#0a0f0d;font-size:8px;letter-spacing:.1em;padding:1px 5px;border-radius:3px;font-weight:700;flex:none;height:14px;}
+
+  .audio-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px;color:var(--ink-dim);}
+  .audio-dot{width:7px;height:7px;border-radius:50%;background:var(--ink-dim);flex:none;}
+  .audio-dot.on{background:var(--accent);box-shadow:0 0 6px var(--accent);}
+  .mic-btn{
+    width:100%;margin-top:8px;padding:12px;border-radius:6px;border:1px solid var(--panel-border);
+    background:#0a0f0d;color:var(--ink);font-family:inherit;font-size:11px;letter-spacing:.15em;cursor:pointer;
+    user-select:none;transition:.15s;
+  }
+  .mic-btn:active,.mic-btn.listening{border-color:var(--accent);color:var(--accent);background:#101b0f;}
+  .mic-btn.speaking{border-color:var(--warn);color:var(--warn);}
+  .mic-hint{font-size:9px;color:var(--ink-dim);text-align:center;margin-top:4px;letter-spacing:.05em;}
+
+  footer{
+    border-top:1px solid var(--panel-border);
+    padding-top:8px;
+    font-size:10px;color:var(--ink-dim);
+    display:flex;justify-content:space-between;
+    letter-spacing:.05em;
+  }
+  footer #log{color:var(--accent-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="brand">
+      <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <div class="title">V.A.U.L.T.<small>INTELIGENCIA CENTRALIZADA · JARVIS OS</small></div>
+    </div>
+    <div class="clock"><span id="clock">--:--:--</span><small id="dateline">cargando fecha del sistema</small></div>
+  </header>
+
+  <main>
+    <!-- COLUMNA IZQUIERDA -->
+    <div class="col">
+      <div class="panel">
+        <h2>VITALES DEL SISTEMA</h2>
+        <div id="vitals"></div>
+        <canvas id="spark" width="240" height="36"></canvas>
+      </div>
+      <div class="panel scroll" style="flex:1;">
+        <h2>DIRECTIVAS (v2.0)</h2>
+        <ul class="list" id="directivas"></ul>
+      </div>
+      <div class="panel scroll">
+        <h2>INFORMES</h2>
+        <ul class="list" id="informes"></ul>
+      </div>
+    </div>
+
+    <!-- CENTRO -->
+    <div class="col">
+      <div class="panel center-wrap" style="flex:1;padding:0;overflow:hidden;">
+        <canvas id="globe"></canvas>
+        <div class="center-status" id="centerStatus">INACTIVO</div>
+        <div class="center-overlay">
+          <div class="big" id="bigStat">0</div>
+          <div class="lbl" id="bigStatLbl">TAREAS RESUELTAS EN LA BÓVEDA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="col">
+      <div class="panel">
+        <h2>PANEL DE COMANDOS <span id="queueLbl" style="font-weight:400;">0 EN COLA</span></h2>
+        <div class="cmd-grid" id="cmdGrid"></div>
+      </div>
+      <div class="panel scroll" style="flex:1;">
+        <h2>AGENDA / HOY</h2>
+        <div id="agenda"></div>
+      </div>
+      <div class="panel">
+        <h2>AUDIO E/S</h2>
+        <div id="audioStatus"></div>
+        <button class="mic-btn" id="micBtn">🎙 MANTÉN PRESIONADO PARA HABLAR</button>
+        <div class="mic-hint" id="micHint">Reconocimiento y voz 100% locales al navegador</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>bóveda: <span id="vaultCount">0</span> notas · skills: 5 activas</span>
+    <span id="log">listo.</span>
+  </footer>
+
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  /* ---------- reloj ---------- */
+  function tickClock(){
+    const d = new Date();
+    $('clock').textContent = d.toLocaleTimeString('es-DO',{hour12:false});
+    $('dateline').textContent = d.toLocaleDateString('es-DO',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) + ' · HORA DEL SISTEMA';
+  }
+  tickClock(); setInterval(tickClock,1000);
+
+  /* ---------- log de la consola ---------- */
+  function log(msg){ $('log').textContent = msg; }
+
+  /* ---------- carga de la bóveda (vault/) ---------- */
+  const VAULT = '../vault/';
+  let manifest = {raw:[],wiki:[],outputs:[]};
+
+  async function fetchText(path){
+    try{ const r = await fetch(VAULT+path,{cache:'no-store'}); if(!r.ok) throw 0; return await r.text(); }
+    catch(e){ return null; }
+  }
+  async function fetchJSON(path){
+    const t = await fetchText(path);
+    if(t===null) return null;
+    try{ return JSON.parse(t); } catch(e){ return null; }
+  }
+
+  async function loadManifest(){
+    const m = await fetchJSON('manifest.json');
+    if(m) manifest = m;
+    const total = manifest.raw.length + manifest.wiki.length + manifest.outputs.length;
+    $('vaultCount').textContent = total;
+    renderInformes();
+  }
+
+  function renderInformes(){
+    const wiki = manifest.wiki || [];
+    $('informes').innerHTML = wiki.map(p => {
+      const name = p.split('/').pop().replace('.md','');
+      return `<li><a href="#" data-note="${p}">${name}</a></li>`;
+    }).join('') || '<li>sin notas en la bóveda</li>';
+    $('informes').querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click', async (e)=>{
+        e.preventDefault();
+        const txt = await fetchText(a.dataset.note);
+        if(txt){ speak(stripMd(txt).slice(0,600)); log('leyendo: '+a.dataset.note); }
+      });
+    });
+  }
+
+  function stripMd(s){
+    return s.replace(/^#.*$/gm,'').replace(/\[\[([^\]]+)\]\]/g,'$1').replace(/[*_`>#-]/g,'').replace(/\s+/g,' ').trim();
+  }
+
+  async function loadDirectivas(){
+    const txt = await fetchText('wiki/directivas.md');
+    const lines = (txt||'').split('\n').filter(l=>l.trim().startsWith('-'));
+    $('directivas').innerHTML = lines.map(l=>`<li>${l.replace(/^-\s*/,'').replace(/\[\[([^\]]+)\]\]/g,'$1')}</li>`).join('')
+      || '<li>sin directivas cargadas</li>';
+  }
+
+  async function loadAgenda(){
+    const items = await fetchJSON('outputs/agenda.json') || [];
+    const now = new Date();
+    const nowMin = now.getHours()*60+now.getMinutes();
+    $('agenda').innerHTML = items.map(it=>{
+      const [h,m] = it.hora.split(':').map(Number);
+      const mins = h*60+m;
+      const isNow = Math.abs(mins-nowMin) < 90 && mins<=nowMin;
+      return `<div class="agenda-item">
+        <div class="agenda-time">${it.hora}</div>
+        <div style="flex:1;">
+          <div class="agenda-title">${it.titulo}</div>
+          <div class="agenda-detail">${it.detalle}</div>
+        </div>
+        ${isNow?'<span class="agenda-now">AHORA</span>':''}
+      </div>`;
+    }).join('') || '<div class="agenda-detail">agenda vacía</div>';
+  }
+
+  let metricsHistory = [];
+  async function loadMetrics(){
+    const m = await fetchJSON('outputs/metrics.json');
+    if(!m) return;
+    $('bigStat').textContent = (m.tareas_resueltas ?? 0).toLocaleString('es-DO');
+    metricsHistory.push(m.tareas_resueltas ?? 0);
+    if(metricsHistory.length>40) metricsHistory.shift();
+    drawSpark();
+  }
+
+  /* ---------- vitales reales del navegador ---------- */
+  async function renderVitals(){
+    const rows = [];
+    rows.push(['NÚCLEOS CPU', navigator.hardwareConcurrency ?? '—', 'navigator']);
+    if(performance.memory){
+      const pct = Math.round(performance.memory.usedJSHeapSize/performance.memory.jsHeapSizeLimit*100);
+      rows.push(['MEMORIA JS', pct+'%', 'heap']);
+    } else {
+      rows.push(['MEMORIA JS', 'n/d', 'navegador sin soporte']);
+    }
+    if(navigator.connection){
+      rows.push(['RED', (navigator.connection.effectiveType||'—').toUpperCase(), navigator.connection.downlink+' Mb/s']);
+    } else {
+      rows.push(['RED', navigator.onLine? 'EN LÍNEA':'SIN CONEXIÓN', 'navigator.onLine']);
+    }
+    rows.push(['NOTAS BÓVEDA', (manifest.wiki.length+manifest.raw.length), 'vault/manifest.json']);
+
+    if(navigator.getBattery){
+      try{
+        const b = await navigator.getBattery();
+        rows.push(['BATERÍA', Math.round(b.level*100)+'%', b.charging?'cargando':'descarga']);
+      }catch(e){}
+    }
+
+    $('vitals').innerHTML = rows.map(([k,v,s])=>`<div class="vital"><span>${k}<br>${s}</span><b>${v}</b></div>`).join('');
+  }
+
+  /* ---------- sparkline (canvas 2d, datos reales de metrics) ---------- */
+  function drawSpark(){
+    const c = $('spark'); const ctx = c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+    const data = metricsHistory.length? metricsHistory : [0];
+    const max = Math.max(...data,1), min = Math.min(...data,0);
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+    ctx.lineWidth = 1.5; ctx.beginPath();
+    data.forEach((v,i)=>{
+      const x = i/(Math.max(data.length-1,1))*c.width;
+      const y = c.height - ((v-min)/(max-min||1))*c.height;
+      i===0? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+  }
+
+  /* ---------- visualización central (canvas 2d, partículas) ---------- */
+  const globe = $('globe'); const gctx = globe.getContext('2d');
+  let particles = []; let energized = false;
+  function sizeGlobe(){
+    const wrap = globe.parentElement.getBoundingClientRect();
+    globe.width = wrap.width; globe.height = wrap.height;
+  }
+  function initParticles(){
+    particles = [];
+    const n = 160;
+    const r = Math.min(globe.width,globe.height)/2.6;
+    for(let i=0;i<n;i++){
+      const theta = Math.random()*Math.PI*2;
+      const phi = Math.acos(2*Math.random()-1);
+      particles.push({
+        theta, phi, r: r*(0.5+Math.random()*0.5),
+        speed: 0.0015+Math.random()*0.0025
+      });
+    }
+  }
+  function drawGlobe(){
+    gctx.clearRect(0,0,globe.width,globe.height);
+    const cx = globe.width/2, cy = globe.height/2;
+    const color = energized ? '200,255,61' : '95,143,116';
+    particles.forEach(p=>{
+      p.theta += p.speed;
+      const x = cx + p.r*Math.sin(p.phi)*Math.cos(p.theta);
+      const y = cy + p.r*Math.sin(p.phi)*Math.sin(p.theta)*0.6;
+      const depth = (Math.cos(p.theta)+1)/2;
+      gctx.beginPath();
+      gctx.fillStyle = `rgba(${color},${0.15+depth*0.7})`;
+      gctx.arc(x,y, 0.6+depth*1.6, 0, Math.PI*2);
+      gctx.fill();
+    });
+    requestAnimationFrame(drawGlobe);
+  }
+  window.addEventListener('resize', ()=>{ sizeGlobe(); initParticles(); });
+  sizeGlobe(); initParticles(); drawGlobe();
+
+  /* ---------- panel de comandos → skills ---------- */
+  const COMMANDS = [
+    {id:'metricas', label:'EXTRAER MÉTRICAS'},
+    {id:'reporte-am', label:'REPORTE AM'},
+    {id:'bandeja', label:'RESUMEN BANDEJA'},
+    {id:'tendencias-gh', label:'TENDENCIAS GH'},
+    {id:'tendencias', label:'ESCANEO TENDENCIAS'},
+    {id:'yt-semanal', label:'YT SEMANAL'},
+    {id:'plan', label:'PLAN DE HOY'},
+    {id:'plan-manana', label:'PLAN MAÑANA'},
+    {id:'revision', label:'REVISIÓN SEMANAL'},
+    {id:'boveda', label:'LIMPIEZA BÓVEDA'},
+  ];
+  let queue = 0;
+  function setQueue(n){ queue = Math.max(0,n); $('queueLbl').textContent = queue+' EN COLA'; }
+
+  $('cmdGrid').innerHTML = COMMANDS.map(c=>`<button class="cmd-btn" data-cmd="${c.id}">${c.label}</button>`).join('');
+
+  async function runCommand(id, btn){
+    if(btn) btn.classList.add('active');
+    setQueue(queue+1);
+    $('centerStatus').textContent = 'EJECUTANDO · '+id.toUpperCase();
+    $('centerStatus').classList.add('live');
+    energized = true;
+
+    let result = 'completado.';
+    if(id==='metricas'){ await loadMetrics(); result = 'métricas releídas de vault/outputs/metrics.json'; }
+    else if(id==='bandeja'){ const t = await fetchText('outputs/bandeja-hoy.md'); result = t? stripMd(t) : 'sin bandeja generada aún'; }
+    else if(id==='plan' || id==='plan-manana'){ const t = await fetchText('outputs/plan-hoy.md'); result = t? stripMd(t) : 'sin plan generado aún'; }
+    else if(id==='tendencias'){ const t = await fetchText('outputs/tendencias.md'); result = t? stripMd(t) : 'sin tendencias registradas'; }
+    else if(id==='boveda'){ await loadManifest(); result = manifest.wiki.length+' notas en wiki/, '+manifest.raw.length+' en raw/ sin depurar'; }
+    else { result = id.replace(/-/g,' ')+' — requiere conectar la fuente externa correspondiente (API key / OAuth) para dejar de ser simulado.'; }
+
+    log(id+': '+result.slice(0,90));
+    speak(result);
+
+    setTimeout(()=>{
+      setQueue(queue-1);
+      if(btn) btn.classList.remove('active');
+      $('centerStatus').textContent = 'INACTIVO';
+      $('centerStatus').classList.remove('live');
+      energized = false;
+    }, 1400);
+  }
+
+  $('cmdGrid').addEventListener('click', (e)=>{
+    const btn = e.target.closest('.cmd-btn');
+    if(!btn) return;
+    runCommand(btn.dataset.cmd, btn);
+  });
+
+  /* ---------- voz local: STT + TTS (Web Speech API, no sale de la máquina) ---------- */
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const micBtn = $('micBtn');
+  const audioRows = [
+    ['stt', 'STT local — mantén presionado y habla'],
+    ['tts', 'TTS local — responde en voz alta'],
+    ['net', 'audio nunca sale de la máquina'],
+  ];
+  $('audioStatus').innerHTML = audioRows.map(([id,l])=>`<div class="audio-row"><span class="audio-dot" id="dot-${id}"></span>${l}</div>`).join('');
+
+  function setDot(id,on){ const d = $('dot-'+id); if(d) d.classList.toggle('on',on); }
+
+  let recognition = null;
+  if(SpeechRecognition){
+    recognition = new SpeechRecognition();
+    recognition.lang = 'es-DO';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    setDot('stt', true);
+
+    recognition.onstart = ()=>{
+      micBtn.classList.add('listening');
+      micBtn.textContent = '🎙 ESCUCHANDO...';
+      $('centerStatus').textContent = 'ESCUCHANDO'; $('centerStatus').classList.add('live');
+      energized = true;
+    };
+    recognition.onerror = (e)=>{ log('voz: error — '+e.error); resetMic(); };
+    recognition.onend = resetMic;
+    recognition.onresult = (e)=>{
+      const said = e.results[0][0].transcript.toLowerCase();
+      log('escuchado: "'+said+'"');
+      matchVoiceCommand(said);
+    };
+  } else {
+    micBtn.disabled = true;
+    micBtn.textContent = 'RECONOCIMIENTO DE VOZ NO DISPONIBLE EN ESTE NAVEGADOR';
+    $('micHint').textContent = 'Usa Chrome/Edge sobre HTTPS o localhost para habilitar STT local.';
+  }
+
+  function resetMic(){
+    micBtn.classList.remove('listening');
+    micBtn.textContent = '🎙 MANTÉN PRESIONADO PARA HABLAR';
+    if(!speechSynthesis.speaking){
+      $('centerStatus').textContent = 'INACTIVO'; $('centerStatus').classList.remove('live');
+      energized = false;
+    }
+  }
+
+  function matchVoiceCommand(said){
+    const hit = COMMANDS.find(c => said.includes(c.label.toLowerCase()) ) ||
+      COMMANDS.find(c => said.includes(c.id.replace('-',' ')));
+    const KEYWORDS = {
+      'metricas':'metricas','métricas':'metricas','bandeja':'bandeja','resumen':'bandeja',
+      'tendencias':'tendencias','plan':'plan','boveda':'boveda','bóveda':'boveda','limpieza':'boveda'
+    };
+    let cmdId = hit ? hit.id : null;
+    if(!cmdId){
+      for(const k in KEYWORDS){ if(said.includes(k)){ cmdId = KEYWORDS[k]; break; } }
+    }
+    if(cmdId){
+      const btn = document.querySelector(`.cmd-btn[data-cmd="${cmdId}"]`);
+      runCommand(cmdId, btn);
+    } else {
+      speak('No reconozco ese comando. Prueba con métricas, bandeja, plan, tendencias o bóveda.');
+    }
+  }
+
+  function speak(text){
+    if(!('speechSynthesis' in window) || !text) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text.slice(0,500));
+    u.lang = 'es-DO'; u.rate = 1.02;
+    setDot('tts', true);
+    micBtn.classList.add('speaking');
+    $('centerStatus').textContent = 'HABLANDO'; $('centerStatus').classList.add('live');
+    energized = true;
+    u.onend = ()=>{
+      setDot('tts', false);
+      micBtn.classList.remove('speaking');
+      $('centerStatus').textContent = 'INACTIVO'; $('centerStatus').classList.remove('live');
+      energized = false;
+    };
+    speechSynthesis.speak(u);
+  }
+
+  // push-to-talk: mouse y touch
+  ['mousedown','touchstart'].forEach(ev => micBtn.addEventListener(ev, (e)=>{
+    e.preventDefault();
+    if(recognition){ try{ recognition.start(); }catch(e){} }
+  }));
+  ['mouseup','mouseleave','touchend'].forEach(ev => micBtn.addEventListener(ev, ()=>{
+    if(recognition){ try{ recognition.stop(); }catch(e){} }
+  }));
+
+  /* ---------- arranque ---------- */
+  (async function boot(){
+    await loadManifest();
+    await Promise.all([loadDirectivas(), loadAgenda(), loadMetrics(), renderVitals()]);
+    log('sistema listo. bóveda cargada, voz '+(recognition?'activa':'no disponible')+'.');
+  })();
+
+  setInterval(loadAgenda, 60000);
+  setInterval(renderVitals, 15000);
+})();
+</script>
+</body>
+</html>
