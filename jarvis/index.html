@@ -98,6 +98,33 @@
   .mic-btn.speaking{border-color:var(--warn);color:var(--warn);}
   .mic-hint{font-size:8px;color:var(--ink-dim);text-align:center;margin-top:3px;letter-spacing:.04em;}
 
+  /* --- VOICE PICKER --- */
+  .voice-picker{margin-top:9px;padding-top:8px;border-top:1px dashed var(--panel-border);}
+  .voice-picker label{display:block;font-size:8px;letter-spacing:.15em;color:var(--ink-dim);margin-bottom:3px;}
+  .voice-picker select{
+    width:100%;background:#0a0f0d;border:1px solid var(--panel-border);color:var(--ink);
+    font-family:inherit;font-size:9.5px;padding:6px 6px;border-radius:4px;margin-bottom:7px;cursor:pointer;
+  }
+  .voice-picker select:focus{outline:none;border-color:var(--accent-dim);}
+  .voice-sliders{display:flex;flex-direction:column;gap:6px;margin-bottom:7px;}
+  .voice-sliders label{display:flex;justify-content:space-between;align-items:center;font-size:8px;letter-spacing:.1em;color:var(--ink-dim);gap:6px;}
+  .voice-sliders label span{color:var(--accent);font-size:9px;font-variant-numeric:tabular-nums;flex:none;}
+  .voice-sliders input[type=range]{
+    flex:1;-webkit-appearance:none;appearance:none;height:3px;background:var(--panel-border);border-radius:2px;outline:none;
+  }
+  .voice-sliders input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--accent);cursor:pointer;
+    box-shadow:0 0 5px rgba(200,255,61,.5);
+  }
+  .voice-sliders input[type=range]::-moz-range-thumb{
+    width:11px;height:11px;border-radius:50%;background:var(--accent);cursor:pointer;border:none;
+  }
+  .test-voice-btn{
+    width:100%;padding:7px;border-radius:4px;border:1px solid var(--panel-border);background:#0a0f0d;
+    color:var(--ink-dim);font-family:inherit;font-size:9px;letter-spacing:.12em;cursor:pointer;transition:.15s;
+  }
+  .test-voice-btn:hover{border-color:var(--accent-dim);color:var(--accent);}
+
   /* --- TOAST --- */
   .toast{position:fixed;bottom:50px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--toast-bg);border:1px solid var(--accent-dim);color:var(--ink);font-family:inherit;font-size:10px;padding:10px 18px;border-radius:5px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;max-width:500px;text-align:center;z-index:100;letter-spacing:.04em;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -184,6 +211,16 @@
         <div id="audioStatus"></div>
         <button class="mic-btn" id="micBtn">MANTÉN PRESIONADO PARA HABLAR</button>
         <div class="mic-hint" id="micHint">STT vía Chrome (usa red) · TTS local · Espacio = push-to-talk</div>
+
+        <div class="voice-picker">
+          <label for="voiceSelect">VOZ</label>
+          <select id="voiceSelect"><option value="">cargando voces...</option></select>
+          <div class="voice-sliders">
+            <label>VELOCIDAD <span id="rateVal">1.0x</span><input type="range" id="rateSlider" min="0.6" max="1.6" step="0.05" value="1.02"></label>
+            <label>TONO <span id="pitchVal">1.0</span><input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1"></label>
+          </div>
+          <button class="test-voice-btn" id="testVoiceBtn">PROBAR VOZ</button>
+        </div>
       </div>
     </div>
   </main>
@@ -567,11 +604,67 @@
     }
   }
 
+  /* ===== TTS — seleccion de voz real, no la que Chrome usa por defecto ===== */
+  let availableVoices = [];
+  let selectedVoice = null;
+  let ttsRate = parseFloat(localStorage.getItem('jarvis_voice_rate')) || 1.02;
+  let ttsPitch = parseFloat(localStorage.getItem('jarvis_voice_pitch')) || 1.0;
+
+  function scoreVoice(v){
+    let s = 0;
+    if(v.lang && v.lang.toLowerCase().startsWith('es')) s += 10;
+    if(v.localService) s += 6; // voces del sistema: mas naturales, sin ida y vuelta de red
+    if(/mónica|monica|paulina|juan|jorge|diego|isabela|marisol|angelica|reed|luciana/i.test(v.name)) s += 8;
+    return s;
+  }
+
+  function populateVoices(){
+    availableVoices = speechSynthesis.getVoices();
+    if(!availableVoices.length) return; // Chrome puede tardar en poblar la lista
+    const esVoices = availableVoices.filter(v=>v.lang && v.lang.toLowerCase().startsWith('es'));
+    const list = esVoices.length ? esVoices : availableVoices;
+    const sel = $('voiceSelect');
+    sel.innerHTML = list.map(v=>'<option value="'+v.name+'">'+v.name+' ('+v.lang+')'+(v.localService?' · local':' · red')+'</option>').join('');
+    const saved = localStorage.getItem('jarvis_voice_name');
+    const savedVoice = list.find(v=>v.name===saved);
+    const best = list.slice().sort((a,b)=>scoreVoice(b)-scoreVoice(a))[0];
+    selectedVoice = savedVoice || best;
+    sel.value = selectedVoice.name;
+    if(!esVoices.length){
+      log('sin voces en español instaladas — usando "'+selectedVoice.name+'" como respaldo');
+    }
+  }
+  populateVoices();
+  if('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = populateVoices;
+
+  $('voiceSelect').addEventListener('change', e=>{
+    selectedVoice = availableVoices.find(v=>v.name===e.target.value) || null;
+    localStorage.setItem('jarvis_voice_name', e.target.value);
+    speak('Así sueno ahora.');
+  });
+  $('rateSlider').value = ttsRate; $('rateVal').textContent = ttsRate.toFixed(2)+'x';
+  $('pitchSlider').value = ttsPitch; $('pitchVal').textContent = ttsPitch.toFixed(1);
+  $('rateSlider').addEventListener('input', e=>{
+    ttsRate = parseFloat(e.target.value);
+    $('rateVal').textContent = ttsRate.toFixed(2)+'x';
+    localStorage.setItem('jarvis_voice_rate', ttsRate);
+  });
+  $('pitchSlider').addEventListener('input', e=>{
+    ttsPitch = parseFloat(e.target.value);
+    $('pitchVal').textContent = ttsPitch.toFixed(1);
+    localStorage.setItem('jarvis_voice_pitch', ttsPitch);
+  });
+  $('testVoiceBtn').addEventListener('click', ()=>{
+    speak('Hola. Así sueno con esta configuración. Sistema V. A. U. L. T. listo.');
+  });
+
   function speak(text){
     if(!('speechSynthesis' in window) || !text) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text.slice(0,500));
-    u.lang = 'es-DO'; u.rate = 1.05;
+    if(selectedVoice){ u.voice = selectedVoice; u.lang = selectedVoice.lang; }
+    else { u.lang = 'es-DO'; }
+    u.rate = ttsRate; u.pitch = ttsPitch;
     setDot('tts', true);
     micBtn.classList.add('speaking');
     micBtn.textContent = 'HABLANDO...';
