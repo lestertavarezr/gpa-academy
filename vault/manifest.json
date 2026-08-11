@@ -12,8 +12,13 @@
   ],
   "outputs": [
     "outputs/plan-hoy.md",
+    "outputs/plan-manana.md",
     "outputs/bandeja-hoy.md",
     "outputs/tendencias.md",
+    "outputs/tendencias-gh.md",
+    "outputs/yt-semanal.md",
+    "outputs/reporte-am.md",
+    "outputs/revision-semanal.md",
     "outputs/agenda.json",
     "outputs/metrics.json"
   ]

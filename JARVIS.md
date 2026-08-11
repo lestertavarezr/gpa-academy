@@ -1,100 +1,156 @@
 # Sistema JARVIS (V.A.U.L.T.)
 
-Implementación de las 4 piezas del sistema personal descrito en la guía: un
-cerebro de skills, una memoria en archivos planos, voz local y un HUD de una
-sola pantalla. Vive junto a `GPA_Academy_App.html` pero es un sistema
-independiente — no depende de esa app ni la modifica.
+Implementacion completa del sistema personal de 4 piezas: cerebro de skills,
+memoria en archivos planos, voz local y un HUD de una sola pantalla. Vive
+junto a `GPA_Academy_App.html` pero es independiente.
+
+## Inicio rapido
+
+```bash
+# desde la raiz del repo
+python3 -m http.server 8080
+
+# abre en Chrome/Edge
+# http://localhost:8080/jarvis/index.html
+```
+
+Concede permiso de microfono cuando el navegador lo pida.
 
 ## Paso 1 — Cerebro (`.claude/skills/`)
 
-Cinco skills, cada una con un solo propósito, siguiendo el formato que
-Claude Code carga automáticamente en este proyecto:
+5 skills con formato SKILL.md, cargadas automaticamente por Claude Code:
 
-| Skill | Carpeta | Qué hace |
-|---|---|---|
-| `metricas` | `.claude/skills/metricas/SKILL.md` | Extrae los números del día a `vault/outputs/metrics.json` |
-| `bandeja` | `.claude/skills/bandeja/SKILL.md` | Resume correo + calendario + noticias en `vault/outputs/bandeja-hoy.md` |
-| `tendencias` | `.claude/skills/tendencias/SKILL.md` | Escanea señales externas a `vault/outputs/tendencias.md` |
-| `plan` | `.claude/skills/plan/SKILL.md` | Escribe las 3 prioridades del día en `vault/outputs/plan-hoy.md` |
-| `boveda` | `.claude/skills/boveda/SKILL.md` | Lee/escribe `vault/`, mantiene el grafo de `[[wikilinks]]` |
-
-Al abrir este repo con Claude Code, las 5 skills quedan disponibles sin
-configuración extra.
+| Skill | Que hace |
+|---|---|
+| `metricas` | Extrae numeros del dia a `vault/outputs/metrics.json` |
+| `bandeja` | Resume correo + calendario en `vault/outputs/bandeja-hoy.md` |
+| `tendencias` | Escanea senales externas a `vault/outputs/tendencias.md` |
+| `plan` | Escribe las 3 prioridades del dia en `vault/outputs/plan-hoy.md` |
+| `boveda` | Lee/escribe `vault/`, mantiene el grafo de `[[wikilinks]]` |
 
 ## Paso 2 — Memoria (`vault/`)
 
 ```
 vault/
-  raw/       — todo capturado, sin depurar (una nota por día)
-  wiki/      — conocimiento depurado, notas enlazadas con [[wikilinks]]
-  outputs/   — lo que cada skill entrega (metrics.json, agenda.json, *.md)
-  manifest.json — lista de qué archivos existen (el HUD la usa para saber
-                  qué puede leer, porque un sitio estático no puede listar
-                  un directorio por sí solo)
+  raw/             — todo capturado, sin depurar
+  wiki/            — conocimiento depurado, enlazado con [[wikilinks]]
+  outputs/         — lo que cada skill entrega
+  manifest.json    — indice de archivos (el HUD lo necesita)
 ```
 
-Todo es Markdown y JSON planos — sin base de datos. Si agregas o quitas un
-archivo de `vault/`, actualiza `vault/manifest.json` (lo hace la skill
-`boveda`).
+Archivos de salida disponibles:
+
+| Archivo | Comando del HUD |
+|---|---|
+| `metrics.json` | EXTRAER METRICAS |
+| `reporte-am.md` | REPORTE AM |
+| `bandeja-hoy.md` | RESUMEN BANDEJA |
+| `tendencias-gh.md` | TENDENCIAS GH |
+| `tendencias.md` | ESCANEO TENDENCIAS |
+| `yt-semanal.md` | YT SEMANAL |
+| `plan-hoy.md` | PLAN DE HOY |
+| `plan-manana.md` | PLAN MANANA |
+| `revision-semanal.md` | REVISION SEMANAL |
+| `agenda.json` | leido automaticamente por la agenda |
+
+Todo es Markdown y JSON plano — sin base de datos.
 
 ## Paso 3 — Voz local
 
-Integrada directamente en el HUD, sin backend ni API de pago:
+Integrada en el HUD con Web Speech API del navegador:
 
-- **STT**: `SpeechRecognition` / `webkitSpeechRecognition` del navegador.
-- **TTS**: `speechSynthesis` del navegador.
-- El audio nunca sale de la máquina — no hay llamada de red, no hay
-  latencia de API, es gratis siempre.
-- Requiere un navegador basado en Chromium servido por `http://localhost`
-  o `https://` (los navegadores bloquean el micrófono en `file://`).
+- **STT**: `SpeechRecognition` / `webkitSpeechRecognition`
+- **TTS**: `speechSynthesis`
+- El audio nunca sale de la maquina — gratis, privado, sin latencia
 
-Uso: mantén presionado el botón del micrófono, habla un comando ("plan de
-hoy", "resumen bandeja", "extraer métricas", "escaneo tendencias", "limpieza
-bóveda"), suelta — el HUD ejecuta el comando y responde en voz alta.
+### Controles
+
+- **Boton del microfono**: manten presionado para hablar, suelta para enviar
+- **Barra espaciadora**: push-to-talk (igual que el boton)
+- **Teclas 1-0**: ejecuta los 10 comandos por numero (1=metricas, 2=reporte, ..., 0=boveda)
+
+### Comandos de voz reconocidos
+
+Di cualquiera de estas palabras y el sistema ejecuta la skill:
+
+`metricas` · `bandeja` · `resumen` · `reporte` · `tendencias` · `github` ·
+`plan` · `manana` · `boveda` · `limpieza` · `youtube` · `semanal` · `revision`
 
 ## Paso 4 — La cara (`jarvis/index.html`)
 
-Una sola pantalla, sin pestañas: vitales del sistema, panel de comandos,
-agenda del día, estado de audio E/S y las notas de la bóveda — todo en un
-único archivo HTML/CSS/JS sin dependencias ni build step.
+Una pantalla, sin pestanas, sin dependencias, sin build step.
 
-- **Vitales**: reales, no simulados — núcleos de CPU (`navigator.hardwareConcurrency`),
-  memoria del heap de JS (`performance.memory`, Chrome/Edge), tipo de red
-  (`navigator.connection`), batería (`navigator.getBattery`) y conteo real de
-  notas en la bóveda.
-- **Panel de comandos**: cada botón corre una skill de verdad — lee el
-  archivo correspondiente en `vault/outputs/` y lo muestra/lee en voz alta.
-  Los comandos que dependen de una fuente externa no conectada (GitHub
-  trending, YouTube) quedan marcados como simulados hasta que se les dé una
-  API key.
-- **Agenda**: leída de `vault/outputs/agenda.json`, resalta el bloque
-  actual.
-- **Visualización central**: partículas animadas en `<canvas>`, reacciona
-  (color) cuando el sistema está escuchando, hablando o ejecutando un
-  comando.
+### Que muestra
 
-### Cómo correrlo
+- **Vitales del sistema**: datos reales del navegador (CPU, memoria heap, red,
+  bateria, notas en boveda, archivos de salida) con indicadores de tendencia
+- **Barra de navegacion**: NUCLEO, IDEAS, ENLACE, EN LINEA, NUMEROS, ACTIVO
+- **Panel de comandos**: 10 botones, cada uno lee su archivo de `vault/outputs/`
+  y lo muestra + lee en voz alta. Indicador de actividad animado
+- **Visualizacion central**: 350 particulas animadas en canvas, reacciona
+  cuando el sistema escucha, habla o ejecuta. Stat ciclico que rota cada 5s
+  entre senales, consultas, tareas, notas y seguidores
+- **Agenda**: leida de `agenda.json`, resalta el bloque actual, atenua los pasados
+- **Audio E/S**: estado de STT/TTS/privacidad con indicadores visuales
+- **Toast**: notificacion emergente al completar cada comando
+- **Sparkline**: grafico de linea con gradiente de las metricas acumuladas
+- **Auto-refresh**: todos los datos se recargan cada 30 segundos
+- **Footer**: conteo de archivos en la boveda y estado del sistema en vivo
 
-El HUD hace `fetch()` a `vault/`, así que necesita servirse por HTTP (no
-`file://`):
+### Responsive
 
-```bash
-# desde la raíz del repo
-python3 -m http.server 8080
-# abre http://localhost:8080/jarvis/index.html
+- **Desktop** (>1100px): 3 columnas
+- **Tablet** (900-1100px): 3 columnas comprimidas
+- **Tablet vertical** (600-900px): 2 columnas, globo arriba
+- **Movil** (<600px): 1 columna, scroll vertical, nav oculta
+
+### Estructura de archivos
+
+```
+gpa-academy/
+  .claude/skills/
+    metricas/SKILL.md
+    bandeja/SKILL.md
+    tendencias/SKILL.md
+    plan/SKILL.md
+    boveda/SKILL.md
+  vault/
+    raw/
+      2026-08-11-captura-inicial.md
+    wiki/
+      sistema-jarvis.md
+      cerebro.md
+      memoria.md
+      voz.md
+      cara.md
+      directivas.md
+    outputs/
+      metrics.json
+      agenda.json
+      plan-hoy.md
+      plan-manana.md
+      bandeja-hoy.md
+      tendencias.md
+      tendencias-gh.md
+      yt-semanal.md
+      reporte-am.md
+      revision-semanal.md
+    manifest.json
+  jarvis/
+    index.html
+  JARVIS.md           (este archivo)
+  GPA_Academy_App.html (app existente, no modificada)
 ```
 
-Concede permiso de micrófono cuando el navegador lo pida para usar la voz.
+## Limites honestos
 
-## Límites honestos
-
-- Los "vitales" son los que un navegador realmente puede leer — no hay
-  acceso a CPU/RAM real del sistema operativo desde JS por razones de
-  seguridad del navegador. Se etiquetan con su fuente real (`navigator`,
-  `heap`, etc.) en vez de inventar un número de "uso de CPU del sistema".
-- Comandos como "TENDENCIAS GH" o "YT SEMANAL" necesitan credenciales reales
-  (API keys/OAuth) para dejar de ser simulados — el HUD lo indica en el log
-  cuando los ejecutas.
-- El reconocimiento de voz (`webkitSpeechRecognition`) es soporte de
-  Chromium; Firefox/Safari no lo implementan igual, y el HUD lo detecta y
-  avisa en vez de fallar en silencio.
+- Los vitales son los que un navegador puede leer de verdad — no hay acceso a
+  CPU/RAM real del OS desde JavaScript. Se etiquetan con su fuente real.
+- TENDENCIAS GH y YT SEMANAL tienen contenido de ejemplo — para datos en vivo
+  necesitan GitHub API / YouTube Data API v3 con credenciales reales.
+- STT funciona en Chromium (Chrome, Edge, Brave). Firefox y Safari no
+  implementan `webkitSpeechRecognition` de la misma forma — el HUD lo detecta
+  y avisa en vez de fallar.
+- El HUD necesita servirse por HTTP (`python3 -m http.server` o cualquier
+  servidor estatico). No funciona abriendo el archivo directamente (`file://`)
+  porque `fetch()` y el microfono requieren un origen seguro.
