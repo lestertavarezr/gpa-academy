@@ -12,17 +12,20 @@ En la sección de inscripción:
   2. Envía los datos por `POST` al webhook de n8n (`/webhook/inscripcion-gpa`, el que construimos en `n8n/`).
   3. Redirige al estudiante al link de pago de Pagadito **correspondiente al programa que eligió**.
 
-## Dos cosas que TÚ tienes que llenar antes de publicar
+## Cosa que YA llené, y una que falta
 
-Abre `index.html` con un editor de texto (VS Code, por ejemplo) y usa "Buscar" (Ctrl+F / Cmd+F):
+**Ya puse la URL del webhook** apuntando a `http://localhost:5678/webhook/inscripcion-gpa` (el puerto por defecto de n8n).
 
-**1. Busca `N8N_INSCRIPCION_WEBHOOK`** y reemplaza esta línea:
-```js
-const N8N_INSCRIPCION_WEBHOOK = 'https://TU-DOMINIO-N8N/webhook/inscripcion-gpa';
-```
-por la URL real de tu webhook (la que te di en `n8n/README.md`, una vez actives tu instancia de n8n).
+⚠️ **Importante:** `localhost:5678` solo funciona **mientras pruebas en la misma computadora donde corre n8n** (abres el `index.html` y n8n en esa misma máquina). Una vez publiques la landing page en internet (Netlify, Cloudflare Pages, etc.), los navegadores de tus estudiantes van a intentar conectarse a *su propio* `localhost:5678` — que no existe — y el formulario va a fallar en silencio (seguirá redirigiendo al pago, pero el dato nunca llegará a n8n).
 
-**2. Busca `PAGADITO_LINKS`** y reemplaza cada una de las 5 URLs que dicen `TODO-...`:
+Para producción necesitas exponer tu n8n con una dirección accesible desde internet, por ejemplo:
+- Un dominio propio apuntando a tu servidor (`https://n8n.tuacademia.com`), o
+- Un servicio como **n8n Cloud**, o
+- Un túnel como **Cloudflare Tunnel** o **ngrok** si por ahora lo tienes corriendo en tu propia máquina/red local.
+
+Cuando tengas esa URL pública, dímela y te la cambio, o busca `localhost:5678` en `index.html` y reemplázalo tú mismo.
+
+**Todavía falta llenar `PAGADITO_LINKS`.** Busca esa palabra en `index.html` y reemplaza cada una de las 5 URLs que dicen `TODO-...`:
 ```js
 const PAGADITO_LINKS = {
   'Diplomado Avanzado en Asistencia Quirúrgica': 'https://www.pagalink.com/TODO-asistencia-quirurgica',
@@ -32,7 +35,7 @@ const PAGADITO_LINKS = {
   'Diplomado Avanzado en Manejo de Heridas y Ostomías': 'https://www.pagalink.com/TODO-heridas-ostomias'
 };
 ```
-por los 5 links de pago reales que generes en tu panel de Pagadito (uno por programa, con el precio correspondiente). Si me pasas los 6 datos (la URL del webhook + los 5 links), yo mismo los pongo en el archivo.
+por los 5 links de pago reales que generes en tu panel de Pagadito (uno por programa, con el precio correspondiente). Si me los pasas, yo mismo los pongo en el archivo.
 
 **Por seguridad, si un programa todavía dice "TODO" en su link, el botón se bloquea solo** con el mensaje "El pago para este programa aún no está configurado" — así nadie puede pagar a un link roto por accidente. Ya lo probé y funciona así.
 
