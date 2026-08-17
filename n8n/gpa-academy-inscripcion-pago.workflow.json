@@ -1,0 +1,1132 @@
+{
+  "name": "GPA Academy - Inscripcion y Pago",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## GPA Academy — Inscripción + Pago + Notificación\n\nEste workflow tiene 3 partes:\n1. Recibe el formulario de inscripción (landing page) y lo guarda.\n2. Recibe la confirmación de pago de Pagadito y busca el formulario guardado.\n3. Notifica al director (Lester) para que cree el acceso en GPA Academy OS.\n\nTodo lo que pasa se registra en la tabla `gpa_log` para poder auditar después.\n\nVer README.md en la carpeta /n8n del repo para instrucciones completas.",
+        "height": 300,
+        "width": 460,
+        "color": 4
+      },
+      "id": "48bac60d-4879-49bd-ba56-b5efa0ba6f4a",
+      "name": "Nota - Resumen General",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### PARTE 1 — Formulario de inscripción\n\nRecibe los datos de la landing page (4 programas) y los guarda como 'pendiente de pago'.",
+        "height": 200,
+        "width": 900,
+        "color": 5
+      },
+      "id": "3e571906-d7b2-409b-9368-86c6d40b2ff9",
+      "name": "Nota - Parte 1 Formulario",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### PARTE 2 — Confirmación de pago (Pagadito)\n\nSi el pago NO está confirmado, el flujo se detiene aquí (solo se registra en el log, no se notifica a nadie).",
+        "height": 260,
+        "width": 1700,
+        "color": 6
+      },
+      "id": "47be5736-2bd9-49de-bc28-224ed059bb9d",
+      "name": "Nota - Parte 2 Pago",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### PARTE 3 — Notificación al director\n\nPor defecto se envía por correo (SMTP). Para usar WhatsApp (Bot Luz), cambiar 'canal_notificacion' a 'whatsapp' en el nodo 'Preparar Mensaje' y configurar la URL del bot en el nodo HTTP.",
+        "height": 240,
+        "width": 1000,
+        "color": 3
+      },
+      "id": "daa3ffcd-5e3c-488c-8942-93ce38afa86e",
+      "name": "Nota - Parte 3 Notificacion",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### FASE 2 (futuro, no activo)\n\nEste nodo ya está armado y conectado, solo deshabilitado.\nCuando GPA Academy OS tenga el endpoint POST /api/enrollments, edítalo, pon la URL real, actívalo (quitar 'disabled') y listo: la creación de acceso será automática.",
+        "height": 220,
+        "width": 480,
+        "color": 7
+      },
+      "id": "8200e04a-ada9-46be-8653-676f3bfc9185",
+      "name": "Nota - Fase 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        1420
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "inscripcion-gpa",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "0dc1efc3-2c82-4d87-b4cd-a69178d0f563",
+      "name": "Webhook - Inscripcion",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "2e691a64-37f0-4018-b452-bfa1065c71fa"
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "661f5090-5627-48ba-96af-52224804ffa0",
+              "name": "nombre",
+              "type": "string",
+              "value": "={{ $json.body.nombre }}"
+            },
+            {
+              "id": "72527039-6231-41dc-8d4b-4054d2f28b38",
+              "name": "cedula",
+              "type": "string",
+              "value": "={{ $json.body.cedula }}"
+            },
+            {
+              "id": "abb3f745-3ec9-4f65-bb5d-7c4417e3260f",
+              "name": "pais",
+              "type": "string",
+              "value": "={{ $json.body.pais }}"
+            },
+            {
+              "id": "7a62005a-1aa3-479c-92b2-1b4bce1884c9",
+              "name": "telefono",
+              "type": "string",
+              "value": "={{ $json.body.telefono }}"
+            },
+            {
+              "id": "66e04930-f776-4d51-97f2-a3f5a07a799f",
+              "name": "email",
+              "type": "string",
+              "value": "={{ ($json.body.email || '').toLowerCase().trim() }}"
+            },
+            {
+              "id": "0020c983-ad3d-47a4-a4a2-f3ac0f6ed3d0",
+              "name": "programa",
+              "type": "string",
+              "value": "={{ $json.body.programa }}"
+            },
+            {
+              "id": "a14e5b67-a9b4-4b14-9ea1-b836c898518b",
+              "name": "estado",
+              "type": "string",
+              "value": "pendiente_pago"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "042bb3ea-8cfc-4d26-a3fe-56888935be14",
+      "name": "Normalizar Inscripcion",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"recibido\"\n}",
+        "options": {}
+      },
+      "id": "d54f75de-488d-400f-9f88-fba979604909",
+      "name": "Responder Formulario",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_inscripciones (nombre, cedula, pais, telefono, email, programa, estado, creado_en)\nVALUES ($1, $2, $3, $4, $5, $6, $7, NOW())\nON CONFLICT (email) DO UPDATE SET\n  nombre = EXCLUDED.nombre,\n  cedula = EXCLUDED.cedula,\n  pais = EXCLUDED.pais,\n  telefono = EXCLUDED.telefono,\n  programa = EXCLUDED.programa,\n  estado = EXCLUDED.estado,\n  creado_en = NOW()\nRETURNING *;",
+        "options": {
+          "queryReplacement": "={{ [$json.nombre, $json.cedula, $json.pais, $json.telefono, $json.email, $json.programa, $json.estado] }}"
+        }
+      },
+      "id": "42ff66e9-9e81-41de-9257-5623e5eda9e4",
+      "name": "Guardar Inscripcion",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        780,
+        0
+      ],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_log (evento, detalle, creado_en) VALUES ('formulario_recibido', $1, NOW());",
+        "options": {
+          "queryReplacement": "={{ [JSON.stringify($json)] }}"
+        }
+      },
+      "id": "4a4c54ea-f850-432b-bf43-b5de35c19a44",
+      "name": "Log OK - Formulario Recibido",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1040,
+        -80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_log (evento, detalle, creado_en) VALUES ('formulario_error_guardando', $1, NOW());",
+        "options": {
+          "queryReplacement": "={{ [JSON.stringify($json)] }}"
+        }
+      },
+      "id": "1fb8cda8-268b-40e8-bd98-e5909eba6756",
+      "name": "Log Error - Formulario",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1040,
+        80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pago-gpa",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "43ad91fb-30d5-4222-a4f5-5ac0ad572f79",
+      "name": "Webhook - Pago Pagadito",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        420
+      ],
+      "webhookId": "1b92177c-0614-437a-a6ee-c6ccfde897c7"
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8224f0fc-17c5-43a6-beac-9f744ef2eeec",
+              "name": "email_referencia",
+              "type": "string",
+              "value": "={{ ($json.body.email || $json.body.customer_email || $json.body.custom1 || '').toLowerCase().trim() }}"
+            },
+            {
+              "id": "387ddb96-42a1-4b5c-ab93-2edee046b0f0",
+              "name": "telefono_referencia",
+              "type": "string",
+              "value": "={{ $json.body.telefono || $json.body.phone || $json.body.custom2 || '' }}"
+            },
+            {
+              "id": "7c68c0ea-e487-4da1-ae08-b95fc719de2c",
+              "name": "monto",
+              "type": "string",
+              "value": "={{ $json.body.amount || $json.body.monto || $json.body.total || '' }}"
+            },
+            {
+              "id": "cfd388ba-8152-471a-995f-5af1fe1bf1f2",
+              "name": "estado_pago",
+              "type": "string",
+              "value": "={{ $json.body.status || $json.body.STATUS || $json.body.ps_status || '' }}"
+            },
+            {
+              "id": "7589e91c-cb38-4901-b44b-ba8a1ba6ad67",
+              "name": "referencia_pago",
+              "type": "string",
+              "value": "={{ $json.body.ern || $json.body.reference || $json.body.transaction_id || $json.body.token || '' }}"
+            },
+            {
+              "id": "2b7a72c1-b42d-4007-b401-c06de092df2e",
+              "name": "fecha_pago",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            },
+            {
+              "id": "8d4bb151-0fe1-4a4a-8913-a6a3bb2a5ba1",
+              "name": "pago_confirmado_bool",
+              "type": "boolean",
+              "value": "={{ ['confirmado','completado','completed','success','approved','completo','pagado','ok'].includes( (($json.body.status || $json.body.STATUS || $json.body.ps_status || '') + '').toLowerCase() ) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7b3b7f95-d394-445a-86cb-bc72c8b12bc6",
+      "name": "Normalizar Pago",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"recibido\"\n}",
+        "options": {}
+      },
+      "id": "d4bf3266-97a1-481f-bdc1-1504362ba9d6",
+      "name": "Responder Pago",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        520,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sandbox-services.pagadito.com/v2/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\"operation\": \"getStatus\", \"uid\": \"TU_UID_PAGADITO\", \"wsk\": \"TU_WSK_PAGADITO\", \"token\": $json.token || \"\", \"ern\": $json.referencia_pago} }}",
+        "options": {}
+      },
+      "id": "70f334b0-f5e0-4d80-81d9-8c1c776ea091",
+      "name": "Verificar con Pagadito (opcional, recomendado)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        620
+      ],
+      "disabled": true,
+      "notes": "Opcional: llama a la API GetStatus de Pagadito para verificar la transaccion en vez de confiar solo en el webhook. Requiere credenciales uid/wsk. Desactivado por defecto."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "04c78e10-cb9f-489d-8c2b-e9f41b3a3612",
+              "leftValue": "={{ $json.pago_confirmado_bool }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "df77b74d-ef72-463b-b3d1-9dacd312a84f",
+      "name": "IF - Pago Confirmado",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        780,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_log (evento, detalle, creado_en) VALUES ('pago_no_confirmado', $1, NOW());",
+        "options": {
+          "queryReplacement": "={{ [JSON.stringify($json)] }}"
+        }
+      },
+      "id": "d176a408-1259-45c4-b014-1141d0bd46ec",
+      "name": "Log - Pago No Confirmado",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1040,
+        560
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM gpa_inscripciones WHERE email = $1 OR telefono = $2 ORDER BY creado_en DESC LIMIT 1;",
+        "options": {
+          "queryReplacement": "={{ [$json.email_referencia, $json.telefono_referencia] }}"
+        }
+      },
+      "id": "c6373efb-12ca-498f-bdcf-b1371f34ee92",
+      "name": "Buscar Inscripcion",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1040,
+        340
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3a91c499-6a47-4793-b579-70a2e81bb0c2",
+              "leftValue": "={{ $json.id !== undefined && $json.id !== null }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "78670d67-9908-4c4c-9ed0-d9a3c92a1f73",
+      "name": "IF - Registro Encontrado",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1300,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5c1993e7-e41e-45e8-81be-34d5b2fbadf2",
+              "name": "nombre",
+              "type": "string",
+              "value": "={{ $json.nombre }}"
+            },
+            {
+              "id": "c0887d23-3630-4e2e-8b30-03675c136002",
+              "name": "cedula",
+              "type": "string",
+              "value": "={{ $json.cedula }}"
+            },
+            {
+              "id": "e225ace9-3e00-43b1-a568-a397ec04f381",
+              "name": "pais",
+              "type": "string",
+              "value": "={{ $json.pais }}"
+            },
+            {
+              "id": "2cf5e6a4-7d72-40b9-bd15-b65e34014406",
+              "name": "telefono",
+              "type": "string",
+              "value": "={{ $json.telefono }}"
+            },
+            {
+              "id": "b10d8a93-2e50-41b4-8a45-023eb096e447",
+              "name": "email",
+              "type": "string",
+              "value": "={{ $json.email }}"
+            },
+            {
+              "id": "7d3838bf-4a19-41a7-9c1e-454934ea7540",
+              "name": "programa",
+              "type": "string",
+              "value": "={{ $json.programa }}"
+            },
+            {
+              "id": "6984da27-03ea-4f53-9f98-30f036e48a3f",
+              "name": "monto",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.monto }}"
+            },
+            {
+              "id": "49c59b6f-2892-475d-9d19-706c08d99a88",
+              "name": "referencia_pago",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.referencia_pago }}"
+            },
+            {
+              "id": "07941987-ed1c-406b-805f-355e0b30cbd8",
+              "name": "fecha_pago",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.fecha_pago }}"
+            },
+            {
+              "id": "2821d353-effb-4878-b199-b45642cd5e84",
+              "name": "mensaje_alerta",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "f9472d89-7072-4536-8962-75c361488a4b",
+              "name": "estado_match",
+              "type": "string",
+              "value": "emparejado"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4ecf2587-c8fe-4632-aa8a-baf5f297819b",
+      "name": "Combinar Datos Estudiante + Pago",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1560,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_log (evento, detalle, creado_en) VALUES ('pago_confirmado_emparejado', $1, NOW());",
+        "options": {
+          "queryReplacement": "={{ [JSON.stringify($json)] }}"
+        }
+      },
+      "id": "677be992-71f7-4bbf-b752-0150baa49cc1",
+      "name": "Log - Pago Emparejado",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1820,
+        260
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "10ae22be-98dd-4908-bab5-97e2449256c3",
+              "name": "nombre",
+              "type": "string",
+              "value": "No disponible"
+            },
+            {
+              "id": "943c5188-1980-4c97-9643-909675a052b5",
+              "name": "cedula",
+              "type": "string",
+              "value": "No disponible"
+            },
+            {
+              "id": "9450eb4e-f3ad-4b83-a4a7-315c33a13ad0",
+              "name": "pais",
+              "type": "string",
+              "value": "No disponible"
+            },
+            {
+              "id": "681710cf-0ef1-4056-8042-d0e69c20cdbf",
+              "name": "telefono",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.telefono_referencia }}"
+            },
+            {
+              "id": "74abacff-2bd8-4994-89a1-acb0cbe9a58e",
+              "name": "email",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.email_referencia }}"
+            },
+            {
+              "id": "4525afe1-0eaa-42ce-aee9-745e59b640b5",
+              "name": "programa",
+              "type": "string",
+              "value": "No disponible"
+            },
+            {
+              "id": "19d1143e-47fb-4abc-845b-ac22ae688147",
+              "name": "monto",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.monto }}"
+            },
+            {
+              "id": "f768b28c-c6ab-4516-836f-a157c4b17ca3",
+              "name": "referencia_pago",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.referencia_pago }}"
+            },
+            {
+              "id": "37be22e3-55f9-420a-b4f2-ef9185266315",
+              "name": "fecha_pago",
+              "type": "string",
+              "value": "={{ $('Normalizar Pago').item.json.fecha_pago }}"
+            },
+            {
+              "id": "0b91f937-f5c4-4441-91ca-4992cde09a09",
+              "name": "mensaje_alerta",
+              "type": "string",
+              "value": "⚠️ Pago recibido sin formulario asociado, verificar manualmente"
+            },
+            {
+              "id": "56a25c16-920a-4d5d-a5e6-8e212d7be51c",
+              "name": "estado_match",
+              "type": "string",
+              "value": "huerfano"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f60eaa03-307b-4153-b950-c132025d6a84",
+      "name": "Marcar Pago Huerfano",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1560,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_log (evento, detalle, creado_en) VALUES ('pago_sin_formulario', $1, NOW());",
+        "options": {
+          "queryReplacement": "={{ [JSON.stringify($json)] }}"
+        }
+      },
+      "id": "41128018-07ce-436d-ad98-cf7b3c0e8761",
+      "name": "Log - Pago Huerfano",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1820,
+        460
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "23211abb-6cb7-4f24-b078-ae66ec4e77c8",
+              "name": "canal_notificacion",
+              "type": "string",
+              "value": "email"
+            },
+            {
+              "id": "22dadf51-c890-48bb-8f79-f7b5749155ea",
+              "name": "director_telefono",
+              "type": "string",
+              "value": "+1-809-000-0000"
+            },
+            {
+              "id": "fd938ec0-9065-4896-8427-34e98c182898",
+              "name": "director_email",
+              "type": "string",
+              "value": "gpacademyrd@gmail.com"
+            },
+            {
+              "id": "478bb112-afc7-4568-9636-d06acbd16f87",
+              "name": "asunto",
+              "type": "string",
+              "value": "={{ $json.mensaje_alerta ? '⚠️ Pago sin formulario - GPA Academy' : '🎓 Nueva inscripcion confirmada - GPA Academy' }}"
+            },
+            {
+              "id": "f9e81fe0-6490-484a-b94d-4d2b3741a803",
+              "name": "mensaje",
+              "type": "string",
+              "value": "={{ ($json.mensaje_alerta ? $json.mensaje_alerta + '\\n\\n' : '') + '🎓 Nueva inscripcion confirmada\\n\\n' + 'Nombre: ' + $json.nombre + '\\n' + 'Cedula: ' + $json.cedula + '\\n' + 'Pais: ' + $json.pais + '\\n' + 'Telefono: ' + $json.telefono + '\\n' + 'Email: ' + $json.email + '\\n' + 'Programa: ' + $json.programa + '\\n' + 'Monto pagado: ' + $json.monto + '\\n' + 'Referencia: ' + $json.referencia_pago + '\\n\\n' + 'Accion requerida: crear acceso en GPA Academy OS' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "99d46e56-cc92-47f5-8aa5-9bcc3fc1c6ec",
+      "name": "Preparar Mensaje Notificacion",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "5cbbc9c5-cacc-4c57-abcc-59e69821dba9",
+              "leftValue": "={{ $json.canal_notificacion }}",
+              "rightValue": "whatsapp",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "832278a7-0906-4813-9fdd-25fa849e5852",
+      "name": "IF - Canal WhatsApp",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2340,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://TU-DOMINIO-BOT-LUZ/webhook/enviar-mensaje",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\"to\": $json.director_telefono, \"message\": $json.mensaje} }}",
+        "options": {}
+      },
+      "id": "1992b49c-6314-452b-9e4c-fe0e2b0b559a",
+      "name": "Enviar WhatsApp (Bot Luz)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2600,
+        220
+      ],
+      "onError": "continueErrorOutput",
+      "notes": "Reemplazar la URL por la de tu integracion real con el bot Luz, o sustituir este nodo por el de WhatsApp/Twilio que ya tengas configurado en n8n."
+    },
+    {
+      "parameters": {
+        "fromEmail": "gpacademyrd@gmail.com",
+        "toEmail": "={{ $json.director_email }}",
+        "subject": "={{ $json.asunto }}",
+        "text": "={{ $json.mensaje }}",
+        "options": {}
+      },
+      "id": "71f6a0d3-eb46-4489-b4df-7ed948a76b11",
+      "name": "Enviar Correo al Director",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2600,
+        460
+      ],
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "smtp": {
+          "id": "TODO",
+          "name": "SMTP GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_log (evento, detalle, creado_en) VALUES ('notificacion_enviada', $1, NOW());",
+        "options": {
+          "queryReplacement": "={{ [JSON.stringify($json)] }}"
+        }
+      },
+      "id": "10ca439e-b4c6-464c-b382-fbec6244a319",
+      "name": "Log - Notificacion Enviada",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        2860,
+        340
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO gpa_log (evento, detalle, creado_en) VALUES ('notificacion_fallida', $1, NOW());",
+        "options": {
+          "queryReplacement": "={{ [JSON.stringify($json)] }}"
+        }
+      },
+      "id": "a3afc2af-08e9-48d6-824c-392f16639621",
+      "name": "Log - Notificacion Fallida",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        2860,
+        620
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "TODO",
+          "name": "Postgres GPA Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://TU-DOMINIO-GPA-ACADEMY-OS/api/enrollments",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\"nombre\": $json.nombre, \"cedula\": $json.cedula, \"pais\": $json.pais, \"telefono\": $json.telefono, \"email\": $json.email, \"programa\": $json.programa, \"monto\": $json.monto, \"referencia_pago\": $json.referencia_pago} }}",
+        "options": {}
+      },
+      "id": "1c09a932-ab49-4a22-bffa-6f7c7df8033d",
+      "name": "Crear Acceso GPA Academy OS (Fase 2)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3120,
+        340
+      ],
+      "disabled": true,
+      "notes": "FASE 2: desactivado a proposito. Cuando exista el endpoint POST /api/enrollments en GPA Academy OS, configura la URL real, agrega autenticacion si aplica, y activa este nodo (quitar disabled)."
+    }
+  ],
+  "connections": {
+    "Webhook - Inscripcion": {
+      "main": [
+        [
+          {
+            "node": "Normalizar Inscripcion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar Inscripcion": {
+      "main": [
+        [
+          {
+            "node": "Responder Formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder Formulario": {
+      "main": [
+        [
+          {
+            "node": "Guardar Inscripcion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar Inscripcion": {
+      "main": [
+        [
+          {
+            "node": "Log OK - Formulario Recibido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Error - Formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Pago Pagadito": {
+      "main": [
+        [
+          {
+            "node": "Normalizar Pago",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar Pago": {
+      "main": [
+        [
+          {
+            "node": "Responder Pago",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder Pago": {
+      "main": [
+        [
+          {
+            "node": "IF - Pago Confirmado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Pago Confirmado": {
+      "main": [
+        [
+          {
+            "node": "Buscar Inscripcion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log - Pago No Confirmado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Inscripcion": {
+      "main": [
+        [
+          {
+            "node": "IF - Registro Encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Registro Encontrado": {
+      "main": [
+        [
+          {
+            "node": "Combinar Datos Estudiante + Pago",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Marcar Pago Huerfano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combinar Datos Estudiante + Pago": {
+      "main": [
+        [
+          {
+            "node": "Log - Pago Emparejado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar Pago Huerfano": {
+      "main": [
+        [
+          {
+            "node": "Log - Pago Huerfano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log - Pago Emparejado": {
+      "main": [
+        [
+          {
+            "node": "Preparar Mensaje Notificacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log - Pago Huerfano": {
+      "main": [
+        [
+          {
+            "node": "Preparar Mensaje Notificacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Mensaje Notificacion": {
+      "main": [
+        [
+          {
+            "node": "IF - Canal WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Canal WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Enviar WhatsApp (Bot Luz)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar Correo al Director",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar WhatsApp (Bot Luz)": {
+      "main": [
+        [
+          {
+            "node": "Log - Notificacion Enviada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log - Notificacion Fallida",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Correo al Director": {
+      "main": [
+        [
+          {
+            "node": "Log - Notificacion Enviada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log - Notificacion Fallida",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log - Notificacion Enviada": {
+      "main": [
+        [
+          {
+            "node": "Crear Acceso GPA Academy OS (Fase 2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
