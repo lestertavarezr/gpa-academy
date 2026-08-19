@@ -25,6 +25,9 @@ services:
       - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
       - DB_POSTGRESDB_USER=${POSTGRES_USER}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      - PAGADITO_UID=${PAGADITO_UID}
+      - PAGADITO_WSK=${PAGADITO_WSK}
+      - PAGADITO_SANDBOX=${PAGADITO_SANDBOX:-true}
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
