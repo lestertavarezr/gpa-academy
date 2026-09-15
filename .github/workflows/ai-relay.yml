@@ -1,0 +1,45 @@
+name: AI relay — ChatGPT ↔ Claude
+
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Número del issue que se quiere procesar
+        required: true
+        type: string
+
+# Solo se otorgan permisos para leer el código y comentar en issues.
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  relay:
+    # La etiqueta inicia una conversación. Los comentarios /relay solo pueden
+    # venir de miembros del repositorio, para evitar consumo por usuarios externos.
+    if: >-
+      (github.event_name == 'issues' && github.event.label.name == 'ai-relay') ||
+      (github.event_name == 'issue_comment' &&
+       !github.event.issue.pull_request &&
+       startsWith(github.event.comment.body, '/relay') &&
+       (github.event.comment.author_association == 'OWNER' ||
+        github.event.comment.author_association == 'MEMBER' ||
+        github.event.comment.author_association == 'COLLABORATOR')) ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conversación entre ChatGPT y Claude
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+          ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
+        run: node .github/scripts/ai-relay.mjs

@@ -87,6 +87,18 @@ Body: { "key": "leadsToday", "value": 8 }
 ### Google Sheets
 Configura un webhook trigger en N8N que lea Sheets y haga POST al dashboard.
 
+### Integración MCP (Claude Desktop)
+
+La API interna de solo lectura está documentada en [`API.md`](./API.md). Configura
+`MCP_SERVICE_TOKEN` como secreto del servidor antes de desplegar. El servidor MCP
+independiente y su configuración de Claude Desktop están en la entrega
+`gpa-academy-os-mcp-integration/mcp-server`; debe recibir la URL pública de este
+dashboard terminada en `/api/mcp` y el mismo token mediante `GPA_API_TOKEN`.
+
+La fuente de datos actual del dashboard es demostrativa (`src/lib/mock-data.ts`).
+Al migrar a base de datos, reemplaza únicamente el adaptador `src/lib/mcp-data.ts`
+por los servicios de dominio reales, sin ampliar los campos que expone la API.
+
 ---
 
 ## Próximas iteraciones recomendadas
