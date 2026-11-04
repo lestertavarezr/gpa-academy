@@ -65,7 +65,16 @@ Inscripción con validación accesible y anti doble envío; resumen previo al pa
 
 ## 6. Pruebas
 
-RESULTADOS_PRUEBAS
+Playwright/Chromium contra servidor local, sin transacciones reales (webhook de n8n y Pagadito interceptados). Última corrida: **todo OK**.
+
+- **7 páginas × 5 anchos (320, 375, 768, 1024, 1440 px)**: sin errores de JS, sin desbordamiento horizontal, un solo `h1` visible, `lang="es"`, canonical y título propios, JSON-LD presente. (La primera corrida detectó un desborde de 34 px a 320 px por el ancho mínimo de las tarjetas; corregido.)
+- **Enlaces antiguos**: `#sutura`, `#diplomado`, `#neuroimagenes`, `#laparoscopia`, `#heridas-ostomias` y `#demo-laparoscopia` redirigen a su ruta nueva; `#faq`, `#manuales` e `#inscripcion` se quedan en la home.
+- **Selección de programa y modalidad**: las 7 combinaciones se preseleccionan correctamente desde las fichas y desde las 7 tarjetas de la home, y el resumen muestra modalidad y precio.
+- **Formulario**: la validación muestra errores por campo sin enviar datos; el anti doble envío se verificó en el informe anterior.
+- **Menú móvil**: abre con `aria-expanded`, Escape lo cierra y devuelve el foco; la barra "Inscribirme ahora" preselecciona el programa en fichas de modalidad única.
+- **Contenido**: cada ficha tiene su clase de muestra; las demos aparecen solo en Asistencia Quirúrgica, Instrumentación Laparoscópica y Manejo de Heridas.
+- **Peso**: el HTML pasó de ~1,05 MB a ~0,90 MB (menos fuentes e imágenes de recursos sin uso). No se midió rendimiento en red real, por lo que no se afirma mejora de velocidad.
+- **Capturas** (inicio, fichas de Sutura y Asistencia, e institución; escritorio y móvil): `docs/capturas/`.
 
 **No ejecutado**: lint/tipos/build (el repo no tiene toolchain); pagos en sandbox (no hay credenciales sandbox de Pagadito; el webhook de n8n y la pasarela se interceptaron en las pruebas, no se usó ninguna transacción real); reproducción de los videos de YouTube (la red de la sandbox los bloquea; el enlace "Ver una clase" apunta a la clase del Taller de Sutura, que sí se reproducía en los dispositivos del cliente); comparación visual con CIFMEC (sitio inaccesible); pruebas en dispositivos físicos.
 
