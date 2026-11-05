@@ -112,12 +112,20 @@ def main():
         out = render(pre, tpl, post, name + SUFFIX, desc, url, ld_blocks('programa', name, desc, url))
         write(os.path.join(ROOT, 'programas', slug, 'index.html'), out)
         urls.append(url)
-    inst_url = BASE + '/institucion/'
-    inst_desc = ('GPA Academy: formación continua en cirugía y procedimientos médicos, online y semipresencial, '
-                 'con sede en Santo Domingo, República Dominicana.')
-    write(os.path.join(ROOT, 'institucion', 'index.html'),
-          render(pre, tpl, post, 'Sobre GPA Academy' + SUFFIX, inst_desc, inst_url, ld_blocks('institucion')))
-    urls.append(inst_url)
+    extra = [
+        ('programas', 'Programas de formación médico-quirúrgica' + SUFFIX,
+         'Catálogo de GPA Academy: cinco programas online y semipresenciales en sutura, asistencia quirúrgica, neuroimágenes, instrumentación laparoscópica y manejo de heridas.', 'home'),
+        ('institucion', 'Sobre GPA Academy' + SUFFIX,
+         'GPA Academy: formación continua en cirugía y procedimientos médicos, online y semipresencial, con sede en Santo Domingo, República Dominicana.', 'institucion'),
+        ('admision', 'Admisión e inscripción' + SUFFIX,
+         'Cómo inscribirte en GPA Academy: proceso, perfiles por programa, modalidades, precios y qué sucede después del pago.', 'institucion'),
+        ('contacto', 'Contacto' + SUFFIX,
+         'Contacta a GPA Academy por WhatsApp, correo o Instagram. Santo Domingo, República Dominicana.', 'institucion'),
+    ]
+    for slug, title, desc, kind in extra:
+        url = f'{BASE}/{slug}/'
+        write(os.path.join(ROOT, slug, 'index.html'), render(pre, tpl, post, title, desc, url, ld_blocks(kind)))
+        urls.append(url)
 
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     sm += ''.join('  <url><loc>%s</loc></url>\n' % u for u in urls) + '</urlset>\n'
