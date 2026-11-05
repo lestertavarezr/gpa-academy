@@ -39,7 +39,7 @@ Falta para activar el resto del plano: **misión, visión y valores**; **histori
 
 - **Privacidad, términos y condiciones de reembolso**: textos aprobados o URLs; se enlazarán en el pie y junto al formulario. No se crearon textos legales.
 - **Consentimiento de cookies** para GA4 y Meta Pixel (hoy cargan sin banner).
-- **URL pública del campus (GPA Academy OS)** para activar «Campus virtual» en el encabezado y el pie.
+- **Campus (GPA Academy OS)**: el hero enlaza «Aula virtual» a `http://69.55.61.114/login` (dirección IP sin HTTPS). Recomendado: dominio propio con certificado HTTPS (p. ej. `campus.gpaacademy.online`) y, si se desea, añadir «Campus virtual» al encabezado y al pie.
 - **Manuales digitales**: 4 links de pago distintos (hoy los 4 comparten el mismo, y el pago no identifica el manual comprado).
 - **`purchase` en analítica**: debe enviarse desde el servidor tras confirmar el pago (n8n); requiere el API secret de GA4.
 
