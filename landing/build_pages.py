@@ -20,7 +20,7 @@ SUFFIX = ' | GPA Academy'
 ORG = {
     "@context": "https://schema.org", "@type": "EducationalOrganization",
     "@id": BASE + "/#organizacion", "name": "GPA Academy", "url": BASE + "/",
-    "email": "gpacademyrd@gmail.com", "telephone": "+1-849-387-5222",
+    "logo": BASE + "/img/logo-gpa.png", "email": "gpacademyrd@gmail.com", "telephone": "+1-849-387-5222",
     "address": {"@type": "PostalAddress", "addressLocality": "Santo Domingo", "addressCountry": "DO"},
     "description": "Educación médico-quirúrgica online y semipresencial.",
 }

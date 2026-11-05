@@ -19,7 +19,7 @@ Secciones y datos que **no se publican** porque no hay información verificada e
 ## 2. Institución (`/institucion/`)
 
 Publicado: quiénes somos, propósito, modelos de estudio y metodología (todo trazable al sitio actual).
-Falta para activar el resto del plano: **misión, visión y valores**; **historia** con años verificados (y foto por hito); **director/responsables** (nombre, cargo, foto autorizada, mensaje, enlaces profesionales); **equipo de gestión**; **entidades de respaldo** con su alcance; **modelo educativo** ampliado si existe documento; **identidad visual** (logotipo oficial en SVG/PNG y manual, si se quiere la segunda pestaña). El logotipo actual es un monograma provisional «G».
+Falta para activar el resto del plano: **misión, visión y valores**; **historia** con años verificados (y foto por hito); **director/responsables** (nombre, cargo, foto autorizada, mensaje, enlaces profesionales); **equipo de gestión**; **entidades de respaldo** con su alcance; **modelo educativo** ampliado si existe documento; **identidad visual** (logotipo oficial en SVG/PNG y manual, si se quiere la segunda pestaña). El logotipo oficial ya está integrado (encabezado, menú, pie, favicon y datos estructurados) a partir de un PNG de 237×208 px: conviene entregar el **original vectorial (SVG) o en alta resolución** para que se vea nítido en pantallas grandes. El escudo indica «Est. 2018»; si ese año es verificable, puede usarse como primer hito de la historia institucional.
 
 ## 3. Programas (catálogo y fichas)
 
