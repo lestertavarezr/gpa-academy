@@ -56,7 +56,22 @@ No se cambiaron precios, condiciones comerciales, permisos ni credenciales; no s
 
 ## 5. Validación
 
-RESULTADOS_VALIDACION
+Playwright/Chromium contra servidor local, sin transacciones reales (webhook de n8n y Pagadito interceptados; no se envió ningún mensaje real).
+
+**Pasaron**
+- **9 rutas × 5 anchos (320, 390, 768, 1024, 1440 px)**: sin errores de JS, sin desbordamiento horizontal, un solo `h1` visible, `lang="es"`, canonical propio, Poppins cargada y encabezado transparente al inicio. (La primera corrida detectó 59 px de desborde en `/contacto/` a 320 px por un grid con estilo en línea; corregido y verificado.)
+- **Encabezado**: blanco al 95 % con padding de 14 px tras desplazarse.
+- **Menú móvil**: overlay a pantalla completa, scroll bloqueado, `aria-expanded`, un único control de cierre visible, foco inicial en el cierre, Escape cierra y devuelve el foco, el enlace «Admisión» navega a `/admision/`.
+- **Enlaces antiguos**: `#sutura`, `#diplomado`, `#neuroimagenes`, `#laparoscopia`, `#heridas-ostomias`, `#demo-laparoscopia`, `#manuales`, `#simuladores` y `#proceso` redirigen a su ruta nueva; `#faq`, `#inscripcion` y `#experiencia` permanecen en la portada.
+- **Catálogo**: 5 programas; búsqueda sin tildes; filtro «100 % online» (3) y «con semipresencial» (2); estado sin resultados y «Restablecer filtros»; el filtro se conserva al cambiar de moneda.
+- **Vista rápida**: `role="dialog"`, `aria-modal`, título asociado, trampa de foco (Tab y Shift+Tab), Escape cierra y libera el scroll, foco restaurado al botón, «Inscribirme · Semipresencial» preselecciona la modalidad y cierra el diálogo.
+- **Programa y modalidad**: las 7 combinaciones se preseleccionan desde las fichas (con resumen y precio) y desde los 7 botones del catálogo.
+- **Formularios**: inscripción (5 errores accesibles y foco al primero) y contacto (3 errores, no abre WhatsApp si es inválido; válido abre `wa.me/18493875222` con el texto armado, verificado interceptando `window.open`, y no muestra mensaje de éxito).
+- **Fichas**: cada una tiene su clase de muestra; las demos aparecen solo en Asistencia Quirúrgica, Instrumentación Laparoscópica y Manejo de Heridas.
+- **WhatsApp flotante** (48 px en móvil) no cubre la barra «Inscribirme ahora».
+- **Contraste**: escaneo automático de texto en las 6 páginas × escritorio/móvil sin textos bajo 4,5:1 (3:1 en texto grande). Las zonas con texto sobre fotografía (hero, tarjetas, vista rápida) se revisaron visualmente porque la herramienta no calcula contraste sobre imágenes.
+
+**Nota sobre la última corrida**: la suite completa terminó con una sola falla, atribuible al entorno: la aserción de la URL de la ventana de WhatsApp no puede leerse porque la sandbox no alcanza `wa.me` (la ventana sí se abrió una vez); esa comprobación se repitió aparte interceptando `window.open` y pasó.
 
 **No ejecutado / limitaciones**: lint, tipos y build (el repo no tiene toolchain); comparación visual con CIFMEC (sitio inaccesible); pagos en sandbox (no hay credenciales; Pagadito y n8n se interceptaron, sin transacciones); reproducción de videos de YouTube y de las demos de terceros dentro de la sandbox; dispositivos físicos; rendimiento en red real (no se afirma mejora). Las imágenes de programa (380 px) se ven pixeladas en la vista rápida y en tarjetas grandes: hacen falta fotos propias de mayor resolución.
 
