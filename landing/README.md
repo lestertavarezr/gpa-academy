@@ -62,20 +62,23 @@ La página pesa **~4.3 MB**, casi todo por una sola foto de portada. Carga bien,
 
 Los pasos son los mismos que ya vimos: sube `index.html` a Netlify, Cloudflare Pages o GitHub Pages, y conecta tu dominio. Este archivo ya está listo para eso — es 100% autosuficiente (no necesita servidor, ni build, ni instalar nada).
 
-## Rutas de la web (rediseño institucional)
+## Rutas de la web (rediseño estructural)
 
-El sitio sigue siendo un único bundle (`index.html`), pero ahora tiene rutas propias:
+El sitio sigue siendo un único bundle (`index.html`) con rutas reales:
 
 | Ruta | Contenido |
 |---|---|
-| `/` | Inicio institucional (hero, oferta, experiencia, simuladores, manuales, proceso, FAQ, inscripción) |
-| `/institucion/` | Sobre GPA Academy |
+| `/` | Portada institucional |
+| `/programas/` | Catálogo con búsqueda, filtro de modalidad y vista rápida |
 | `/programas/<slug>/` | Ficha de cada programa (5 rutas) |
+| `/institucion/` | Institución |
+| `/admision/` | Admisión: proceso, requisitos, precios, formulario |
+| `/contacto/` | Contacto (arma el mensaje y abre WhatsApp o correo) |
 
-La vista se decide en el navegador según `location.pathname`. Las carpetas `programas/` e `institucion/` **se generan**: después de editar `index.html` ejecuta
+La vista se decide en el navegador según `location.pathname`. Las carpetas de rutas **se generan**: tras editar `index.html` ejecuta
 
 ```bash
 python3 landing/build_pages.py
 ```
 
-Eso clona el bundle en cada ruta, ajusta título, descripción, canonical, Open Graph y datos estructurados, y regenera `sitemap.xml`. Los enlaces antiguos (`/#sutura`, `/#demo-diplomado`, …) redirigen a la ruta nueva.
+Eso clona el bundle en cada ruta, ajusta título, descripción, canonical, Open Graph y datos estructurados, y regenera `sitemap.xml`. Los enlaces antiguos (`/#sutura`, `/#demo-diplomado`, `/#manuales`, …) redirigen a la ruta nueva. Contenido pendiente de aportar: `CONTENT_NEEDED.md`.
