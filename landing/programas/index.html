@@ -27,12 +27,16 @@
   <meta name="twitter:title" content="Programas de formación médico-quirúrgica | GPA Academy">
   <meta name="twitter:description" content="Catálogo de GPA Academy: cinco programas online y semipresenciales en sutura, asistencia quirúrgica, neuroimágenes, instrumentación laparoscópica y manejo de heridas.">
   <meta name="twitter:image" content="https://gpaacademy.online/og-image.jpg">
+  <link rel="preload" as="image" href="/img/logo-gpa.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0B1E3D; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
     #__bundler_loading { position: fixed; bottom: 20px; right: 20px; font: 13px/1.4 -apple-system, BlinkMacSystemFont, sans-serif; color: #666; background: #fff; padding: 8px 14px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.12); z-index: 10000; }
     #__bundler_thumbnail { position: fixed; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0B1E3D; z-index: 9999; }
-    #__bundler_thumbnail svg { width: 100%; height: 100%; object-fit: contain; }
+    #__bundler_loading { display: none; }
+    #__bundler_thumbnail img { width: clamp(120px, 24vw, 208px); height: auto; aspect-ratio: 1 / 1; object-fit: contain; animation: gpaSplash 2.2s ease-in-out infinite; }
+    @keyframes gpaSplash { 0%, 100% { opacity: .72; transform: scale(.985); } 50% { opacity: 1; transform: scale(1); } }
+    @media (prefers-reduced-motion: reduce) { #__bundler_thumbnail img { animation: none; } }
     #__bundler_placeholder { color: #999; font-size: 14px; }
   </style>
   <noscript>
@@ -49,10 +53,7 @@
 </head>
 <body>
   <div id="__bundler_thumbnail">
-  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="100" cy="100" r="70" fill="none" stroke="#00C2D1" stroke-width="6"></circle>
-    <path d="M100 60v80M60 100h80" stroke="#C9A227" stroke-width="6" stroke-linecap="round"></path>
-  </svg>
+  <img src="/img/logo-gpa.png" alt="GPA Academy" width="208" height="208" fetchpriority="high" decoding="async">
 </div>
   <div id="__bundler_loading">Unpacking...</div>
 
